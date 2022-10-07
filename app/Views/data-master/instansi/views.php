@@ -1,13 +1,10 @@
-<?php
-if ($user_level > 2) {
-	header('Location: ' . base_url());
-	exit();
-}
-?>
-
 <?= $this->extend('layout/template'); ?>
 
 <?= $this->section('content'); ?>
+
+<?php
+setlocale(LC_ALL, 'id-ID', 'id_ID');
+?>
 
 <div class="container-fluid p-0">
 	<div class="row row-deck row-cards">
@@ -18,11 +15,11 @@ if ($user_level > 2) {
 				<div class="card-header">
 					<div class="d-flex align-items-center justify-content-between">
 						<h3 class="card-title">
-							Akun Manager
+							Data Instansi
 						</h3>
 						<div>
 							<?php if ($user_level <= 2) : ?>
-								<a href="#" class="btn btn-success text-white btnShowModal" data-toggle="modal" data-target="#modalInput" data-title="Tambah Akun Manager" data-action="tambah" data-toggle="tooltip" data-placement="bottom" title="Tambah Data">
+								<a href="#" class="btn btn-success text-white btnShowModal" data-toggle="modal" data-target="#modalInput" data-title="Tambah Data Instansi" data-action="tambah" data-toggle="tooltip" data-placement="bottom" title="Tambah Data">
 									<i class="align-middle" data-feather="plus"></i> Tambah
 								</a>
 							<?php endif; ?>
@@ -33,20 +30,14 @@ if ($user_level > 2) {
 				<div class="card-body border-bottom pb-1 row">
 
 					<div class="col-12">
-						<!-- <a id="card-view-table" class="btn btn-success" href="#">CARD VIEW</a> -->
-
 						<table class="table table-sm table-hover table-responsive-sm table-striped" id="data-table-custom" style="font-size: 12px;">
 							<thead>
 								<tr>
 									<th>No.</th>
-									<th>Foto</th>
-									<th>Nama Lengkap</th>
-									<th>Username</th>
-									<th>Email</th>
-									<th>No. Handphone</th>
+									<th>Nama Instansi</th>
+									<th>deskripsi</th>
 									<th>Create at</th>
 									<th>Update at</th>
-									<th>Last Login</th>
 									<?php if ($user_level <= 2) : ?>
 										<th>Aksi</th>
 									<?php endif; ?>
@@ -55,49 +46,33 @@ if ($user_level > 2) {
 
 							<tbody>
 								<?php $no = 1; ?>
-								<?php foreach ($data_manager as $row) : ?>
+								<?php foreach ($data_instansi as $row) : ?>
 									<tr>
-										<td class="text-center">
-											<?= $no++; ?>.
+										<td class="text-center"><?= $no++; ?>.</td>
+										<td class="text-left" style="width: 25%;">
+											<?= $row['nama_instansi']; ?>
 										</td>
-										<td class="text-left">
-											<img src="<?= (empty($row['foto'])) ? base_url() . '/assets/img/noimg.png' : base_url() . '/assets/img/user/thumbnail/' . $row['foto']; ?>" style="width: 50px; height: 50px; object-fit: cover; object-position: top; border-radius: 50%;">
-										</td>
-										<td class="text-left" style="width: 15%;">
-											<?= $row['nama_lengkap']; ?>
-										</td>
-										<td class="text-left" style="width: 15%;">
-											<?= $row['username']; ?>
-										</td>
-										<td class="text-left">
-											<?= $row['email']; ?>
-										</td>
-										<td class="text-left">
-											<?= $row['no_hp']; ?>
+										<td class="text-left" style="width: 35%;">
+											<?= $row['deskripsi']; ?>
 										</td>
 										<td>
-											<?= strftime('%d/%m/%Y %H:%M:%S', strtotime($row['create_datetime'])); ?>
+											<?= date('d/m/Y H:i:s', strtotime($row['create_datetime'])); ?>
 										</td>
 										<td>
-											<?php if ($row['update_datetime'] != "") : ?>
-												<?= strftime('%d/%m/%Y %H:%M:%S', strtotime($row['update_datetime'])); ?>
-											<?php endif; ?>
-										</td>
-										<td>
-											<?php if ($row['last_login'] != "") : ?>
-												<?= strftime('%d/%m/%Y %H:%M:%S', strtotime($row['last_login'])); ?>
+											<?php if ($row['update_datetime'] != "0000-00-00 00:00:00") : ?>
+												<?= date('d/m/Y H:i:s', strtotime($row['update_datetime'])); ?>
 											<?php endif; ?>
 										</td>
 										<?php if ($user_level <= 2) : ?>
 											<td class="table-action">
 												<div class="list-unstyled d-flex align-items-center justify-content-center">
 													<li>
-														<a href="#" class="btn btn-warning text-white btnShowModal" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Akun Manager" data-id="<?= $row['id_user']; ?>" data-namalengkap="<?= $row['nama_lengkap']; ?>" data-username="<?= $row['username']; ?>" data-email="<?= $row['email']; ?>" data-nohp="<?= $row['no_hp']; ?>" class="btn btn-info d-flex text-white" data-toggle="tooltip" data-placement="bottom" title="Ubah">
+														<a href="#" class="btn btn-warning text-white btnShowModal" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Instansi" data-id="<?= $row['id_instansi']; ?>" data-namainstansi="<?= $row['nama_instansi']; ?>" data-deskripsi="<?= $row['deskripsi']; ?>" class="btn btn-info d-flex text-white" data-toggle="tooltip" data-placement="bottom" title="Ubah">
 															<i class="align-middle" data-feather="edit"></i>
 														</a>
 													</li>
 													<li>
-														<a href="#" onclick="hapus_data(<?= $row['id_user'] ?>)" class="btn btn-danger text-white" data-toggle="tooltip" data-placement="bottom" title="Hapus">
+														<a href="#" onclick="hapus_data(<?= $row['id_instansi'] ?>)" class="btn btn-danger text-white" data-toggle="tooltip" data-placement="bottom" title="Hapus">
 															<i class="align-middle" data-feather="trash"></i>
 														</a>
 													</li>
@@ -131,44 +106,26 @@ if ($user_level > 2) {
 				<div class="modal-body">
 
 					<input type="hidden" id="action" name="action" value="">
-					<input type="hidden" id="id_user" name="id_user" value="">
+					<input type="hidden" id="id_instansi" name="id_instansi" value="">
 
-					<div class="form-group row mb-3">
-						<label for="nama_lengkap" class="col-sm-3 col-form-label">
-							Nama Lengkap
+					<div class="form-group row mb-2">
+						<label for="nama_instansi" class="col-sm-12 col-form-label">
+							Nama Instansi
 						</label>
-						<div class="col-sm-9">
-							<input type="text" autofocus class="form-control" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap ...">
+						<div class="col-sm-12">
+							<input type="text" autofocus class="form-control" id="nama_instansi" name="nama_instansi" placeholder="Masukkan Nama Instansi ...">
 						</div>
 					</div>
 
-					<div class="form-group row mb-3">
-						<label for="username" class="col-sm-3 col-form-label">
-							Username
+					<div class="form-group row mb-2">
+						<label for="deskripsi" class="col-sm-12 col-form-label">
+							Deskripsi
 						</label>
-						<div class="col-sm-9">
-							<input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username ...">
+						<div class="col-sm-12">
+							<textarea name="deskripsi" id="deskripsi" rows="3" class="form-control" placeholder="Masukkan deskripsi ..."></textarea>
 						</div>
 					</div>
 
-					<div class="form-group row mb-3">
-						<label for="email" class="col-sm-3 col-form-label">
-							Email
-						</label>
-						<div class="col-sm-9">
-							<input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email ..." value="<?= $user_email ?>">
-						</div>
-					</div>
-
-					<div class="form-group row mb-3">
-						<label for="no_hp" class="col-sm-3 col-form-label">
-							No. Handphone
-						</label>
-						<div class="col-sm-9">
-							<input type="text" class="form-control" id="no_hp" name="no_hp" placeholder="Masukkan No. Handphone ..." value="<?= $user_no_hp ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" minlength="11">
-						</div>
-					</div>
-					<hr>
 					<div class="mt-4 d-flex justify-content-between align-items-center w-100">
 						<button type="submit" class="btn btn-lg btn-success btn-block">
 							<i class="fa fa-save"></i> SIMPAN
@@ -199,13 +156,13 @@ if ($user_level > 2) {
 				if (action == "tambah") {
 					$("form").trigger("reset");
 				} else if (action == "ubah") {
-					var id_user = $(this).data('id');
-					var namalengkap = $(this).data('namalengkap');
-					var username = $(this).data('username');
+					var id_instansi = $(this).data('id');
+					var namainstansi = $(this).data('namainstansi');
+					var deskripsi = $(this).data('deskripsi');
 
-					$('#modalInput #id_user').val(id_user);
-					$('#modalInput #nama_lengkap').val(namalengkap);
-					$('#modalInput #username').val(username);
+					$('#modalInput #id_instansi').val(id_instansi);
+					$('#modalInput #nama_instansi').val(namainstansi);
+					$('#modalInput #deskripsi').val(deskripsi);
 				}
 			});
 
@@ -215,23 +172,23 @@ if ($user_level > 2) {
 				var action = $('#action').val();
 
 				if (action == "tambah") {
-					var urlPost = base_url + "/data-master/ulpl/add";
+					var urlPost = base_url + "/data-master/instansi/add";
 				} else if (action == "ubah") {
-					var urlPost = base_url + "/data-master/ulpl/edit";
+					var urlPost = base_url + "/data-master/instansi/edit";
 				}
 
-				var id_user = $('#id_user').val();
-				var nama_lengkap = $('#nama_lengkap').val();
-				var username = $('#username').val();
+				var id_instansi = $('#id_instansi').val();
+				var nama_instansi = $('#nama_instansi').val();
+				var deskripsi = $('#deskripsi').val();
 
 				$.ajax({
 					type: "POST",
 					url: urlPost,
 					dataType: "JSON",
 					data: {
-						id_user: id_user,
-						nama_lengkap: nama_lengkap,
-						username: username,
+						id_instansi: id_instansi,
+						nama_instansi: nama_instansi,
+						deskripsi: deskripsi,
 					},
 					beforeSend: function() {
 						$("#loader").show();
@@ -255,10 +212,10 @@ if ($user_level > 2) {
 		});
 	});
 
-	function hapus_data(id_user) {
+	function hapus_data(id_instansi) {
 		event.preventDefault(); // prevent form submit
 
-		var urlPost = base_url + "/data-master/ulpl/delete";
+		var urlPost = base_url + "/data-master/instansi/delete";
 
 		Swal.fire({
 			title: "Hapus Data",
@@ -276,7 +233,7 @@ if ($user_level > 2) {
 					url: urlPost,
 					dataType: "JSON",
 					data: {
-						id_user: id_user
+						id_instansi: id_instansi
 					},
 					beforeSend: function() {
 						$("#loader").show();
@@ -302,12 +259,10 @@ if ($user_level > 2) {
 		var tanggalHariIni = datetime.getDate() + '-' + datetime.getMonth() + '-' + datetime.getFullYear();
 
 		var $dTable = $('#data-table-custom').DataTable({
-			<?php if ($user_level <= 2) : ?> "dom": '<"d-block d-lg-flex justify-content-between"lf<"btn btn-sm"B>r>t<"d-block d-lg-flex justify-content-between"ip>',
+			<?php if ($user_level == 1) : ?> "dom": 'lBfrtip',
 			<?php endif; ?> "paging": true,
 			"responsive": true,
 			"searching": true,
-			"fixedHeader": true,
-			"autoWidth": true,
 			"deferRender": true,
 			"lengthMenu": [
 				[10, 25, 50, 100, -1],
@@ -315,7 +270,7 @@ if ($user_level > 2) {
 			],
 			"buttons": [{
 					extend: 'excelHtml5',
-					filename: 'Akun Manager - UPDK KAPUAS - update ' + tanggalHariIni,
+					filename: 'DATA Instansi - UPDK KAPUAS - update ' + tanggalHariIni,
 					text: 'Export Excel (*xlsx)',
 					exportOptions: {
 						// columns: [0, 1, 2, 3, 4, 5],
@@ -327,9 +282,9 @@ if ($user_level > 2) {
 				},
 				{
 					extend: 'pdfHtml5',
-					filename: 'Akun Manager - UPDK KAPUAS - update ' + tanggalHariIni,
+					filename: 'DATA Instansi - UPDK KAPUAS - update ' + tanggalHariIni,
 					text: 'Export PDF (*pdf)',
-					message: 'Akun Manager',
+					message: 'DATA Instansi',
 					messageBottom: 'Data dibuat otomatis oleh sistem : ' + tanggalHariIni,
 					exportOptions: {
 						// columns: [0, 1, 2, 3, 4, 5],
@@ -338,19 +293,22 @@ if ($user_level > 2) {
 							page: 'current'
 						}
 					},
-					orientation: 'portrait',
+					orientation: 'landscape',
 					pageSize: 'LEGAL',
 					customize: function(doc) {
 						doc.pageMargins = [20, 20, 20, 20];
-						doc.defaultStyle.fontSize = 10;
-						doc.styles.tableHeader.fontSize = 10;
-						doc.styles.title.fontSize = 14;
+						doc.defaultStyle.fontSize = 7;
+						doc.styles.tableHeader.fontSize = 7;
+						doc.styles.title.fontSize = 9;
+						// Remove spaces around page title
 						doc.content[0].text = doc.content[0].text.trim();
+						// Create a footer
 						doc['footer'] = (function(page, pages) {
 							return {
 								columns: [
-									'Akun Manager',
+									'Data Instansi',
 									{
+										// This is the right column
 										alignment: 'right',
 										text: ['Page ', {
 											text: page.toString()
@@ -391,29 +349,7 @@ if ($user_level > 2) {
 						doc.content[1].layout = objLayout;
 					}
 				},
-			],
-			initComplete: function(settings, json) {
-				$("#card-view-table").on("click", function() {
-					if ($("#data-table-custom").hasClass("card")) {
-						$(".colHeader").remove();
-					} else {
-						var labels = [];
-						$("#data-table-custom thead th").each(function() {
-							labels.push($(this).text());
-						});
-						$("#data-table-custom tbody tr").each(function() {
-							$(this)
-								.find("td")
-								.each(function(column) {
-									$("<span class='colHeader font-weight-bold'>" + labels[column] + ":</span>").prependTo(
-										$(this)
-									);
-								});
-						});
-					}
-					$("#data-table-custom").toggleClass("card");
-				});
-			}
+			]
 		});
 
 	});

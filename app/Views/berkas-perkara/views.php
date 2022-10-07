@@ -31,14 +31,30 @@
 							<div class="col-lg-3 mb-3">
 								<div class="form-group">
 									<label for="tanggalOrderSelect">Tanggal</label>
-									<div class="cariTanggalWaktu">
+									<div class="cariTanggal">
 										<div class="input-group date">
 											<span class="input-group-append">
 												<span class="input-group-text bg-light d-block">
 													<i class="fa fa-calendar"></i>
 												</span>
 											</span>
-											<input type="text" class="form-control form-control-sm pull-right" id="cariTanggalWaktu" placeholder="Cth : 01/09/2022 - 30/09/2022">
+											<input type="text" class="form-control form-control-sm pull-right" id="cariTanggalBerkas" placeholder="Cth : 01/10/2022 - 31/10/2022">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-lg-3 mb-3">
+								<div class="form-group">
+									<label for="tanggalOrderSelect">Tanggal</label>
+									<div class="cariTanggal">
+										<div class="input-group date">
+											<span class="input-group-append">
+												<span class="input-group-text bg-light d-block">
+													<i class="fa fa-calendar"></i>
+												</span>
+											</span>
+											<input type="text" class="form-control form-control-sm pull-right" id="cariTanggalP16" placeholder="Cth: 01/10/2022 - 31/10/2022">
 										</div>
 									</div>
 								</div>
@@ -54,12 +70,15 @@
 								<div id="instansiPelaksanaPenyidikanSelect"></div>
 							</div>
 
+							<div class="col-lg-3 mb-3">
+								<label for="statusSelect">Status</label>
+								<div id="statusSelect"></div>
+							</div>
 						</div>
 					</div>
 
 					<div class="col-12">
 						<!-- <a id="card-view-table" class="btn btn-success" href="#">CARD VIEW</a> -->
-
 						<table class="table table-sm table-hover table-responsive-sm table-striped" id="data-table-custom" style="font-size: 12px;">
 							<thead>
 								<tr>
@@ -76,11 +95,9 @@
 							<tbody>
 								<?php $no = 1; ?>
 								<?php foreach ($data_berkas_perkara as $row) : ?>
-
 									<?php
 									$id_instansi_penyidik = $row['id_instansi_penyidik'];
 									$instansi_penyidik = $db->query("SELECT * FROM instansi WHERE id_instansi='$id_instansi_penyidik' ")->getRow();
-
 									$id_instansi_pelaksana_penyidikan = $row['id_instansi_pelaksana_penyidikan'];
 									$instansi_pelaksana_penyidikan = $db->query("SELECT * FROM instansi WHERE id_instansi='$id_instansi_pelaksana_penyidikan' ")->getRow();
 									?>
@@ -141,7 +158,7 @@
 </div>
 
 <div class="modal fade" id="modalInput" tabindex="10" role="dialog" aria-labelledby="judulForm" aria-hidden="true">
-	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-xl modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="judulForm" style="color: #000;"></h5>
@@ -151,6 +168,12 @@
 			</div>
 			<form id="formInput" enctype="multipart/form-data">
 				<div class="modal-body">
+
+					<div class="row">
+						<div class="col-lg-4">
+
+						</div>
+					</div>
 
 					<input type="hidden" id="action" name="action" value="">
 					<input type="hidden" id="id_berkas_perkara" name="id_berkas_perkara" value="">
@@ -297,9 +320,9 @@
 				var action = $('#action').val();
 
 				if (action == "tambah") {
-					var urlPost = base_url + "/overhaul/add";
+					var urlPost = base_url + "/berkas-perkara/add";
 				} else if (action == "ubah") {
-					var urlPost = base_url + "/overhaul/edit";
+					var urlPost = base_url + "/berkas-perkara/edit";
 				}
 
 				var id_berkas_perkara = $('#id_berkas_perkara').val();
@@ -354,7 +377,7 @@
 	function hapus_data(id_berkas_perkara) {
 		event.preventDefault(); // prevent form submit
 
-		var urlPost = base_url + "/overhaul/delete";
+		var urlPost = base_url + "/berkas-perkara/delete";
 
 		Swal.fire({
 			title: "Hapus Data",
@@ -399,6 +422,7 @@
 
 		var start_date;
 		var end_date;
+
 		var filterTanggalWaktu = (function(oSettings, aData, iDataIndex) {
 			var dateStart = parseDateValue(start_date);
 			var dateEnd = parseDateValue(end_date);
@@ -447,6 +471,7 @@
 					}
 					$("#data-table-custom").toggleClass("card");
 				});
+
 				var status = this.api().column(5);
 				var statusSelect = $('<select class="filter form-control js-select-2"><option value="">Semua</option></select>')
 					.appendTo('#statusSelect')
@@ -471,7 +496,7 @@
 				<?php endforeach; ?>
 					`);
 
-				var instansiPelaksanaPenyidikan = this.api().column(3);
+				var instansiPelaksanaPenyidikan = this.api().column(4);
 				var instansiPelaksanaPenyidikanSelect = $('<select class="filter form-control form-control-sm js-select-2"><option value="">Semua</option></select>')
 					.appendTo('#instansiPelaksanaPenyidikanSelect')
 					.on('change', function() {
@@ -490,7 +515,7 @@
 			],
 			"buttons": [{
 					extend: 'excelHtml5',
-					filename: 'DATA LAPORAN OVERHAUL UPDK KAPUAS - update ' + tanggalHariIni,
+					filename: 'DATA BERKAS PERKARA KEJAKSAAN NEGERI BERAU - update ' + tanggalHariIni,
 					text: 'Export Excel (*xlsx)',
 					exportOptions: {
 						// columns: [0, 1, 2, 3, 4, 5],
@@ -502,9 +527,9 @@
 				},
 				{
 					extend: 'pdfHtml5',
-					filename: 'DATA LAPORAN OVERHAUL UPDK KAPUAS - update ' + tanggalHariIni,
+					filename: 'DATA BERKAS PERKARA KEJAKSAAN NEGERI BERAU - update ' + tanggalHariIni,
 					text: 'Export PDF (*pdf)',
-					message: 'DATA LAPORAN OVERHAUL',
+					message: 'DATA BERKAS PERKARA',
 					messageBottom: 'Data dibuat otomatis oleh sistem : ' + tanggalHariIni,
 					exportOptions: {
 						// columns: [0, 1, 2, 3, 4, 5],
@@ -520,15 +545,13 @@
 						doc.defaultStyle.fontSize = 10;
 						doc.styles.tableHeader.fontSize = 10;
 						doc.styles.title.fontSize = 14;
-						// Remove spaces around page title
 						doc.content[0].text = doc.content[0].text.trim();
 						// Create a footer
 						doc['footer'] = (function(page, pages) {
 							return {
 								columns: [
-									'Laporan Overhaul - UPDK KAPUAS',
+									'BERKAS PERKARA - KEJAKSAAN NEGERI BERAU',
 									{
-										// This is the right column
 										alignment: 'right',
 										text: ['Page ', {
 											text: page.toString()
@@ -572,15 +595,15 @@
 			]
 		});
 
-		document.getElementsByClassName("cariTanggalWaktu")[0].style.textAlign = "right";
+		document.getElementsByClassName("cariTanggal")[0].style.textAlign = "right";
 
-		//konfigurasi daterangepicker pada input dengan id cariTanggalWaktu
-		$('#cariTanggalWaktu').daterangepicker({
+		//konfigurasi daterangepicker pada input dengan id cariTanggalBerkas
+		$('#cariTanggalBerkas').daterangepicker({
 			autoUpdateInput: false
 		});
 
 		//menangani proses saat apply date range
-		$('#cariTanggalWaktu').on('apply.daterangepicker', function(ev, picker) {
+		$('#cariTanggalBerkas').on('apply.daterangepicker', function(ev, picker) {
 			$(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
 			start_date = picker.startDate.format('DD/MM/YYYY');
 			end_date = picker.endDate.format('DD/MM/YYYY');
@@ -588,7 +611,29 @@
 			$dTable.draw();
 		});
 
-		$('#cariTanggalWaktu').on('cancel.daterangepicker', function(ev, picker) {
+		$('#cariTanggalBerkas').on('cancel.daterangepicker', function(ev, picker) {
+			$(this).val('');
+			start_date = '';
+			end_date = '';
+			$.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(filterTanggalWaktu, 1));
+			$dTable.draw();
+		});
+
+		//konfigurasi daterangepicker pada input dengan id cariTanggalP16
+		$('#cariTanggalP16').daterangepicker({
+			autoUpdateInput: false
+		});
+
+		//menangani proses saat apply date range
+		$('#cariTanggalP16').on('apply.daterangepicker', function(ev, picker) {
+			$(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+			start_date = picker.startDate.format('DD/MM/YYYY');
+			end_date = picker.endDate.format('DD/MM/YYYY');
+			$.fn.dataTableExt.afnFiltering.push(filterTanggalWaktu);
+			$dTable.draw();
+		});
+
+		$('#cariTanggalP16').on('cancel.daterangepicker', function(ev, picker) {
 			$(this).val('');
 			start_date = '';
 			end_date = '';

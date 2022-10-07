@@ -1,3 +1,10 @@
+<?php
+if ($user_level > 2) {
+	header('Location: ' . base_url());
+	exit();
+}
+?>
+
 <?= $this->extend('layout/template'); ?>
 
 <?= $this->section('content'); ?>
@@ -11,12 +18,12 @@
 				<div class="card-header">
 					<div class="d-flex align-items-center justify-content-between">
 						<h3 class="card-title">
-							Data Jenis Periodik
+							Data Jaksa
 						</h3>
 						<div>
 							<?php if ($user_level <= 2) : ?>
-								<a href="#" class="btn btn-success text-white btnShowModal" data-toggle="modal" data-target="#modalInput" data-title="Tambah Data Jenis Periodik" data-action="tambah" data-toggle="tooltip" data-placement="bottom" title="Tambah Data">
-									<i class="align-middle" data-feather="plus"></i> Tambah
+								<a href="#" class="btn btn-success text-white btnShowModalInput" data-toggle="modal" data-target="#modalInput" data-title="Tambah Data Jaksa" data-action="tambah" data-toggle="tooltip" data-placement="bottom" title="Tambah Data">
+									<i class="align-middle" data-feather="user-plus"></i> Tambah
 								</a>
 							<?php endif; ?>
 						</div>
@@ -26,14 +33,20 @@
 				<div class="card-body border-bottom pb-1 row">
 
 					<div class="col-12">
+						<!-- <a id="card-view-table" class="btn btn-success" href="#">CARD VIEW</a> -->
+
 						<table class="table table-sm table-hover table-responsive-sm table-striped" id="data-table-custom" style="font-size: 12px;">
 							<thead>
 								<tr>
 									<th>No.</th>
-									<th>Jenis Periodik</th>
-									<th>Keterangan</th>
+									<th>Foto</th>
+									<th>Nama Lengkap</th>
+									<th>Username</th>
+									<th>Email</th>
+									<th>No. Handphone</th>
 									<th>Create at</th>
 									<th>Update at</th>
+									<th>Last Login</th>
 									<?php if ($user_level <= 2) : ?>
 										<th>Aksi</th>
 									<?php endif; ?>
@@ -42,31 +55,66 @@
 
 							<tbody>
 								<?php $no = 1; ?>
-								<?php foreach ($data_jenis_periodik as $row) : ?>
+								<?php foreach ($data_jaksa as $row) : ?>
+									<?php
+									$update_datetime = "";
+									if ($row['update_datetime'] != "0000-00-00 00:00:00") {
+										$update_datetime = date('d/m/Y H:i:s', strtotime($row['update_datetime']));
+									}
+
+									$last_login = "";
+									if ($row['last_login'] != "0000-00-00 00:00:00") {
+										$last_login = date('d/m/Y H:i:s', strtotime($row['last_login']));
+									}
+									?>
 									<tr>
-										<td class="text-center"><?= $no++; ?>.</td>
-										<td class="text-left" style="width: 25%;">
-											<?= $row['jenis_periodik']; ?>
+										<td class="text-center">
+											<?= $no++; ?>.
 										</td>
-										<td class="text-left" style="width: 35%;">
-											<?= $row['keterangan']; ?>
+										<td class="text-left">
+											<img src="<?= (empty($row['foto'])) ? base_url() . '/assets/img/noimg.png' : base_url() . '/assets/img/user/thumbnail/' . $row['foto']; ?>" style="width: 50px; height: 50px; object-fit: cover; object-position: top; border-radius: 50%;">
+										</td>
+										<td class="text-left" style="width: 15%;">
+											<?= $row['nama_lengkap']; ?>
+										</td>
+										<td class="text-left" style="width: 15%;">
+											<?= $row['username']; ?>
+										</td>
+										<td class="text-left">
+											<?= $row['email']; ?>
+										</td>
+										<td class="text-left">
+											<?= $row['no_hp']; ?>
 										</td>
 										<td>
-											<?= strftime('%d/%m/%Y %H:%M:%S', strtotime($row['create_datetime'])); ?>
+											<?= date('d/m/Y H:i:s', strtotime($row['create_datetime'])); ?>
 										</td>
 										<td>
-											<?= strftime('%d/%m/%Y %H:%M:%S', strtotime($row['update_datetime'])); ?>
+											<?= $update_datetime; ?>
+										</td>
+										<td>
+											<?= $last_login; ?>
 										</td>
 										<?php if ($user_level <= 2) : ?>
 											<td class="table-action">
 												<div class="list-unstyled d-flex align-items-center justify-content-center">
 													<li>
-														<a href="#" class="btn btn-warning text-white btnShowModal" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Jenis Periodik" data-id="<?= $row['id_jenis_periodik']; ?>" data-jenisperiodik="<?= $row['jenis_periodik']; ?>" data-keterangan="<?= $row['keterangan']; ?>" class="btn btn-info d-flex text-white" data-toggle="tooltip" data-placement="bottom" title="Ubah">
-															<i class="align-middle" data-feather="edit"></i>
+														<a href="#" class="btn btn-info text-white btnShowModalDetail" data-toggle="modal" data-target="#modalDetail" data-title="Detail Data Jaksa" data-id="<?= $row['id_user']; ?>" data-fotoprofil="<?= (empty($row['foto'])) ? base_url() . '/assets/img/noimg.png' : base_url() . '/assets/img/user/thumbnail/' . $row['foto']; ?>" data-namalengkap="<?= $row['nama_lengkap']; ?>" data-username="<?= $row['username']; ?>" data-email="<?= $row['email']; ?>" data-nohp="<?= $row['no_hp']; ?>" data-createat="<?= date('d/m/Y H:i:s', strtotime($row['create_datetime'])); ?>" data-updateat="<?= $update_datetime; ?>" data-lastlogin="<?= $last_login; ?>" data-toggle="tooltip" data-placement="bottom" title="Detail">
+															<i class="align-middle" data-feather="list"></i>
 														</a>
 													</li>
 													<li>
-														<a href="#" onclick="hapus_data(<?= $row['id_jenis_periodik'] ?>)" class="btn btn-danger text-white" data-toggle="tooltip" data-placement="bottom" title="Hapus">
+														<a href="#" class="btn btn-warning text-white btnShowModalInput" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Jaksa" data-id="<?= $row['id_user']; ?>" data-namalengkap="<?= $row['nama_lengkap']; ?>" data-username="<?= $row['username']; ?>" data-email="<?= $row['email']; ?>" data-nohp="<?= $row['no_hp']; ?>" data-toggle="tooltip" data-placement="bottom" title="Ubah Data Akun">
+															<i class="align-middle" data-feather="user"></i>
+														</a>
+													</li>
+													<li>
+														<a href="#" class="btn btn-dark text-white btnShowModalInput" data-toggle="modal" data-target="#modalInput" data-action="ubah-password" data-title="Ubah Password Akun" data-id="<?= $row['id_user']; ?>" data-namalengkap="<?= $row['nama_lengkap']; ?>" data-username="<?= $row['username']; ?>" data-email="<?= $row['email']; ?>" data-nohp="<?= $row['no_hp']; ?>" data-toggle="tooltip" data-placement="bottom" title="Ubah Password">
+															<i class="align-middle" data-feather="lock"></i>
+														</a>
+													</li>
+													<li>
+														<a href="#" onclick="hapus_data(<?= $row['id_user'] ?>)" class="btn btn-danger text-white" data-toggle="tooltip" data-placement="bottom" title="Hapus">
 															<i class="align-middle" data-feather="trash"></i>
 														</a>
 													</li>
@@ -88,7 +136,7 @@
 </div>
 
 <div class="modal fade" id="modalInput" tabindex="10" role="dialog" aria-labelledby="judulForm" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="judulForm" style="color: #000;"></h5>
@@ -100,26 +148,67 @@
 				<div class="modal-body">
 
 					<input type="hidden" id="action" name="action" value="">
-					<input type="hidden" id="id_jenis_periodik" name="id_jenis_periodik" value="">
+					<input type="hidden" id="id_user" name="id_user" value="">
 
-					<div class="form-group row mb-2">
-						<label for="jenis_periodik" class="col-sm-12 col-form-label">
-							Jenis Periodik
-						</label>
-						<div class="col-sm-12">
-							<input type="text" autofocus class="form-control" id="jenis_periodik" name="jenis_periodik" placeholder="Masukkan Jenis Periodik ...">
+					<div id="inputDataAkunForm">
+						<div class="form-group row mb-3">
+							<label for="nama_lengkap" class="col-sm-3 col-form-label">
+								Nama Lengkap
+							</label>
+							<div class="col-sm-9">
+								<input type="text" autofocus class="form-control" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan nama lengkap ...">
+							</div>
+						</div>
+
+						<div class="form-group row mb-3">
+							<label for="username" class="col-sm-3 col-form-label">
+								Username
+							</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username ...">
+							</div>
+						</div>
+
+						<div class="form-group row mb-3">
+							<label for="email" class="col-sm-3 col-form-label">
+								Email
+							</label>
+							<div class="col-sm-9">
+								<input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email ..." value="<?= $user_email ?>" autocomplete="false">
+							</div>
+						</div>
+
+						<div class="form-group row mb-3">
+							<label for="no_hp" class="col-sm-3 col-form-label">
+								No. Handphone
+							</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="no_hp" name="no_hp" placeholder="62 .... " value="<?= $user_no_hp ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" minlength="11">
+							</div>
 						</div>
 					</div>
 
-					<div class="form-group row mb-2">
-						<label for="keterangan" class="col-sm-12 col-form-label">
-							Keterangan
-						</label>
-						<div class="col-sm-12">
-							<textarea name="keterangan" id="keterangan" rows="3" class="form-control" placeholder="Masukkan keterangan ..."></textarea>
+					<div id="inputPasswordForm">
+						<div class="form-group row mt-3">
+							<label for="password" class="col-sm-3 col-form-label">
+								Password
+							</label>
+							<div class="col-sm-9">
+								<input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password ..." value="" autocomplete="false">
+							</div>
+						</div>
+
+						<div class="form-group row mt-3">
+							<label for="konfirmasi_password" class="col-sm-3 col-form-label">
+								Konfirmasi Password
+							</label>
+							<div class="col-sm-9">
+								<input type="password" class="form-control" id="konfirmasi_password" name="konfirmasi_password" placeholder="Masukkan konfirmasi password  ..." value="" autocomplete="false">
+							</div>
 						</div>
 					</div>
 
+					<hr>
 					<div class="mt-4 d-flex justify-content-between align-items-center w-100">
 						<button type="submit" class="btn btn-lg btn-success btn-block">
 							<i class="fa fa-save"></i> SIMPAN
@@ -133,6 +222,77 @@
 	</div>
 </div>
 
+<div class="modal fade" id="modalDetail" tabindex="10" role="dialog" aria-labelledby="judulFormDetail" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="judulFormDetail" style="color: #000;"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="text-center">
+					<img id="detail_foto_profil" src="" style="width: 100px; height: 100px; object-fit: cover; object-position: top; border-radius: 50%; background-color: #fff;" alt="Foto Profil Jaksa">
+				</div>
+
+				<table class="table-sm table-responsive table-borderless">
+					<tr>
+						<td>Nama Lengkap</td>
+						<td>:</td>
+						<td>
+							<span id="detail_nama_lengkap"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>Username</td>
+						<td>:</td>
+						<td>
+							<span id="detail_username"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>Email</td>
+						<td>:</td>
+						<td>
+							<span id="detail_email"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>No. Handphone</td>
+						<td>:</td>
+						<td>
+							<span id="detail_no_hp"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>Create at</td>
+						<td>:</td>
+						<td>
+							<span id="detail_create_datetime"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>Update at</td>
+						<td>:</td>
+						<td>
+							<span id="detail_update_datetime"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>Last Login</td>
+						<td>:</td>
+						<td>
+							<span id="detail_last_login"></span>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+
 <script>
 	$(document).ready(function() {
 		$(function() {
@@ -140,7 +300,7 @@
 			// $("#modalInput").css("z-index", "1500");
 			$("#modalInput").appendTo('body');
 
-			$(document).on('click', '.btnShowModal', function() {
+			$(document).on('click', '.btnShowModalInput', function() {
 				var title = $(this).data('title');
 				var action = $(this).data('action');
 
@@ -148,42 +308,120 @@
 				$('#modalInput #action').val(action);
 
 				if (action == "tambah") {
-					$("form").trigger("reset");
-				} else if (action == "ubah") {
-					var id_jenis_periodik = $(this).data('id');
-					var jenisperiodik = $(this).data('jenisperiodik');
-					var keterangan = $(this).data('keterangan');
 
-					$('#modalInput #id_jenis_periodik').val(id_jenis_periodik);
-					$('#modalInput #jenis_periodik').val(jenisperiodik);
-					$('#modalInput #keterangan').val(keterangan);
+					$("form").trigger("reset");
+					$('#inputDataAkunForm').show();
+					$('#inputPasswordForm').show();
+
+				} else if (action == "ubah") {
+					$('#inputDataAkunForm').show();
+					$('#inputPasswordForm').hide();
+
+					var id_user = $(this).data('id');
+					var namalengkap = $(this).data('namalengkap');
+					var username = $(this).data('username');
+					var email = $(this).data('email');
+					var no_hp = $(this).data('no_hp');
+
+					$('#modalInput #id_user').val(id_user);
+					$('#modalInput #nama_lengkap').val(namalengkap);
+					$('#modalInput #username').val(username);
+					$('#modalInput #email').val(email);
+					$('#modalInput #no_hp').val(no_hp);
+
+				} else if (action == "ubah-password") {
+					$('#inputDataAkunForm').hide();
+					$('#inputPasswordForm').show();
+
+					var id_user = $(this).data('id');
+
+					$('#modalInput #id_user').val(id_user);
 				}
 			});
 
+			$("#modalDetail").appendTo('body');
+			$(document).on('click', '.btnShowModalDetail', function() {
+				var title = $(this).data('title');
+
+				$('#modalDetail #judulFormDetail').text(title);
+
+				var id_user = $(this).data('id');
+				var namalengkap = $(this).data('namalengkap');
+				var username = $(this).data('username');
+				var email = $(this).data('email');
+				var no_hp = $(this).data('nohp');
+				var create_datetime = $(this).data('createat');
+				var update_datetime = $(this).data('updateat');
+				var last_login = $(this).data('lastlogin');
+				var foto_profil = $(this).data('fotoprofil');
+
+				// $('#modalDetail #detail_id_user').val(id_user);
+				$('#modalDetail #detail_nama_lengkap').text(namalengkap);
+				$('#modalDetail #detail_username').text(username);
+				$('#modalDetail #detail_email').text(email);
+				$('#modalDetail #detail_no_hp').text(no_hp);
+				$('#modalDetail #detail_create_datetime').text(create_datetime);
+				$('#modalDetail #detail_update_datetime').text(update_datetime);
+				$('#modalDetail #detail_last_login').text(last_login);
+				$('#modalDetail #detail_foto_profil').attr("src", foto_profil);
+
+			});
+
+			// Submit Form
 			$("#formInput").submit(function(e) {
 				e.preventDefault();
 
+				let formData = new FormData();
 				var action = $('#action').val();
+				var id_user = $('#id_user').val();
+				formData.append('id_user', id_user);
 
 				if (action == "tambah") {
-					var urlPost = base_url + "/data-master/jenis-periodik/add";
-				} else if (action == "ubah") {
-					var urlPost = base_url + "/data-master/jenis-periodik/edit";
-				}
+					var urlPost = base_url + "/data-master/ulpl/add";
 
-				var id_jenis_periodik = $('#id_jenis_periodik').val();
-				var jenis_periodik = $('#jenis_periodik').val();
-				var keterangan = $('#keterangan').val();
+					var nama_lengkap = $('#nama_lengkap').val();
+					var username = $('#username').val();
+					var email = $('#email').val();
+					var no_hp = $('#no_hp').val();
+					var password = $('#password').val();
+					var konfirmasi_password = $('#konfirmasi_password').val();
+
+					formData.append('nama_lengkap', nama_lengkap);
+					formData.append('username', username);
+					formData.append('email', email);
+					formData.append('no_hp', no_hp);
+					formData.append('password', password);
+					formData.append('konfirmasi_password', konfirmasi_password);
+				} else if (action == "ubah") {
+					var urlPost = base_url + "/data-master/ulpl/edit";
+
+					var nama_lengkap = $('#nama_lengkap').val();
+					var username = $('#username').val();
+					var email = $('#email').val();
+					var no_hp = $('#no_hp').val();
+
+					formData.append('nama_lengkap', nama_lengkap);
+					formData.append('username', username);
+					formData.append('email', email);
+					formData.append('no_hp', no_hp);
+				} else if (action == "ubah-password") {
+					var urlPost = base_url + "/data-master/ulpl/edit";
+
+					var password = $('#password').val();
+					var konfirmasi_password = $('#konfirmasi_password').val();
+
+					formData.append('password', password);
+					formData.append('konfirmasi_password', konfirmasi_password);
+				}
 
 				$.ajax({
 					type: "POST",
 					url: urlPost,
 					dataType: "JSON",
-					data: {
-						id_jenis_periodik: id_jenis_periodik,
-						jenis_periodik: jenis_periodik,
-						keterangan: keterangan,
-					},
+					data: formData,
+					cache: false,
+					processData: false,
+					contentType: false,
 					beforeSend: function() {
 						$("#loader").show();
 					},
@@ -206,10 +444,10 @@
 		});
 	});
 
-	function hapus_data(id_jenis_periodik) {
+	function hapus_data(id_user) {
 		event.preventDefault(); // prevent form submit
 
-		var urlPost = base_url + "/data-master/jenis-periodik/delete";
+		var urlPost = base_url + "/data-master/ulpl/delete";
 
 		Swal.fire({
 			title: "Hapus Data",
@@ -227,7 +465,7 @@
 					url: urlPost,
 					dataType: "JSON",
 					data: {
-						id_jenis_periodik: id_jenis_periodik
+						id_user: id_user
 					},
 					beforeSend: function() {
 						$("#loader").show();
@@ -253,10 +491,12 @@
 		var tanggalHariIni = datetime.getDate() + '-' + datetime.getMonth() + '-' + datetime.getFullYear();
 
 		var $dTable = $('#data-table-custom').DataTable({
-			<?php if ($user_level == 1) : ?> "dom": 'lBfrtip',
+			<?php if ($user_level <= 2) : ?> "dom": '<"d-block d-lg-flex justify-content-between"lf<"btn btn-sm"B>r>t<"d-block d-lg-flex justify-content-between"ip>',
 			<?php endif; ?> "paging": true,
 			"responsive": true,
 			"searching": true,
+			"fixedHeader": true,
+			"autoWidth": true,
 			"deferRender": true,
 			"lengthMenu": [
 				[10, 25, 50, 100, -1],
@@ -264,7 +504,7 @@
 			],
 			"buttons": [{
 					extend: 'excelHtml5',
-					filename: 'DATA Jenis Periodik - UPDK KAPUAS - update ' + tanggalHariIni,
+					filename: 'Data Jaksa - UPDK KAPUAS - update ' + tanggalHariIni,
 					text: 'Export Excel (*xlsx)',
 					exportOptions: {
 						// columns: [0, 1, 2, 3, 4, 5],
@@ -276,9 +516,9 @@
 				},
 				{
 					extend: 'pdfHtml5',
-					filename: 'DATA Jenis Periodik - UPDK KAPUAS - update ' + tanggalHariIni,
+					filename: 'Data Jaksa - UPDK KAPUAS - update ' + tanggalHariIni,
 					text: 'Export PDF (*pdf)',
-					message: 'DATA Jenis Periodik',
+					message: 'Data Jaksa',
 					messageBottom: 'Data dibuat otomatis oleh sistem : ' + tanggalHariIni,
 					exportOptions: {
 						// columns: [0, 1, 2, 3, 4, 5],
@@ -287,22 +527,19 @@
 							page: 'current'
 						}
 					},
-					orientation: 'landscape',
+					orientation: 'portrait',
 					pageSize: 'LEGAL',
 					customize: function(doc) {
 						doc.pageMargins = [20, 20, 20, 20];
-						doc.defaultStyle.fontSize = 7;
-						doc.styles.tableHeader.fontSize = 7;
-						doc.styles.title.fontSize = 9;
-						// Remove spaces around page title
+						doc.defaultStyle.fontSize = 10;
+						doc.styles.tableHeader.fontSize = 10;
+						doc.styles.title.fontSize = 14;
 						doc.content[0].text = doc.content[0].text.trim();
-						// Create a footer
 						doc['footer'] = (function(page, pages) {
 							return {
 								columns: [
-									'Data Jenis Periodik',
+									'Data Jaksa',
 									{
-										// This is the right column
 										alignment: 'right',
 										text: ['Page ', {
 											text: page.toString()
@@ -343,7 +580,29 @@
 						doc.content[1].layout = objLayout;
 					}
 				},
-			]
+			],
+			initComplete: function(settings, json) {
+				$("#card-view-table").on("click", function() {
+					if ($("#data-table-custom").hasClass("card")) {
+						$(".colHeader").remove();
+					} else {
+						var labels = [];
+						$("#data-table-custom thead th").each(function() {
+							labels.push($(this).text());
+						});
+						$("#data-table-custom tbody tr").each(function() {
+							$(this)
+								.find("td")
+								.each(function(column) {
+									$("<span class='colHeader font-weight-bold'>" + labels[column] + ":</span>").prependTo(
+										$(this)
+									);
+								});
+						});
+					}
+					$("#data-table-custom").toggleClass("card");
+				});
+			}
 		});
 
 	});

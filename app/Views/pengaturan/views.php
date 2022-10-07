@@ -121,7 +121,7 @@
 								Password lama
 							</label>
 							<div class="col-sm-9">
-								<input type="password" class="form-control <?= ($validation->hasError('password_lama')) ? 'is-invalid' : ''; ?>" id="password_lama" name="password_lama" placeholder="Masukkan password lama ..." value="<?= old('password_lama') ?>">
+								<input type="password" class="form-control" id="password_lama" name="password_lama" placeholder="Masukkan password lama ..." value="">
 							</div>
 						</div>
 
