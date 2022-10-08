@@ -35,6 +35,8 @@ $routes->post('/berkas-perkara/delete', 'BerkasPerkara::delete', ['filter' => 'a
 $routes->get('/data-master/jaksa', 'Jaksa::index', ['filter' => 'auth_login']);
 $routes->post('/data-master/jaksa/add', 'Jaksa::add', ['filter' => 'auth_login']);
 $routes->post('/data-master/jaksa/edit', 'Jaksa::edit', ['filter' => 'auth_login']);
+$routes->post('/data-master/jaksa/update-password', 'Jaksa::update_password', ['filter' => 'auth_login']);
+$routes->post('/data-master/jaksa/update-profil', 'Jaksa::update_profil', ['filter' => 'auth_login']);
 $routes->post('/data-master/jaksa/delete', 'Jaksa::delete', ['filter' => 'auth_login']);
 
 $routes->get('/data-master/instansi', 'Instansi::index', ['filter' => 'auth_login']);

@@ -60,17 +60,17 @@
 								</div>
 							</div>
 
-							<div class="col-lg-3 mb-3">
+							<div class="col-lg-2 mb-3">
 								<label for="instansiPenyidikSelect">Instansi Penyidik</label>
 								<div id="instansiPenyidikSelect"></div>
 							</div>
 
-							<div class="col-lg-3 mb-3">
-								<label for="instansiPelaksanaPenyidikanSelect">Instansi Pelaksana Penyidikan</label>
+							<div class="col-lg-2 mb-3">
+								<label for="instansiPelaksanaPenyidikanSelect">Instansi Pelaksana</label>
 								<div id="instansiPelaksanaPenyidikanSelect"></div>
 							</div>
 
-							<div class="col-lg-3 mb-3">
+							<div class="col-lg-2 mb-3">
 								<label for="statusSelect">Status</label>
 								<div id="statusSelect"></div>
 							</div>
@@ -158,7 +158,7 @@
 </div>
 
 <div class="modal fade" id="modalInput" tabindex="10" role="dialog" aria-labelledby="judulForm" aria-hidden="true">
-	<div class="modal-xl modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="judulForm" style="color: #000;"></h5>
@@ -169,98 +169,140 @@
 			<form id="formInput" enctype="multipart/form-data">
 				<div class="modal-body">
 
-					<div class="row">
-						<div class="col-lg-4">
-
-						</div>
-					</div>
-
 					<input type="hidden" id="action" name="action" value="">
 					<input type="hidden" id="id_berkas_perkara" name="id_berkas_perkara" value="">
 					<input type="hidden" id="id_user" name="id_user" value="<?= $user_id; ?>">
 
-					<div class="form-group row mb-2">
-						<label for="tanggal_waktu" class="col-sm-12 col-form-label">
-							Tanggal & Waktu
+					<div class="form-group row mb-3">
+						<label for="pidana_anak" class="col-sm-12 col-form-label">
+							Pidana Anak
 						</label>
 						<div class="col-sm-12">
-							<input type="datetime-local" class="form-control" id="tanggal_waktu" name="tanggal_waktu" placeholder="0" value="<?= date('Y-m-d H:i'); ?>:00" style="width: 200px;">
+							<input type="checkbox" class="form-control" id="pidana_anak" name="pidana_anak" value="Ya">
 						</div>
 					</div>
 
-					<div class="form-group row mb-2">
-						<label for="id_instansi_penyidik" class="col-sm-12 col-form-label">
-							Instansi Penyidik
+					<div class="form-group row mb-3">
+						<div class="col-lg-6 mb-3 mb-lg-0">
+							<div class="row">
+								<label for="nomor_berkas" class="col-sm-12 col-form-label">
+									Nomor Berkas
+								</label>
+								<div class="col-sm-12">
+									<input type="text" class="form-control" id="nomor_berkas" name="nomor_berkas" placeholder="Masukkan Nomor Berkas ..." value="">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-6 mb-3 mb-lg-0">
+							<div class="row">
+								<label for="tanggal_berkas" class="col-sm-12 col-form-label">
+									Tanggal Berkas
+								</label>
+								<div class="col-sm-12">
+									<input type="date" class="form-control" id="tanggal_berkas" name="tanggal_berkas" placeholder="0" value="<?= date('Y-m-d'); ?>" style="width: 200px;">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row mb-3">
+						<div class="col-lg-6 mb-3 mb-lg-0">
+							<div class="row">
+								<label for="nomor_p16" class="col-sm-12 col-form-label">
+									Nomor P-16
+								</label>
+								<div class="col-sm-12">
+									<input type="text" class="form-control" id="nomor_p16" name="nomor_p16" placeholder="Masukkan Nomor P-16 ..." value="">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-6 mb-3 mb-lg-0">
+							<div class="row">
+								<label for="tanggal_p16" class="col-sm-12 col-form-label">
+									Tanggal P-16
+								</label>
+								<div class="col-sm-12">
+									<input type="date" class="form-control" id="tanggal_p16" name="tanggal_p16" placeholder="0" value="<?= date('Y-m-d'); ?>" style="width: 200px;">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row mb-3">
+						<div class="col-lg-6 mb-3 mb-lg-0">
+							<div class="row">
+								<label for="id_instansi_penyidik" class="col-sm-12 col-form-label">
+									Instansi Penyidik
+								</label>
+								<div class="col-sm-12">
+									<select name="id_instansi_penyidik" id="id_instansi_penyidik" class="form-control js-select-2">
+										<option value="">-- Pilih Instansi Penyidik --</option>
+										<?php foreach ($list_instansi as $d_ins) : ?>
+											<option value="<?= $d_ins['id_instansi']; ?>">
+												<?= $d_ins['nama_instansi']; ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-6 mb-3 mb-lg-0">
+							<label for="id_instansi_pelaksana_penyidikan" class="col-sm-12 col-form-label">
+								Instansi Pelaksana Penyidikan
+							</label>
+							<div class="col-sm-12">
+								<select name="id_instansi_pelaksana_penyidikan" id="id_instansi_pelaksana_penyidikan" class="form-control js-select-2">
+									<option value="">-- Pilih Instansi Pelaksana Penyidikan --</option>
+									<?php foreach ($list_instansi as $d_ins_2) : ?>
+										<option value="<?= $d_ins_2['id_instansi']; ?>">
+											<?= $d_ins_2['nama_instansi']; ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row mb-3">
+						<label for="jaksa_terkait" class="col-sm-12 col-form-label">
+							Jaksa Terkait
 						</label>
 						<div class="col-sm-12">
-							<select name="id_instansi_penyidik" id="id_instansi_penyidik" class="form-control">
-								<option value="">-- Pilih Instansi Penyidik --</option>
-								<?php foreach ($list_instansi as $d_ins) : ?>
-									<option value="<?= $d_ins['id_instansi']; ?>">
-										<?= $d_ins['nama_instansi']; ?>
+							<select name="jaksa_terkait" id="jaksa_terkait" class="form-control js-select-2" multiple>
+								<?php foreach ($list_jaksa as $jaksa) : ?>
+									<option value="<?= $jaksa['id_user']; ?>">
+										<?= $jaksa['nama_lengkap']; ?> (NIP.<?= $jaksa['nip']; ?>)
 									</option>
 								<?php endforeach; ?>
 							</select>
 						</div>
 					</div>
 
-					<div class="form-group row mb-2">
-						<label for="id_instansi_pelaksana_penyidikan" class="col-sm-12 col-form-label">
-							Instansi Pelaksana Penyidikan
+					<div class="form-group row mb-3">
+						<label for="status_berkas" class="col-sm-12 col-form-label">
+							Status Berkas
 						</label>
 						<div class="col-sm-12">
-							<select name="id_instansi_pelaksana_penyidikan" id="id_instansi_pelaksana_penyidikan" class="form-control">
-								<option value="">-- Pilih Instansi Pelaksana Penyidikan --</option>
-								<?php foreach ($list_instansi as $d_ins) : ?>
-									<option value="<?= $d_ins['id_instansi']; ?>">
-										<?= $d_ins['nama_instansi']; ?>
-									</option>
-								<?php endforeach; ?>
-							</select>
+							<input type="text" class="form-control" id="status_berkas" name="status_berkas" placeholder="Masukkan Status Berkas ..." value="">
 						</div>
 					</div>
 
 					<div class="form-group row mb-2">
-						<label for="unit" class="col-sm-12 col-form-label">
-							Unit
+						<label for="file_berkas" class="col-sm-12 col-form-label">
+							File Berkas
+							<small class="text-danger">
+								(*Jika Ada) (*Maks 4 MB)
+							</small>
 						</label>
 						<div class="col-sm-12">
-							<input type="number" class="form-control text-center" id="unit" name="unit" placeholder="0" style="width: 100px;">
-						</div>
-					</div>
-
-					<div class="form-group row mb-2">
-						<div class="col-6 col-lg-4 col-md-6 col-sm-6">
-							<label for="rencana" class="col-sm-12 col-form-label">
-								Rencana
-							</label>
-							<div class="col-sm-12">
-								<input type="number" step="any" class="form-control text-center" id="rencana" name="rencana" placeholder="0" style="width: 100px;">
-							</div>
-						</div>
-						<div class="col-6 col-lg-4 col-md-6 col-sm-6">
-							<label for="realisasi" class="col-sm-12 col-form-label">
-								Realisasi
-							</label>
-							<div class="col-sm-12">
-								<input type="number" step="any" class="form-control text-center" id="realisasi" name="realisasi" placeholder="0" style="width: 100px;">
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group row mb-2">
-						<label for="catatan" class="col-sm-12 col-form-label">
-							Catatan
-						</label>
-						<div class="col-sm-12">
-							<textarea name="catatan" id="catatan" rows="3" class="form-control" placeholder="Masukkan catatan ..."></textarea>
+							<input type="file" name="file_berkas" class="dropify" data-max-file-size="4M" data-show-remove="true" data-show-loader="true" data-show-errors="true" data-errors-position="outside" data-max-file-size-preview="4M" />
 						</div>
 					</div>
 
 					<div class="mt-4 d-flex justify-content-between align-items-center w-100">
-						<!-- <button type="button" class="btn btn-lg btn-outline-dark btn-block mt-2" data-dismiss="modal">
-							<i class="fa fa-times"></i> TUTUP
-						</button> -->
 						<button type="submit" class="btn btn-lg btn-success btn-block">
 							<i class="fa fa-save"></i> SIMPAN
 						</button>
@@ -640,6 +682,33 @@
 			$.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(filterTanggalWaktu, 1));
 			$dTable.draw();
 		});
+	});
+
+	$('.dropify').dropify({
+		messages: {
+			'default': 'Drag and drop a file here or click',
+			'replace': 'Drag and drop or click to replace',
+			'remove': 'Hapus',
+			'error': 'Maaf, terjadi kesalahan !'
+		},
+		tpl: {
+			wrap: '<div class="dropify-wrapper"></div>',
+			loader: '<div class="dropify-loader"></div>',
+			message: '<div class="dropify-message"><span class="file-icon" /> <p>{{ default }}</p></div>',
+			preview: '<div class="dropify-preview"><span class="dropify-render"></span><div class="dropify-infos"><div class="dropify-infos-inner"><p class="dropify-infos-message">{{ replace }}</p></div></div></div>',
+			filename: '<p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner"></span></p>',
+			clearButton: '<button type="button" class="dropify-clear">{{ remove }}</button>',
+			errorLine: '<p class="dropify-error">{{ error }}</p>',
+			errorsContainer: '<div class="dropify-errors-container"><ul></ul></div>'
+		},
+		error: {
+			'fileSize': 'Ukuran file terlalu besar !',
+			'minWidth': 'The image width is too small ({{ value }}}px min).',
+			'maxWidth': 'The image width is too big ({{ value }}}px max).',
+			'minHeight': 'The image height is too small ({{ value }}}px min).',
+			'maxHeight': 'The image height is too big ({{ value }}px max).',
+			'imageFormat': 'The image format is not allowed ({{ value }} only).'
+		}
 	});
 </script>
 

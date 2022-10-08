@@ -79,8 +79,8 @@
 									<hr>
 									<form id="formLogin">
 										<div class="mb-3">
-											<label class="form-label">Username/Email</label>
-											<input class="form-control form-control-lg" autofocus type="username" id="username" name="username" placeholder="Masukkan username/email ..." autocomplete="false" />
+											<label class="form-label">NIP/Username/Email</label>
+											<input class="form-control form-control-lg" autofocus type="username" id="username" name="username" placeholder="Masukkan NIP/Username/Email ..." autocomplete="false" />
 										</div>
 										<div class="mb-3">
 											<label class="form-label">Password</label>

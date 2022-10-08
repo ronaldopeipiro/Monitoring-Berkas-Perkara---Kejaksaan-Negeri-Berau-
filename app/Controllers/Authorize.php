@@ -12,7 +12,7 @@ class Authorize extends BaseController
 		$this->validation = \Config\Services::validation();
 		$this->request = \Config\Services::request();
 
-		$this->namaAkunEmailSMTP = "LAPOR LAKA LANTAS APP";
+		$this->namaAkunEmailSMTP = "APP MONITORING BERKAS PERKARA - KEJAKSAAN NEGERI BERAU";
 		$this->akunEmailSMTP = "laporlakalantasapp@gmail.com";
 		$this->passwordEmailSMTP = "ywsxjzhlpofqeydf";
 
@@ -25,7 +25,7 @@ class Authorize extends BaseController
 		$iv_length = openssl_cipher_iv_length($ciphering);
 		$options = 0;
 		$encryption_iv = '1234567891011121';
-		$encryption_key = "#*AplikasiOutageUPDKKapuas2022#@";
+		$encryption_key = "#*AplikasiMonitoringBerkasPerkaraKejaksaanNegeriBERAU2022#@";
 
 		$encryption = openssl_encrypt(
 			$string,
@@ -45,7 +45,7 @@ class Authorize extends BaseController
 		$options = 0;
 
 		$decryption_iv = '1234567891011121';
-		$decryption_key = "#*AplikasiOutageUPDKKapuas2022#@";
+		$decryption_key = "#*AplikasiMonitoringBerkasPerkaraKejaksaanNegeriBERAU2022#@";
 
 		$decryption = openssl_decrypt(
 			$string_encrypt,
@@ -121,7 +121,7 @@ class Authorize extends BaseController
 			return false;
 		}
 
-		$data = ($this->db->query("SELECT * FROM user WHERE username='$username' OR email='$username' LIMIT 1"))->getRow();
+		$data = ($this->db->query("SELECT * FROM user WHERE username='$username' OR nip='$username' OR email='$username' LIMIT 1"))->getRow();
 
 		if ($data) {
 			$pass = $data->password;
@@ -160,7 +160,7 @@ class Authorize extends BaseController
 		} else {
 			echo json_encode(array(
 				'success' => '0',
-				'pesan' => 'Username/Email tidak ditemukan !'
+				'pesan' => 'NIP/Username/Email tidak ditemukan !'
 			));
 		}
 	}
@@ -255,7 +255,7 @@ class Authorize extends BaseController
 		$email_smtp->setSubject("Permintaan Reset Password");
 		$pesan = '
 					<h3>Hallo, saudara/i <b>' . $nama_penerima . '</b> (username.' . $username . ')</h3>
-					anda baru saja meminta untuk melakukan reset password akun anda pada aplikasi LAPOR LAKA LANTAS APP.
+					anda baru saja meminta untuk melakukan reset password akun anda pada APP aplikasi MONITORING BERKAS PERKARA - KEJAKSAAN NEGERI BERAU.
 					<br>
 					Jika benar bahwa anda yang meminta untuk melakukan reset password, silahkan lakukan reset password akun anda melalui tautan berikut.
 					<br>

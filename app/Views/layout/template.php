@@ -1,3 +1,7 @@
+<?php
+setlocale(LC_ALL, 'id-ID', 'id_ID');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,10 +30,10 @@
 	<link rel="stylesheet" href="<?= base_url(); ?>/template/toastr/toastr.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-	<link rel="stylesheet" href="<?= base_url() ?>/template/sweetalert2/sweetalert2.min.css">
-	<link href='https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.css' type='text/css' rel='stylesheet'>
-	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+	<link rel="stylesheet" href="<?= base_url(); ?>/template/dropify/dist/css/dropify.min.css">
 
+	<link rel="stylesheet" href="<?= base_url() ?>/template/sweetalert2/sweetalert2.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
 
 	<script src="<?= base_url(); ?>/template/js/app.js"></script>
 
@@ -54,85 +58,10 @@
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
+	<script type="text/javascript" src="<?= base_url(); ?>/template/dropify/dist/js/dropify.min.js"></script>
+
 	<script>
 		const base_url = "<?= base_url() ?>";
-
-		function format_tgl_indo(tanggal, format) {
-			// var date = new Date();
-			// var tahun = date.getFullYear();
-			// var bulan = date.getMonth();
-			// var tanggal = date.getDate();
-			// var hari = date.getDay();
-			// var jam = date.getHours();
-			// var menit = date.getMinutes();
-			// var detik = date.getSeconds();
-
-			switch (hari) {
-				case 0:
-					hari = "Minggu";
-					break;
-				case 1:
-					hari = "Senin";
-					break;
-				case 2:
-					hari = "Selasa";
-					break;
-				case 3:
-					hari = "Rabu";
-					break;
-				case 4:
-					hari = "Kamis";
-					break;
-				case 5:
-					hari = "Jum'at";
-					break;
-				case 6:
-					hari = "Sabtu";
-					break;
-			}
-			switch (bulan) {
-				case 0:
-					bulan = "Januari";
-					break;
-				case 1:
-					bulan = "Februari";
-					break;
-				case 2:
-					bulan = "Maret";
-					break;
-				case 3:
-					bulan = "April";
-					break;
-				case 4:
-					bulan = "Mei";
-					break;
-				case 5:
-					bulan = "Juni";
-					break;
-				case 6:
-					bulan = "Juli";
-					break;
-				case 7:
-					bulan = "Agustus";
-					break;
-				case 8:
-					bulan = "September";
-					break;
-				case 9:
-					bulan = "Oktober";
-					break;
-				case 10:
-					bulan = "November";
-					break;
-				case 11:
-					bulan = "Desember";
-					break;
-			}
-			var tampilTanggal = "Tanggal: " + hari + ", " + tanggal + " " + bulan + " " + tahun;
-			var tampilWaktu = "Jam: " + jam + ":" + menit + ":" + detik;
-			console.log(tampilTanggal);
-			console.log(tampilWaktu);
-		}
 	</script>
 
 	<style>
@@ -345,7 +274,7 @@
 						<div class="col-lg-3 text-end">
 							<ul class="list-inline d-flex justify-content-between">
 								<li class="list-inline-item">
-									<a class="text-muted" href="https://wa.me/+6285750597580" target="_blank">Butuh Bantuan ?</a>
+									<a class="text-muted" href="https://wa.me/+6285750597580" target="_blank">Bantuan</a>
 								</li>
 								<li class="list-inline-item">
 									<a class="text-muted" href="<?= base_url(); ?>/panduan-aplikasi">Panduan</a>
@@ -365,6 +294,8 @@
 	<script>
 		$(document).ready(function() {
 			$(".js-select-2").select2();
+			$(".js-select-2-R").select2();
+			$(".js-select-2-M").select2();
 
 			$("#data-table").DataTable({
 				paging: true,
@@ -425,6 +356,7 @@
 
 		$(function() {
 			$('[data-toggle="tooltip"]').tooltip()
+
 		})
 	</script>
 

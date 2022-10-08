@@ -14,6 +14,7 @@ class UserModel extends Model
 		'username',
 		'password',
 		'nama_lengkap',
+		'nip',
 		'email',
 		'no_hp',
 		'foto',
@@ -47,7 +48,7 @@ class UserModel extends Model
 		return $this->where([
 			'aktif' => 'Y'
 		])->orderBy(
-			'nama_user',
+			'nama_lengkap',
 			'asc'
 		)->findAll();
 	}
@@ -69,7 +70,7 @@ class UserModel extends Model
 			'id_level' => $id_level,
 			'aktif' => 'Y'
 		])->orderBy(
-			'nama_user',
+			'nama_lengkap',
 			'asc'
 		)->findAll();
 	}

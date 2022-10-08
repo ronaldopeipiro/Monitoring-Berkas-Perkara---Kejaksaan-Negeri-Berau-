@@ -1,10 +1,14 @@
+<?php
+if ($user_level > 2) {
+	header('Location: ' . base_url());
+	exit();
+}
+?>
+
 <?= $this->extend('layout/template'); ?>
 
 <?= $this->section('content'); ?>
 
-<?php
-setlocale(LC_ALL, 'id-ID', 'id_ID');
-?>
 
 <div class="container-fluid p-0">
 	<div class="row row-deck row-cards">
@@ -35,7 +39,7 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 								<tr>
 									<th>No.</th>
 									<th>Nama Instansi</th>
-									<th>deskripsi</th>
+									<th>Deskripsi</th>
 									<th>Create at</th>
 									<th>Update at</th>
 									<?php if ($user_level <= 2) : ?>

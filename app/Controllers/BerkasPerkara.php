@@ -63,6 +63,7 @@ class BerkasPerkara extends BaseController
 			'user_foto' => $this->user_foto,
 			'data_berkas_perkara' => $this->BerkasPerkaraModel->getBerkasPerkara(),
 			'list_instansi' => $this->InstansiModel->getListInstansiAktif(),
+			'list_jaksa' => $this->UserModel->getListUserAktifByLevel(3),
 		];
 
 		return view('berkas-perkara/views', $data);

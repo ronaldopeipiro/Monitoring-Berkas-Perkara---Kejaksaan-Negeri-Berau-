@@ -37,16 +37,17 @@ if ($user_level > 2) {
 
 						<table class="table table-sm table-hover table-responsive-sm table-striped" id="data-table-custom" style="font-size: 12px;">
 							<thead>
-								<tr>
+								<tr class="text-center">
 									<th>No.</th>
 									<th>Foto</th>
 									<th>Nama Lengkap</th>
-									<th>Username</th>
+									<th>NIP</th>
+									<!-- <th>Username</th> -->
 									<th>Email</th>
 									<th>No. Handphone</th>
-									<th>Create at</th>
-									<th>Update at</th>
-									<th>Last Login</th>
+									<!-- <th>Create</th>
+									<th>Update</th>
+									<th>Last Login</th> -->
 									<?php if ($user_level <= 2) : ?>
 										<th>Aksi</th>
 									<?php endif; ?>
@@ -58,13 +59,17 @@ if ($user_level > 2) {
 								<?php foreach ($data_jaksa as $row) : ?>
 									<?php
 									$update_datetime = "";
-									if ($row['update_datetime'] != "0000-00-00 00:00:00") {
+									$update_datetime_show = "";
+									if (($row['update_datetime'] != "0000-00-00 00:00:00") and ($row['last_login'] != NULL)) {
 										$update_datetime = date('d/m/Y H:i:s', strtotime($row['update_datetime']));
+										$update_datetime_show = date('d/m/Y', strtotime($row['update_datetime'])) . "<br>" . date('H:i:s', strtotime($row['update_datetime']));;
 									}
 
 									$last_login = "";
-									if ($row['last_login'] != "0000-00-00 00:00:00") {
+									$last_login_show = "";
+									if (($row['last_login'] != "0000-00-00 00:00:00") and ($row['last_login'] != NULL)) {
 										$last_login = date('d/m/Y H:i:s', strtotime($row['last_login']));
+										$last_login_show = date('d/m/Y', strtotime($row['last_login'])) . "<br>" . date('H:i:s', strtotime($row['last_login']));;
 									}
 									?>
 									<tr>
@@ -74,38 +79,47 @@ if ($user_level > 2) {
 										<td class="text-left">
 											<img src="<?= (empty($row['foto'])) ? base_url() . '/assets/img/noimg.png' : base_url() . '/assets/img/user/thumbnail/' . $row['foto']; ?>" style="width: 50px; height: 50px; object-fit: cover; object-position: top; border-radius: 50%;">
 										</td>
-										<td class="text-left" style="width: 15%;">
+										<td class="text-left">
 											<?= $row['nama_lengkap']; ?>
 										</td>
-										<td class="text-left" style="width: 15%;">
-											<?= $row['username']; ?>
+										<td class="text-left">
+											<?= $row['nip']; ?>
 										</td>
+										<!-- <td class="text-left">
+											<?= $row['username']; ?>
+										</td> -->
 										<td class="text-left">
 											<?= $row['email']; ?>
 										</td>
 										<td class="text-left">
 											<?= $row['no_hp']; ?>
 										</td>
-										<td>
-											<?= date('d/m/Y H:i:s', strtotime($row['create_datetime'])); ?>
+										<!-- <td>
+											<?= date('d/m/Y', strtotime($row['create_datetime'])); ?> <br>
+											<?= date('H:i:s', strtotime($row['create_datetime'])); ?>
 										</td>
 										<td>
-											<?= $update_datetime; ?>
+											<?= $update_datetime_show; ?>
 										</td>
 										<td>
-											<?= $last_login; ?>
-										</td>
+											<?= $last_login_show; ?>
+										</td> -->
 										<?php if ($user_level <= 2) : ?>
 											<td class="table-action">
 												<div class="list-unstyled d-flex align-items-center justify-content-center">
 													<li>
-														<a href="#" class="btn btn-info text-white btnShowModalDetail" data-toggle="modal" data-target="#modalDetail" data-title="Detail Data Jaksa" data-id="<?= $row['id_user']; ?>" data-fotoprofil="<?= (empty($row['foto'])) ? base_url() . '/assets/img/noimg.png' : base_url() . '/assets/img/user/thumbnail/' . $row['foto']; ?>" data-namalengkap="<?= $row['nama_lengkap']; ?>" data-username="<?= $row['username']; ?>" data-email="<?= $row['email']; ?>" data-nohp="<?= $row['no_hp']; ?>" data-createat="<?= date('d/m/Y H:i:s', strtotime($row['create_datetime'])); ?>" data-updateat="<?= $update_datetime; ?>" data-lastlogin="<?= $last_login; ?>" data-toggle="tooltip" data-placement="bottom" title="Detail">
+														<a href="#" class="btn btn-info text-white btnShowModalDetail" data-toggle="modal" data-target="#modalDetail" data-title="Detail Data Jaksa" data-id="<?= $row['id_user']; ?>" data-fotoprofil="<?= (empty($row['foto'])) ? base_url() . '/assets/img/noimg.png' : base_url() . '/assets/img/user/thumbnail/' . $row['foto']; ?>" data-namalengkap="<?= $row['nama_lengkap']; ?>" data-nip="<?= $row['nip']; ?>" data-username="<?= $row['username']; ?>" data-email="<?= $row['email']; ?>" data-nohp="<?= $row['no_hp']; ?>" data-createat="<?= date('d/m/Y H:i:s', strtotime($row['create_datetime'])); ?>" data-updateat="<?= $update_datetime; ?>" data-lastlogin="<?= $last_login; ?>" data-toggle="tooltip" data-placement="bottom" title="Detail">
 															<i class="align-middle" data-feather="list"></i>
 														</a>
 													</li>
 													<li>
-														<a href="#" class="btn btn-warning text-white btnShowModalInput" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Jaksa" data-id="<?= $row['id_user']; ?>" data-namalengkap="<?= $row['nama_lengkap']; ?>" data-username="<?= $row['username']; ?>" data-email="<?= $row['email']; ?>" data-nohp="<?= $row['no_hp']; ?>" data-toggle="tooltip" data-placement="bottom" title="Ubah Data Akun">
+														<a href="#" class="btn btn-warning text-white btnShowModalInput" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Jaksa" data-id="<?= $row['id_user']; ?>" data-namalengkap="<?= $row['nama_lengkap']; ?>" data-nip="<?= $row['nip']; ?>" data-username="<?= $row['username']; ?>" data-email="<?= $row['email']; ?>" data-nohp="<?= $row['no_hp']; ?>" data-toggle="tooltip" data-placement="bottom" title="Ubah Data Akun">
 															<i class="align-middle" data-feather="user"></i>
+														</a>
+													</li>
+													<li>
+														<a href="#" class="btn btn-success text-white btnShowModalInput" data-toggle="modal" data-target="#modalInput" data-action="ubah-foto-profil" data-title="Ubah Data Jaksa" data-id="<?= $row['id_user']; ?>" data-fotoprofil="<?= (empty($row['foto'])) ? base_url() . '/assets/img/noimg.png' : base_url() . '/assets/img/user/thumbnail/' . $row['foto']; ?>" data-toggle="tooltip" data-placement="bottom" title="Ubah Foto Profil">
+															<i class="align-middle" data-feather="image"></i>
 														</a>
 													</li>
 													<li>
@@ -136,7 +150,7 @@ if ($user_level > 2) {
 </div>
 
 <div class="modal fade" id="modalInput" tabindex="10" role="dialog" aria-labelledby="judulForm" aria-hidden="true">
-	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-md modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="judulForm" style="color: #000;"></h5>
@@ -150,13 +164,33 @@ if ($user_level > 2) {
 					<input type="hidden" id="action" name="action" value="">
 					<input type="hidden" id="id_user" name="id_user" value="">
 
-					<div id="inputDataAkunForm">
+					<div style="display: none;" id="inputFotoProfilForm">
+						<div class="form-group row mt-3">
+							<div class="col-lg-12 text-center">
+								<img id="fotobaru" src="" style="width: 180px; height: 180px; border-radius: 50%; object-fit: cover; object-position: top; border: solid 1px #ccc; padding: 1px;">
+							</div>
+							<div class="col-sm-12 mt-3">
+								<input type="file" class="form-control" id="foto" name="foto" onchange="readURL(this)" accept="image/png, image/jpg, image/jpeg">
+							</div>
+						</div>
+					</div>
+
+					<div style="display: none;" id="inputDataAkunForm">
 						<div class="form-group row mb-3">
 							<label for="nama_lengkap" class="col-sm-3 col-form-label">
 								Nama Lengkap
 							</label>
 							<div class="col-sm-9">
 								<input type="text" autofocus class="form-control" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan nama lengkap ...">
+							</div>
+						</div>
+
+						<div class="form-group row mb-3">
+							<label for="nip" class="col-sm-3 col-form-label">
+								NIP
+							</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="nip" name="nip" placeholder="Masukkan NIP ..." oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" minlength="18" maxlength="18">
 							</div>
 						</div>
 
@@ -188,7 +222,7 @@ if ($user_level > 2) {
 						</div>
 					</div>
 
-					<div id="inputPasswordForm">
+					<div style="display: none;" id="inputPasswordForm">
 						<div class="form-group row mt-3">
 							<label for="password" class="col-sm-3 col-form-label">
 								Password
@@ -245,6 +279,13 @@ if ($user_level > 2) {
 						</td>
 					</tr>
 					<tr>
+						<td>NIP</td>
+						<td>:</td>
+						<td>
+							<span id="detail_nip"></span>
+						</td>
+					</tr>
+					<tr>
 						<td>Username</td>
 						<td>:</td>
 						<td>
@@ -296,7 +337,6 @@ if ($user_level > 2) {
 <script>
 	$(document).ready(function() {
 		$(function() {
-			// Modal Ubah
 			// $("#modalInput").css("z-index", "1500");
 			$("#modalInput").appendTo('body');
 
@@ -310,6 +350,7 @@ if ($user_level > 2) {
 				if (action == "tambah") {
 
 					$("form").trigger("reset");
+					$('#inputFotoProfilForm').hide();
 					$('#inputDataAkunForm').show();
 					$('#inputPasswordForm').show();
 
@@ -319,23 +360,36 @@ if ($user_level > 2) {
 
 					var id_user = $(this).data('id');
 					var namalengkap = $(this).data('namalengkap');
+					var nip = $(this).data('nip');
 					var username = $(this).data('username');
 					var email = $(this).data('email');
 					var no_hp = $(this).data('no_hp');
 
 					$('#modalInput #id_user').val(id_user);
 					$('#modalInput #nama_lengkap').val(namalengkap);
+					$('#modalInput #nip').val(nip);
 					$('#modalInput #username').val(username);
 					$('#modalInput #email').val(email);
 					$('#modalInput #no_hp').val(no_hp);
 
 				} else if (action == "ubah-password") {
 					$('#inputDataAkunForm').hide();
+					$('#inputFotoProfilForm').hide();
 					$('#inputPasswordForm').show();
 
 					var id_user = $(this).data('id');
 
 					$('#modalInput #id_user').val(id_user);
+				} else if (action == "ubah-foto-profil") {
+					$('#inputDataAkunForm').hide();
+					$('#inputPasswordForm').hide();
+					$('#inputFotoProfilForm').show();
+
+					var id_user = $(this).data('id');
+					var foto_profil = $(this).data('fotoprofil');
+
+					$('#modalInput #id_user').val(id_user);
+					$('#modalInput #fotobaru').attr("src", foto_profil);
 				}
 			});
 
@@ -377,9 +431,10 @@ if ($user_level > 2) {
 				formData.append('id_user', id_user);
 
 				if (action == "tambah") {
-					var urlPost = base_url + "/data-master/ulpl/add";
+					var urlPost = base_url + "/data-master/jaksa/add";
 
 					var nama_lengkap = $('#nama_lengkap').val();
+					var nip = $('#nip').val();
 					var username = $('#username').val();
 					var email = $('#email').val();
 					var no_hp = $('#no_hp').val();
@@ -387,31 +442,39 @@ if ($user_level > 2) {
 					var konfirmasi_password = $('#konfirmasi_password').val();
 
 					formData.append('nama_lengkap', nama_lengkap);
+					formData.append('nip', nip);
 					formData.append('username', username);
 					formData.append('email', email);
 					formData.append('no_hp', no_hp);
 					formData.append('password', password);
 					formData.append('konfirmasi_password', konfirmasi_password);
 				} else if (action == "ubah") {
-					var urlPost = base_url + "/data-master/ulpl/edit";
+					var urlPost = base_url + "/data-master/jaksa/edit";
 
 					var nama_lengkap = $('#nama_lengkap').val();
+					var nip = $('#nip').val();
 					var username = $('#username').val();
 					var email = $('#email').val();
 					var no_hp = $('#no_hp').val();
 
 					formData.append('nama_lengkap', nama_lengkap);
+					formData.append('nip', nip);
 					formData.append('username', username);
 					formData.append('email', email);
 					formData.append('no_hp', no_hp);
 				} else if (action == "ubah-password") {
-					var urlPost = base_url + "/data-master/ulpl/edit";
+					var urlPost = base_url + "/data-master/jaksa/update-password";
 
 					var password = $('#password').val();
 					var konfirmasi_password = $('#konfirmasi_password').val();
 
 					formData.append('password', password);
 					formData.append('konfirmasi_password', konfirmasi_password);
+				} else if (action == "ubah-foto-profil") {
+					var urlPost = base_url + "/data-master/jaksa/update-profil";
+
+					const foto = $('#foto').prop('files')[0];
+					formData.append('foto', foto);
 				}
 
 				$.ajax({
@@ -447,7 +510,7 @@ if ($user_level > 2) {
 	function hapus_data(id_user) {
 		event.preventDefault(); // prevent form submit
 
-		var urlPost = base_url + "/data-master/ulpl/delete";
+		var urlPost = base_url + "/data-master/jaksa/delete";
 
 		Swal.fire({
 			title: "Hapus Data",
