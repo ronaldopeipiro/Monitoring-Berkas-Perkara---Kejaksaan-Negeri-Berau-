@@ -30,7 +30,8 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 	<link rel="stylesheet" href="<?= base_url(); ?>/template/toastr/toastr.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-	<link rel="stylesheet" href="<?= base_url(); ?>/template/dropify/dist/css/dropify.min.css">
+	<!-- <link rel="stylesheet" href="<?= base_url(); ?>/template/dropify/dist/css/dropify.min.css"> -->
+	<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
 
 	<link rel="stylesheet" href="<?= base_url() ?>/template/sweetalert2/sweetalert2.min.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
@@ -58,7 +59,9 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-	<script type="text/javascript" src="<?= base_url(); ?>/template/dropify/dist/js/dropify.min.js"></script>
+	<!-- <script type="text/javascript" src="<?= base_url(); ?>/template/dropify/dist/js/dropify.min.js"></script> -->
+
+	<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
 
 	<script>
 		const base_url = "<?= base_url() ?>";
@@ -169,7 +172,7 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 						</a>
 					</li>
 
-					<?php if ($user_level <= 3) : ?>
+					<?php if ($user_level < 3) : ?>
 						<li class="sidebar-item <?= $request->uri->getSegment(1) == 'data-master' ? 'active' : ''; ?>">
 							<a data-target="#data-master" data-toggle="collapse" class="sidebar-link collapsed">
 								<i class="align-middle" data-feather="layers"></i>

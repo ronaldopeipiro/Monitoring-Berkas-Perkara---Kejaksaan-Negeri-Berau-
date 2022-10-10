@@ -30,7 +30,7 @@ class InstansiModel extends Model
 		return $this->where([
 			'aktif' => 'Y'
 		])->orderBy(
-			'nama_instansi',
+			'id_instansi',
 			'asc'
 		)->findAll();
 	}

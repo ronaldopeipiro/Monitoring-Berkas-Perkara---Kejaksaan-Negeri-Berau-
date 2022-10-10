@@ -30,7 +30,7 @@
 
 							<div class="col-lg-3 mb-3">
 								<div class="form-group">
-									<label for="tanggalOrderSelect">Tanggal</label>
+									<label for="tanggalBerkasSelect">Tanggal Berkas</label>
 									<div class="cariTanggal">
 										<div class="input-group date">
 											<span class="input-group-append">
@@ -46,7 +46,7 @@
 
 							<div class="col-lg-3 mb-3">
 								<div class="form-group">
-									<label for="tanggalOrderSelect">Tanggal</label>
+									<label for="tanggalP16Select">Tanggal P-16</label>
 									<div class="cariTanggal">
 										<div class="input-group date">
 											<span class="input-group-append">
@@ -83,10 +83,13 @@
 							<thead>
 								<tr>
 									<th>No.</th>
-									<th>Nomor / Tgl. Berkas</th>
-									<th>Nomor / Tgl. P16</th>
+									<th>Nomor Berkas</th>
+									<th>Tanggal Berkas</th>
+									<th>Nomor P16</th>
+									<th>Tanggal P16</th>
 									<th>Instansi Penyidik</th>
 									<th>Instansi Pelaksana Penyidikan</th>
+									<th>Pidana Anak</th>
 									<th>Status</th>
 									<th>Aksi</th>
 								</tr>
@@ -105,12 +108,32 @@
 									<tr>
 										<td class="text-center"><?= $no++; ?>.</td>
 										<td>
-											<?= $row['nomor_berkas']; ?> <br>
-											<?= strftime('%d/%m/%Y', strtotime($row['tanggal_berkas'])); ?>
+											<?php if ($row['file_berkas'] != "") : ?>
+												<a href="<?= base_url(); ?>/assets/berkas/<?= $row['file_berkas']; ?>" target="_blank">
+													<?= $row['nomor_berkas']; ?>
+												</a>
+											<?php else : ?>
+												<?= $row['nomor_berkas']; ?>
+											<?php endif; ?>
 										</td>
 										<td>
-											<?= $row['nomor_p16']; ?> <br>
-											<?= strftime('%d/%m/%Y', strtotime($row['tanggal_p16'])); ?>
+											<?php if ($row['tanggal_berkas'] != "0000-00-00") : ?>
+												<?= date('d/m/Y', strtotime($row['tanggal_berkas'])); ?>
+											<?php endif; ?>
+										</td>
+										<td>
+											<?php if ($row['file_p16'] != "") : ?>
+												<a href="<?= base_url(); ?>/assets/berkas/<?= $row['file_p16']; ?>" target="_blank">
+													<?= $row['nomor_p16']; ?>
+												</a>
+											<?php else : ?>
+												<?= $row['nomor_p16']; ?>
+											<?php endif; ?>
+										</td>
+										<td>
+											<?php if ($row['tanggal_p16'] != "0000-00-00") : ?>
+												<?= date('d/m/Y', strtotime($row['tanggal_p16'])); ?>
+											<?php endif; ?>
 										</td>
 										<td>
 											<?= $instansi_penyidik->nama_instansi; ?>
@@ -118,20 +141,22 @@
 										<td>
 											<?= $instansi_pelaksana_penyidikan->nama_instansi; ?>
 										</td>
-										<td>
-											<?= $data_pltd->nama_pltd; ?>
-										</td>
-										<td>
-											<?= $data_mesin->nama_mesin; ?>
+										<td class="text-center">
+											<?= $row['pidana_anak']; ?>
 										</td>
 										<td class="text-center">
 											<?= $row['status']; ?>
 										</td>
 										<td class="table-action">
-											<?php if (($user_level <= 2) or ($user_id == $row['id_user'])) : ?>
-												<div class="list-unstyled d-flex align-items-center justify-content-center">
+											<div class="list-unstyled d-flex align-items-center justify-content-center">
+												<li>
+													<a href="#" data-toggle="modal" data-target="#modalDetail" data-action="ubah" data-title="Detail Data Berkas Perkara" data-id="<?= $row['id_berkas_perkara']; ?>" class="btn btn-success d-flex text-white btnShowModal" data-toggle="tooltip" data-placement="bottom" title="Detail">
+														<i class="align-middle" data-feather="list"></i>
+													</a>
+												</li>
+												<?php if (($user_level <= 3) or ($user_id == $row['id_user_create'])) : ?>
 													<li>
-														<a href="#" class="btn btn-warning text-white btnShowModal" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Berkas Perkara" data-id="<?= $row['id_berkas_perkara']; ?>" class="btn btn-info d-flex text-white" data-toggle="tooltip" data-placement="bottom" title="Ubah">
+														<a href="#" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Berkas Perkara" data-id="<?= $row['id_berkas_perkara']; ?>" class="btn btn-info d-flex text-white btnShowModal" data-toggle="tooltip" data-placement="bottom" title="Ubah">
 															<i class="align-middle" data-feather="edit"></i>
 														</a>
 													</li>
@@ -140,8 +165,8 @@
 															<i class="align-middle" data-feather="trash"></i>
 														</a>
 													</li>
-												</div>
-											<?php endif; ?>
+												<?php endif; ?>
+											</div>
 										</td>
 									</tr>
 								<?php endforeach; ?>
@@ -173,75 +198,117 @@
 					<input type="hidden" id="id_berkas_perkara" name="id_berkas_perkara" value="">
 					<input type="hidden" id="id_user" name="id_user" value="<?= $user_id; ?>">
 
-					<div class="form-group row mb-3">
-						<label for="pidana_anak" class="col-sm-12 col-form-label">
-							Pidana Anak
-						</label>
-						<div class="col-sm-12">
-							<input type="checkbox" class="form-control" id="pidana_anak" name="pidana_anak" value="Ya">
-						</div>
+					<div class="form-check mb-3">
+						<input class="form-check-input" type="checkbox" id="pidana_anak" name="pidana_anak" value="">
+						<label class="form-check-label" for="pidana_anak">Pidana Anak</label>
 					</div>
 
-					<div class="form-group row mb-3">
-						<div class="col-lg-6 mb-3 mb-lg-0">
-							<div class="row">
-								<label for="nomor_berkas" class="col-sm-12 col-form-label">
-									Nomor Berkas
-								</label>
-								<div class="col-sm-12">
-									<input type="text" class="form-control" id="nomor_berkas" name="nomor_berkas" placeholder="Masukkan Nomor Berkas ..." value="">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group row">
+								<div class="col-lg-8 mb-3 mb-lg-0">
+									<div class="row">
+										<label for="nomor_berkas" class="col-sm-12 col-form-label">
+											Nomor Berkas <br>
+											<small class="text-danger">(*Wajib diisi !)</small>
+										</label>
+										<div class="col-sm-12">
+											<input type="text" class="form-control" id="nomor_berkas" name="nomor_berkas" placeholder="Masukkan Nomor Berkas ..." value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-4 mb-3 mb-lg-0">
+									<div class="row">
+										<label for="tanggal_berkas" class="col-sm-12 col-form-label">
+											Tanggal Berkas <br>
+											<small class="text-danger">(*Wajib diisi !)</small>
+										</label>
+										<div class="col-sm-12">
+											<input type="date" class="form-control" id="tanggal_berkas" name="tanggal_berkas" placeholder="0" value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-12 mb-3 mb-lg-0 mt-3">
+									<div class="form-group row mb-2">
+										<label for="file_berkas" class="col-sm-12 col-form-label">
+											File Berkas
+											<small class="text-info">
+												(*Jika Ada)
+											</small>
+											<small class="text-danger">
+												(*Maks 4 MB)
+											</small>
+										</label>
+										<div class="col-sm-12">
+											<input type="file" name="file_berkas" id="file_berkas" class="dropify" data-height="100" data-max-file-size="4M" data-show-remove="true" data-show-loader="true" data-show-errors="true" data-errors-position="outside" data-max-file-size-preview="4M" style="font-size: 12px;" />
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 
-						<div class="col-lg-6 mb-3 mb-lg-0">
-							<div class="row">
-								<label for="tanggal_berkas" class="col-sm-12 col-form-label">
-									Tanggal Berkas
-								</label>
-								<div class="col-sm-12">
-									<input type="date" class="form-control" id="tanggal_berkas" name="tanggal_berkas" placeholder="0" value="<?= date('Y-m-d'); ?>" style="width: 200px;">
+						<div class="col-lg-6">
+							<div class="form-group row">
+								<div class="col-lg-8 mb-3 mb-lg-0">
+									<div class="row">
+										<label for="nomor_p16" class="col-sm-12 col-form-label">
+											Nomor P-16 <br>
+											<small class="text-info">(*Jika ada)</small>
+										</label>
+										<div class="col-sm-12">
+											<input type="text" class="form-control" id="nomor_p16" name="nomor_p16" placeholder="Masukkan Nomor P-16 ..." value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-4 mb-3 mb-lg-0">
+									<div class="row">
+										<label for="tanggal_p16" class="col-sm-12 col-form-label">
+											Tanggal P-16 <br>
+											<small class="text-info">(*Jika ada)</small>
+										</label>
+										<div class="col-sm-12">
+											<input type="date" class="form-control" id="tanggal_p16" name="tanggal_p16" placeholder="0" value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-12 mb-3 mb-lg-0 mt-3">
+									<div class="form-group row mb-2">
+										<label for="file_p16" class="col-sm-12 col-form-label">
+											File P-16
+											<small class="text-info">
+												(*Jika Ada)
+											</small>
+											<small class="text-danger">
+												(*Maks 4 MB)
+											</small>
+										</label>
+										<div class="col-sm-12">
+											<input type="file" name="file_p16" id="file_p16" class="dropify" data-height="100" data-max-file-size="4M" data-show-remove="true" data-show-loader="true" data-show-errors="true" data-errors-position="outside" data-max-file-size-preview="4M" style="font-size: 12px;" />
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
+
 					</div>
 
-					<div class="form-group row mb-3">
+					<div class="row">
 						<div class="col-lg-6 mb-3 mb-lg-0">
-							<div class="row">
-								<label for="nomor_p16" class="col-sm-12 col-form-label">
-									Nomor P-16
-								</label>
-								<div class="col-sm-12">
-									<input type="text" class="form-control" id="nomor_p16" name="nomor_p16" placeholder="Masukkan Nomor P-16 ..." value="">
-								</div>
-							</div>
-						</div>
-
-						<div class="col-lg-6 mb-3 mb-lg-0">
-							<div class="row">
-								<label for="tanggal_p16" class="col-sm-12 col-form-label">
-									Tanggal P-16
-								</label>
-								<div class="col-sm-12">
-									<input type="date" class="form-control" id="tanggal_p16" name="tanggal_p16" placeholder="0" value="<?= date('Y-m-d'); ?>" style="width: 200px;">
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group row mb-3">
-						<div class="col-lg-6 mb-3 mb-lg-0">
-							<div class="row">
+							<div class="form-group row mb-3">
 								<label for="id_instansi_penyidik" class="col-sm-12 col-form-label">
 									Instansi Penyidik
+									<small class="text-danger">(*Wajib diisi !)</small>
 								</label>
 								<div class="col-sm-12">
 									<select name="id_instansi_penyidik" id="id_instansi_penyidik" class="form-control js-select-2">
-										<option value="">-- Pilih Instansi Penyidik --</option>
-										<?php foreach ($list_instansi as $d_ins) : ?>
-											<option value="<?= $d_ins['id_instansi']; ?>">
-												<?= $d_ins['nama_instansi']; ?>
+										<option value=""></option>
+										<?php foreach ($list_instansi as $instansi) : ?>
+											<option value="<?= $instansi['id_instansi']; ?>">
+												<?= $instansi['nama_instansi']; ?>
 											</option>
 										<?php endforeach; ?>
 									</select>
@@ -250,18 +317,21 @@
 						</div>
 
 						<div class="col-lg-6 mb-3 mb-lg-0">
-							<label for="id_instansi_pelaksana_penyidikan" class="col-sm-12 col-form-label">
-								Instansi Pelaksana Penyidikan
-							</label>
-							<div class="col-sm-12">
-								<select name="id_instansi_pelaksana_penyidikan" id="id_instansi_pelaksana_penyidikan" class="form-control js-select-2">
-									<option value="">-- Pilih Instansi Pelaksana Penyidikan --</option>
-									<?php foreach ($list_instansi as $d_ins_2) : ?>
-										<option value="<?= $d_ins_2['id_instansi']; ?>">
-											<?= $d_ins_2['nama_instansi']; ?>
-										</option>
-									<?php endforeach; ?>
-								</select>
+							<div class="form-group row mb-3">
+								<label for="id_instansi_pelaksana_penyidikan" class="col-sm-12 col-form-label">
+									Instansi Pelaksana Penyidikan
+									<small class="text-danger">(*Wajib diisi !)</small>
+								</label>
+								<div class="col-sm-12">
+									<select name="id_instansi_pelaksana_penyidikan" id="id_instansi_pelaksana_penyidikan" class="form-control js-select-2">
+										<option value=""></option>
+										<?php foreach ($list_instansi as $instansi) : ?>
+											<option value="<?= $instansi['id_instansi']; ?>">
+												<?= $instansi['nama_instansi']; ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -269,6 +339,7 @@
 					<div class="form-group row mb-3">
 						<label for="jaksa_terkait" class="col-sm-12 col-form-label">
 							Jaksa Terkait
+							<small class="text-danger">(*Wajib diisi !)</small>
 						</label>
 						<div class="col-sm-12">
 							<select name="jaksa_terkait" id="jaksa_terkait" class="form-control js-select-2" multiple>
@@ -284,21 +355,16 @@
 					<div class="form-group row mb-3">
 						<label for="status_berkas" class="col-sm-12 col-form-label">
 							Status Berkas
+							<small class="text-danger">(*Wajib diisi !)</small>
 						</label>
 						<div class="col-sm-12">
-							<input type="text" class="form-control" id="status_berkas" name="status_berkas" placeholder="Masukkan Status Berkas ..." value="">
-						</div>
-					</div>
-
-					<div class="form-group row mb-2">
-						<label for="file_berkas" class="col-sm-12 col-form-label">
-							File Berkas
-							<small class="text-danger">
-								(*Jika Ada) (*Maks 4 MB)
-							</small>
-						</label>
-						<div class="col-sm-12">
-							<input type="file" name="file_berkas" class="dropify" data-max-file-size="4M" data-show-remove="true" data-show-loader="true" data-show-errors="true" data-errors-position="outside" data-max-file-size-preview="4M" />
+							<select name="status_berkas" id="status_berkas" class="form-control">
+								<option value="KOSONG">KOSONG</option>
+								<option value="P-18">P-18</option>
+								<option value="P-19">P-19</option>
+								<option value="P-20">P-20</option>
+								<option value="P-21">P-21</option>
+							</select>
 						</div>
 					</div>
 
@@ -359,41 +425,80 @@
 			$("#formInput").submit(function(e) {
 				e.preventDefault();
 
+				let formData = new FormData();
 				var action = $('#action').val();
+				var id_user = $('#id_user').val();
+				formData.append('id_user', id_user);
 
 				if (action == "tambah") {
 					var urlPost = base_url + "/berkas-perkara/add";
+
+					var pidana_anak = $('#pidana_anak');
+					if (pidana_anak.checked == true) {
+						pidana_anak = "Ya";
+					} else {
+						pidana_anak = "Tidak";
+					}
+
+					var nomor_berkas = $('#nomor_berkas').val();
+					var tanggal_berkas = $('#tanggal_berkas').val();
+					var file_berkas = $('#file_berkas').prop('files')[0];
+					var nomor_p16 = $('#nomor_p16').val();
+					var tanggal_p16 = $('#tanggal_p16').val();
+					var file_p16 = $('#file_p16').prop('files')[0];
+					var status_berkas = $('#status_berkas').val();
+					var id_instansi_penyidik = $('#id_instansi_penyidik').val();
+					var id_instansi_pelaksana_penyidikan = $('#id_instansi_pelaksana_penyidikan').val();
+					var jaksa_terkait = $('#jaksa_terkait').val();
+
+					formData.append('pidana_anak', pidana_anak);
+					formData.append('nomor_berkas', nomor_berkas);
+					formData.append('tanggal_berkas', tanggal_berkas);
+					formData.append('file_berkas', file_berkas);
+					formData.append('nomor_p16', nomor_p16);
+					formData.append('tanggal_p16', tanggal_p16);
+					formData.append('file_p16', file_p16);
+					formData.append('status_berkas', status_berkas);
+					formData.append('id_instansi_penyidik', id_instansi_penyidik);
+					formData.append('id_instansi_pelaksana_penyidikan', id_instansi_pelaksana_penyidikan);
+					formData.append('jaksa_terkait', jaksa_terkait);
+
 				} else if (action == "ubah") {
 					var urlPost = base_url + "/berkas-perkara/edit";
+
+					var pidana_anak = $('#pidana_anak').val();
+					var nomor_berkas = $('#nomor_berkas').val();
+					var tanggal_berkas = $('#tanggal_berkas').val();
+					var file_berkas = $('#file_berkas').prop('files')[0];
+					var nomor_p16 = $('#nomor_p16').val();
+					var tanggal_p16 = $('#tanggal_p16').val();
+					var file_p16 = $('#file_p16').prop('files')[0];
+					var status_berkas = $('#status_berkas').val();
+					var id_instansi_penyidik = $('#id_instansi_penyidik').val();
+					var id_instansi_pelaksana_penyidikan = $('#id_instansi_pelaksana_penyidikan').val();
+					var jaksa_terkait = $('#jaksa_terkait').val();
+
+					formData.append('pidana_anak', pidana_anak);
+					formData.append('nomor_berkas', nomor_berkas);
+					formData.append('tanggal_berkas', tanggal_berkas);
+					formData.append('file_berkas', file_berkas);
+					formData.append('nomor_p16', nomor_p16);
+					formData.append('tanggal_p16', tanggal_p16);
+					formData.append('file_p16', file_p16);
+					formData.append('status_berkas', status_berkas);
+					formData.append('id_instansi_penyidik', id_instansi_penyidik);
+					formData.append('id_instansi_pelaksana_penyidikan', id_instansi_pelaksana_penyidikan);
+					formData.append('jaksa_terkait', jaksa_terkait);
 				}
 
-				var id_berkas_perkara = $('#id_berkas_perkara').val();
-				var tanggal_waktu = $('#tanggal_waktu').val();
-				var id_user = $('#id_user').val();
-				var id_pltd = $('#id_pltd').val();
-				var id_mesin = $('#id_mesin').val();
-				var unit = $('#unit').val();
-				var id_jenis_periodik = $('#id_jenis_periodik').val();
-				var rencana = $('#rencana').val();
-				var realisasi = $('#realisasi').val();
-				var catatan = $('#catatan').val();
-
 				$.ajax({
-					type: "POST",
+					type: "GET",
 					url: urlPost,
 					dataType: "JSON",
-					data: {
-						id_berkas_perkara: id_berkas_perkara,
-						tanggal_waktu: tanggal_waktu,
-						id_user: id_user,
-						id_pltd: id_pltd,
-						id_mesin: id_mesin,
-						unit: unit,
-						id_jenis_periodik: id_jenis_periodik,
-						rencana: rencana,
-						realisasi: realisasi,
-						catatan: catatan
-					},
+					data: formData,
+					cache: false,
+					processData: false,
+					contentType: false,
 					beforeSend: function() {
 						$("#loader").show();
 					},
@@ -686,10 +791,10 @@
 
 	$('.dropify').dropify({
 		messages: {
-			'default': 'Drag and drop a file here or click',
-			'replace': 'Drag and drop or click to replace',
+			'default': '',
+			'replace': '',
 			'remove': 'Hapus',
-			'error': 'Maaf, terjadi kesalahan !'
+			'error': 'Terjadi kesalahan !'
 		},
 		tpl: {
 			wrap: '<div class="dropify-wrapper"></div>',

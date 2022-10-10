@@ -372,7 +372,7 @@ class Jaksa extends BaseController
 		}
 	}
 
-	public function ubah_profil()
+	public function update_foto_profil()
 	{
 		$id_user = $this->request->getPost('id_user');
 		$file_foto = $this->request->getFile('foto');

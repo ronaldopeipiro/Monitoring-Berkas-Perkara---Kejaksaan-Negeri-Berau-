@@ -2,6 +2,8 @@
 
 <?= $this->section('content'); ?>
 <?php
+$tahun_now = date('Y');
+
 function rupiah($angka)
 {
 	$hasil_rupiah = "Rp. " . number_format($angka, 0, ',', '.') . ',-';
@@ -188,7 +190,7 @@ $jumlah_jaksa = $db->query("SELECT * FROM user WHERE id_level='3' AND aktif='Y'"
 					data: [
 						<?php
 						for ($bulan = 1; $bulan <= 12; $bulan++) {
-							$total_perbulan = $db->query("SELECT * FROM berkas_perkara WHERE MONTH(tanggal_berkas)='$bulan' ")->getNumRows();
+							$total_perbulan = $db->query("SELECT * FROM berkas_perkara WHERE MONTH(tanggal_berkas)='$bulan' AND YEAR(tanggal_berkas)='$tahun_now' ")->getNumRows();
 							echo "$total_perbulan,";
 						}
 						?>

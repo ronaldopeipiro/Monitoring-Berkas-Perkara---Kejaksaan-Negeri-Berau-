@@ -217,7 +217,7 @@ if ($user_level > 2) {
 								No. Handphone
 							</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="no_hp" name="no_hp" placeholder="62 .... " value="<?= $user_no_hp ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" minlength="11">
+								<input type="text" class="form-control" id="no_hp" name="no_hp" placeholder="62 .... " value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" minlength="11">
 							</div>
 						</div>
 					</div>
@@ -363,7 +363,7 @@ if ($user_level > 2) {
 					var nip = $(this).data('nip');
 					var username = $(this).data('username');
 					var email = $(this).data('email');
-					var no_hp = $(this).data('no_hp');
+					var no_hp = $(this).data('nohp');
 
 					$('#modalInput #id_user').val(id_user);
 					$('#modalInput #nama_lengkap').val(namalengkap);
@@ -471,7 +471,7 @@ if ($user_level > 2) {
 					formData.append('password', password);
 					formData.append('konfirmasi_password', konfirmasi_password);
 				} else if (action == "ubah-foto-profil") {
-					var urlPost = base_url + "/data-master/jaksa/update-profil";
+					var urlPost = base_url + "/data-master/jaksa/update-foto-profil";
 
 					const foto = $('#foto').prop('files')[0];
 					formData.append('foto', foto);
