@@ -13,6 +13,7 @@
 						<h3 class="card-title">
 							Data Berkas Perkara
 						</h3>
+
 						<div>
 							<?php if ($user_level == 2) : ?>
 								<a href="#" class="btn btn-success text-white btnShowModal" data-toggle="modal" data-target="#modalInput" data-title="Tambah Data Berkas Perkara" data-action="tambah" data-toggle="tooltip" data-placement="bottom" title="Tambah Data">
@@ -20,6 +21,7 @@
 								</a>
 							<?php endif; ?>
 						</div>
+
 					</div>
 				</div>
 
@@ -28,7 +30,7 @@
 					<div class="col-12">
 						<div class="row">
 
-							<div class="col-lg-3 mb-3">
+							<!-- <div class="col-lg-3 mb-3">
 								<div class="form-group">
 									<label for="tanggalBerkasSelect">Tanggal Berkas</label>
 									<div class="cariTanggal">
@@ -58,7 +60,7 @@
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 
 							<div class="col-lg-2 mb-3">
 								<label for="instansiPenyidikSelect">Instansi Penyidik</label>
@@ -89,7 +91,7 @@
 									<th>Tanggal P16</th>
 									<th>Instansi Penyidik</th>
 									<th>Instansi Pelaksana Penyidikan</th>
-									<th>Pidana Anak</th>
+									<th>Jaksa Terkait</th>
 									<th>Status</th>
 									<th>Aksi</th>
 								</tr>
@@ -101,8 +103,18 @@
 									<?php
 									$id_instansi_penyidik = $row['id_instansi_penyidik'];
 									$instansi_penyidik = $db->query("SELECT * FROM instansi WHERE id_instansi='$id_instansi_penyidik' ")->getRow();
+
 									$id_instansi_pelaksana_penyidikan = $row['id_instansi_pelaksana_penyidikan'];
 									$instansi_pelaksana_penyidikan = $db->query("SELECT * FROM instansi WHERE id_instansi='$id_instansi_pelaksana_penyidikan' ")->getRow();
+
+									$array_jaksa_terkait = $row['jaksa_terkait'];
+									$data_jaksa_terkait = $db->query("SELECT * FROM user WHERE id_user IN ($array_jaksa_terkait) ORDER BY nama_lengkap ASC ");
+
+									$jaksa_terkait = "";
+									foreach ($data_jaksa_terkait->getResult('array') as $jt) {
+										$jaksa_terkait .= "<span class='badge btn-primary'>" . $jt['nama_lengkap'] . "</span> <br>";
+									}
+
 									?>
 
 									<tr>
@@ -141,8 +153,8 @@
 										<td>
 											<?= $instansi_pelaksana_penyidikan->nama_instansi; ?>
 										</td>
-										<td class="text-center">
-											<?= $row['pidana_anak']; ?>
+										<td class="text-left">
+											<?= $jaksa_terkait; ?>
 										</td>
 										<td class="text-center">
 											<?= $row['status']; ?>
@@ -150,21 +162,25 @@
 										<td class="table-action">
 											<div class="list-unstyled d-flex align-items-center justify-content-center">
 												<li>
-													<a href="#" data-toggle="modal" data-target="#modalDetail" data-action="ubah" data-title="Detail Data Berkas Perkara" data-id="<?= $row['id_berkas_perkara']; ?>" class="btn btn-success d-flex text-white btnShowModal" data-toggle="tooltip" data-placement="bottom" title="Detail">
+													<a href="#" data-toggle="modal" data-target="#modalDetail" data-action="detail" data-title="Detail Data Berkas Perkara" data-id-berkas-perkara="<?= $row['id_berkas_perkara']; ?>" data-nomor-berkas="<?= $row['nomor_berkas']; ?>" data-tanggal-berkas="<?= date('d/m/Y', strtotime($row['tanggal_berkas'])); ?>" data-file-berkas="<?= ($row['file_berkas'] != "") ? base_url() . '/assets/berkas/' . $row['file_berkas'] : ''; ?>" data-nomor-p16="<?= $row['nomor_p16']; ?>" data-tanggal-p16="<?= ($row['tanggal_p16'] != "0000-00-00") ? date('d/m/Y', strtotime($row['tanggal_p16'])) : '' ?>" data-file-p16="<?= ($row['file_p16'] != "") ? base_url() . '/assets/berkas/' . $row['file_p16'] : ''; ?>" data-instansi-penyidik="<?= $instansi_penyidik->nama_instansi; ?>" data-instansi-pelaksana-penyidikan="<?= $instansi_pelaksana_penyidikan->nama_instansi; ?>" data-jaksa-terkait="<?= $jaksa_terkait; ?>" data-pidana-anak="<?= $row['pidana_anak']; ?>" class="btn btn-success d-flex text-white btnShowModalDetail" data-toggle="tooltip" data-placement="bottom" title="Detail">
 														<i class="align-middle" data-feather="list"></i>
 													</a>
 												</li>
-												<?php if (($user_level <= 3) or ($user_id == $row['id_user_create'])) : ?>
+
+												<?php if (($user_level < 3) or ($user_id == $row['id_user_create'])) : ?>
+
 													<li>
-														<a href="#" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Berkas Perkara" data-id="<?= $row['id_berkas_perkara']; ?>" class="btn btn-info d-flex text-white btnShowModal" data-toggle="tooltip" data-placement="bottom" title="Ubah">
+														<a href="#" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Berkas Perkara" data-id-berkas-perkara="<?= $row['id_berkas_perkara']; ?>" data-nomor-berkas="<?= $row['nomor_berkas']; ?>" data-tanggal-berkas="<?= date('Y-m-d', strtotime($row['tanggal_berkas'])); ?>" data-nomor-p16="<?= $row['nomor_p16']; ?>" data-tanggal-p16="<?= ($row['tanggal_p16'] != "0000-00-00") ? date('Y-m-d', strtotime($row['tanggal_p16'])) : ""; ?>" data-instansi-penyidik="<?= $row['id_instansi_penyidik']; ?>" data-instansi-pelaksana-penyidikan="<?= $row['id_instansi_pelaksana_penyidikan']; ?>" data-jaksa-terkait="<?= $row['jaksa_terkait']; ?>" data-pidana-anak="<?= $row['pidana_anak']; ?>" class="btn btn-info d-flex text-white btnShowModal" data-toggle="tooltip" data-placement="bottom" title="Ubah">
 															<i class="align-middle" data-feather="edit"></i>
 														</a>
 													</li>
+
 													<li>
 														<a href="#" onclick="hapus_data(<?= $row['id_berkas_perkara'] ?>)" class="btn btn-danger text-white" data-toggle="tooltip" data-placement="bottom" title="Hapus">
 															<i class="align-middle" data-feather="trash"></i>
 														</a>
 													</li>
+
 												<?php endif; ?>
 											</div>
 										</td>
@@ -293,7 +309,6 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
 
 					<div class="row">
@@ -381,13 +396,119 @@
 	</div>
 </div>
 
+<div class="modal fade" id="modalDetail" tabindex="10" role="dialog" aria-labelledby="judulFormDetail" aria-hidden="true">
+	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="judulFormDetail" style="color: #000;"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<div class="modal-body">
+
+				<div class="row">
+					<div class="col-12">
+						<table class="table-sm table-borderless table-responsive">
+							<tr>
+								<td>Pidana Anak</td>
+								<td>:</td>
+								<td>
+									<span id="detail_pidanaAnak"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>Tanggal Berkas</td>
+								<td>:</td>
+								<td>
+									<span id="detail_tanggalBerkas"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>Nomor Berkas</td>
+								<td>:</td>
+								<td>
+									<span id="detail_nomorBerkas"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>File Berkas</td>
+								<td>:</td>
+								<td>
+									<a href="" id="detail_fileBerkas" target="_blank">
+										Lihat file berkas
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Tanggal P-16</td>
+								<td>:</td>
+								<td>
+									<span id="detail_tanggalP16"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>Nomor P-16</td>
+								<td>:</td>
+								<td>
+									<span id="detail_nomorP16"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>File P-16</td>
+								<td>:</td>
+								<td>
+									<a href="" id="detail_fileP16" target="_blank">
+										Lihat file P-16
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td>Instansi Penyidik</td>
+								<td>:</td>
+								<td>
+									<span id="detail_instansiPenyidik"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>Instansi Pelaksana Penyidikan</td>
+								<td>:</td>
+								<td>
+									<span id="detail_instansiPelaksanaPenyidikan"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>Jaksa Terkait</td>
+								<td>:</td>
+								<td>
+									<span id="detail_jaksaTerkait"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>Status Pengiriman Notifikasi</td>
+								<td>:</td>
+								<td>
+									<span id="detail_notifikasiSend"></span>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
 <script>
 	$(document).ready(function() {
 		$(function() {
 			// Modal Ubah
 			// $("#modalInput").css("z-index", "1500");
 			$("#modalInput").appendTo('body');
-
 			$(document).on('click', '.btnShowModal', function() {
 				var title = $(this).data('title');
 				var action = $(this).data('action');
@@ -398,28 +519,67 @@
 				if (action == "tambah") {
 					$("form").trigger("reset");
 				} else if (action == "ubah") {
-					var id_berkas_perkara = $(this).data('id');
-					var tanggalwaktu = $(this).data('tanggalwaktu');
-					var iduser = $(this).data('iduser');
-					var idpltd = $(this).data('idpltd');
-					var idmesin = $(this).data('idmesin');
-					var unit = $(this).data('unit');
-					var idjenisperiodik = $(this).data('idjenisperiodik');
-					var rencana = $(this).data('rencana');
-					var realisasi = $(this).data('realisasi');
-					var catatan = $(this).data('catatan');
+					$("form").trigger("reset");
+					var id_berkas_perkara = $(this).data('idBerkasPerkara');
+					var jaksaTerkait = $(this).data('jaksaTerkait');
 
 					$('#modalInput #id_berkas_perkara').val(id_berkas_perkara);
-					$('#modalInput #tanggal_waktu').val(tanggalwaktu);
-					$('#modalInput #id_user').val(iduser);
-					$('#modalInput #id_pltd').val(idpltd);
-					$('#modalInput #id_mesin').val(idmesin);
-					$('#modalInput #unit').val(unit);
-					$('#modalInput #id_jenis_periodik').val(idjenisperiodik);
-					$('#modalInput #rencana').val(rencana);
-					$('#modalInput #realisasi').val(realisasi);
-					$('#modalInput #catatan').val(catatan);
+					// $('#modalInput #jaksa_terkait').select2("val", [jaksaTerkait]).trigger('change');
+					$.each(jaksaTerkait.split(","), function(i, e) {
+						$("#modalInput #jaksa_terkait option[value='" + e + "']").prop("selected", "true").trigger('change');
+					});
 				}
+			});
+
+			$("#modalDetail").appendTo('body');
+
+			$(document).on('click', '.btnShowModalDetail', function() {
+
+				var title = $(this).data('title');
+				var action = $(this).data('action');
+				var idBerkasPerkara = $(this).data('idBerkasPerkara');
+				var tanggalBerkas = $(this).data('tanggalBerkas');
+				var nomorBerkas = $(this).data('nomorBerkas');
+				var fileBerkas = $(this).data('fileBerkas');
+				var tanggalP16 = $(this).data('tanggalP16');
+				var nomorP16 = $(this).data('nomorP16');
+				var fileP16 = $(this).data('fileP16');
+				var instansiPenyidik = $(this).data('instansiPenyidik');
+				var instansiPelaksanaPenyidikan = $(this).data('instansiPelaksanaPenyidikan');
+				var dataJaksaTerkait = $(this).data('jaksaTerkait');
+				var jaksaTerkait = dataJaksaTerkait.replaceAll(`'`, `"`);
+				var pidanaAnak = $(this).data('pidanaAnak');
+				var statusBerkas = $(this).data('statusBerkas');
+				var status = $(this).data('status');
+				var notifikasiSend = $(this).data('notifikasiSend');
+
+				$('#modalDetail #judulFormDetail').text(title);
+				$('#modalDetail #detail_idBerkasPerkara').text(idBerkasPerkara);
+
+				$('#modalDetail #detail_nomorBerkas').text(nomorBerkas);
+				$('#modalDetail #detail_tanggalBerkas').text(tanggalBerkas);
+				if (fileBerkas != "") {
+					$('#modalDetail #detail_fileBerkas').attr("href", fileBerkas);
+				} else {
+					$('#modalDetail #detail_fileBerkas').hide();
+				}
+
+				$('#modalDetail #detail_nomorP16').text(nomorP16);
+				$('#modalDetail #detail_tanggalP16').text(tanggalP16);
+
+				if (fileP16 != "") {
+					$('#modalDetail #detail_fileP16').attr("href", fileP16);
+				} else {
+					$('#modalDetail #detail_fileP16').hide();
+				}
+
+				$('#modalDetail #detail_instansiPenyidik').text(instansiPenyidik);
+				$('#modalDetail #detail_instansiPelaksanaPenyidikan').text(instansiPelaksanaPenyidikan);
+				$('#modalDetail #detail_jaksaTerkait').html(jaksaTerkait);
+				$('#modalDetail #detail_pidanaAnak').text(pidanaAnak);
+				$('#modalDetail #detail_statusBerkas').text(statusBerkas);
+				$('#modalDetail #detail_status').text(status);
+				$('#modalDetail #detail_notifikasiSend').text(notifikasiSend);
 			});
 
 			$("#formInput").submit(function(e) {
@@ -492,7 +652,7 @@
 				}
 
 				$.ajax({
-					type: "GET",
+					type: "POST",
 					url: urlPost,
 					dataType: "JSON",
 					data: formData,
@@ -665,7 +825,7 @@
 					filename: 'DATA BERKAS PERKARA KEJAKSAAN NEGERI BERAU - update ' + tanggalHariIni,
 					text: 'Export Excel (*xlsx)',
 					exportOptions: {
-						// columns: [0, 1, 2, 3, 4, 5],
+						columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
 						stripHtml: true,
 						modifier: {
 							page: 'current'
@@ -679,7 +839,7 @@
 					message: 'DATA BERKAS PERKARA',
 					messageBottom: 'Data dibuat otomatis oleh sistem : ' + tanggalHariIni,
 					exportOptions: {
-						// columns: [0, 1, 2, 3, 4, 5],
+						columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
 						stripHtml: true,
 						modifier: {
 							page: 'current'
