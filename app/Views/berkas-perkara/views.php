@@ -46,7 +46,7 @@
 								</div>
 							</div>
 
-							<div class="col-lg-3 mb-3">
+							<!-- <div class="col-lg-3 mb-3">
 								<div class="form-group">
 									<label for="cariTanggalBerkas">Tanggal Berkas</label>
 									<div class="cariTanggal">
@@ -76,7 +76,7 @@
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 
 							<div class="col-lg-2 mb-3">
 								<label for="instansiPenyidikSelect">Instansi Penyidik</label>
@@ -97,10 +97,9 @@
 								<tr>
 									<th>No.</th>
 									<th>Tanggal Penerimaan</th>
-									<th>Nomor Berkas</th>
-									<th>Tanggal Berkas</th>
-									<th>Nomor P16</th>
-									<th>Tanggal P16</th>
+									<th>SPDP</th>
+									<th>Berkas Tahap 1</th>
+									<th>P16</th>
 									<th>Instansi Penyidik</th>
 									<th>Jaksa Terkait</th>
 									<th>Status Berkas</th>
@@ -155,32 +154,52 @@
 												<?= date('d/m/Y', strtotime($row['tanggal_penerimaan'])); ?>
 											<?php endif; ?>
 										</td>
+
+										<td>
+											<?php if ($row['file_spdp'] != "") : ?>
+												<a href="<?= base_url(); ?>/assets/berkas/<?= $row['file_spdp']; ?>" target="_blank">
+													No. : <?= $row['nomor_spdp']; ?>
+												</a>
+											<?php else : ?>
+												<?php if ($row['nomor_spdp'] != "") : ?>
+													No. : <?= $row['nomor_spdp']; ?>
+												<?php endif; ?>
+											<?php endif; ?>
+											<br>
+											<?php if (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != "")) : ?>
+												Tgl. : <?= date('d/m/Y', strtotime($row['tanggal_spdp'])); ?>
+											<?php endif; ?>
+										</td>
+
 										<td>
 											<?php if ($row['file_berkas'] != "") : ?>
 												<a href="<?= base_url(); ?>/assets/berkas/<?= $row['file_berkas']; ?>" target="_blank">
-													<?= $row['nomor_berkas']; ?>
+													No. : <?= $row['nomor_berkas']; ?>
 												</a>
 											<?php else : ?>
-												<?= $row['nomor_berkas']; ?>
+												<?php if ($row['nomor_berkas'] != "") : ?>
+													No. : <?= $row['nomor_berkas']; ?>
+												<?php endif; ?>
 											<?php endif; ?>
-										</td>
-										<td>
+											<br>
 											<?php if (($row['tanggal_berkas'] != "0000-00-00") and ($row['tanggal_berkas'] != "")) : ?>
-												<?= date('d/m/Y', strtotime($row['tanggal_berkas'])); ?>
+												Tgl. : <?= date('d/m/Y', strtotime($row['tanggal_berkas'])); ?>
 											<?php endif; ?>
 										</td>
+
 										<td>
 											<?php if ($row['file_p16'] != "") : ?>
-												<a href="<?= base_url(); ?>/assets/berkas/<?= $row['file_p16']; ?>" target="_blank">
-													<?= $row['nomor_p16']; ?>
+												<a href="<?= base_url(); ?>/assets/p16/<?= $row['file_p16']; ?>" target="_blank">
+													No. : <?= $row['nomor_p16']; ?>
 												</a>
 											<?php else : ?>
-												<?= $row['nomor_p16']; ?>
+												<?php if ($row['nomor_p16'] != "") : ?>
+													No. : <?= $row['nomor_p16']; ?>
+												<?php endif; ?>
 											<?php endif; ?>
-										</td>
-										<td>
+											<br>
 											<?php if (($row['tanggal_p16'] != "0000-00-00") and ($row['tanggal_p16'] != "")) : ?>
-												<?= date('d/m/Y', strtotime($row['tanggal_p16'])); ?>
+												Tgl. : <?= date('d/m/Y', strtotime($row['tanggal_p16'])); ?>
 											<?php endif; ?>
 										</td>
 										<td>
@@ -251,9 +270,9 @@
 
 					<div class="row">
 
-						<div class="col-lg-6 mb-3 mb-lg-0">
+						<div class="col-lg-6 mb-lg-0">
 							<div class="row">
-								<label for="tanggal_penerimaan" class="col-sm-12 col-form-label">
+								<label for="tanggal_penerimaan p-1" class="col-sm-12 col-form-label">
 									Tanggal Penerimaan
 									<small class="text-danger">(*Wajib diisi !)</small>
 								</label>
@@ -263,9 +282,9 @@
 							</div>
 						</div>
 
-						<div class="col-lg-6 mb-3 mb-lg-0">
+						<div class="col-lg-6 mb-lg-0">
 							<div class="form-group row mb-3">
-								<label for="id_instansi_penyidik" class="col-sm-12 col-form-label">
+								<label for="id_instansi_penyidik p-1" class="col-sm-12 col-form-label">
 									Instansi Penyidik
 									<small class="text-danger">(*Wajib diisi !)</small>
 								</label>
@@ -447,8 +466,9 @@
 			<div class="modal-body">
 
 				<div class="row">
-					<div class="col-12">
-						<table class="table-sm table-borderless table-responsive">
+
+					<div class="col-lg-12 mb-3">
+						<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
 							<tr>
 								<td>Tanggal Penerimaan</td>
 								<td>:</td>
@@ -461,150 +481,6 @@
 								<td>:</td>
 								<td>
 									<span id="detail_intervalHari"></span>
-								</td>
-							</tr>
-
-							<tr>
-								<td>Tanggal SPDP</td>
-								<td>:</td>
-								<td>
-									<span id="detail_tanggalSPDP"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>Nomor SPDP</td>
-								<td>:</td>
-								<td>
-									<span id="detail_nomorSPDP"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>File SPDP</td>
-								<td>:</td>
-								<td>
-									<a href="" id="detail_fileSpdp" target="_blank">
-										Unduh / Lihat file SPDP
-									</a>
-								</td>
-							</tr>
-
-							<tr>
-								<td>Tanggal Berkas</td>
-								<td>:</td>
-								<td>
-									<span id="detail_tanggalBerkas"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>Nomor Berkas</td>
-								<td>:</td>
-								<td>
-									<span id="detail_nomorBerkas"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>File Berkas</td>
-								<td>:</td>
-								<td>
-									<a href="" id="detail_fileBerkas" target="_blank">
-										Unduh / Lihat file berkas
-									</a>
-								</td>
-							</tr>
-
-							<tr>
-								<td>Tanggal P-16</td>
-								<td>:</td>
-								<td>
-									<span id="detail_tanggalP16"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>Nomor P-16</td>
-								<td>:</td>
-								<td>
-									<span id="detail_nomorP16"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>File P-16</td>
-								<td>:</td>
-								<td>
-									<a href="" id="detail_fileP16" target="_blank">
-										Unduh / Lihat file P-16
-									</a>
-								</td>
-							</tr>
-
-							<tr>
-								<td>Tanggal P-17</td>
-								<td>:</td>
-								<td>
-									<span id="detail_tanggalP17"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>Nomor P-17</td>
-								<td>:</td>
-								<td>
-									<span id="detail_nomorP17"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>File P-17</td>
-								<td>:</td>
-								<td>
-									<a href="" id="detail_fileP17" target="_blank">
-										Unduh / Lihat file P-17
-									</a>
-								</td>
-							</tr>
-
-							<tr>
-								<td>Tanggal SOP Form 02</td>
-								<td>:</td>
-								<td>
-									<span id="detail_tanggalSopForm"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>Nomor SOP Form 02</td>
-								<td>:</td>
-								<td>
-									<span id="detail_nomorSopForm"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>File SOP Form 02</td>
-								<td>:</td>
-								<td>
-									<a href="" id="detail_fileSopForm" target="_blank">
-										Unduh / Lihat file SOP Form 02
-									</a>
-								</td>
-							</tr>
-
-							<tr>
-								<td>Tanggal Surat Pengembalian SPDP</td>
-								<td>:</td>
-								<td>
-									<span id="detail_tanggalSuratPengembalianSpdp"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>Nomor Surat Pengembalian SPDP</td>
-								<td>:</td>
-								<td>
-									<span id="detail_nomorSuratPengembalianSpdp"></span>
-								</td>
-							</tr>
-							<tr>
-								<td>File Surat Pengembalian SPDP</td>
-								<td>:</td>
-								<td>
-									<a href="" id="detail_fileSuratPengembalianSpdp" target="_blank">
-										Unduh / Lihat file Surat Pengembalian SPDP
-									</a>
 								</td>
 							</tr>
 
@@ -667,7 +543,216 @@
 								</td>
 							</tr>
 						</table>
+
 					</div>
+
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-body p-1">
+
+								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
+									<tr>
+										<td>Tanggal SPDP</td>
+										<td>:</td>
+										<td>
+											<span id="detail_tanggalSPDP"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>Nomor SPDP</td>
+										<td>:</td>
+										<td>
+											<span id="detail_nomorSPDP"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>File SPDP</td>
+										<td>:</td>
+										<td>
+											<a href="" class="badge btn btn-sm btn-info" id="detail_fileSpdp" target="_blank">
+												Unduh / Lihat file SPDP
+											</a>
+										</td>
+									</tr>
+								</table>
+
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-body p-1">
+
+								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
+									<tr>
+										<td>Tanggal Berkas Tahap 1</td>
+										<td>:</td>
+										<td>
+											<span id="detail_tanggalBerkas"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>Nomor Berkas Tahap 1</td>
+										<td>:</td>
+										<td>
+											<span id="detail_nomorBerkas"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>File Berkas Tahap 1</td>
+										<td>:</td>
+										<td>
+											<a href="" class="badge btn btn-sm btn-info" id="detail_fileBerkas" target="_blank">
+												Unduh / Lihat file berkas
+											</a>
+										</td>
+									</tr>
+								</table>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-body p-1">
+
+								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
+									<tr>
+										<td>Tanggal P-16</td>
+										<td>:</td>
+										<td>
+											<span id="detail_tanggalP16"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>Nomor P-16</td>
+										<td>:</td>
+										<td>
+											<span id="detail_nomorP16"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>File P-16</td>
+										<td>:</td>
+										<td>
+											<a href="" class="badge btn btn-sm btn-info" id="detail_fileP16" target="_blank">
+												Unduh / Lihat file P-16
+											</a>
+										</td>
+									</tr>
+								</table>
+
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-body p-1">
+
+								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
+									<tr>
+										<td>Tanggal P-17</td>
+										<td>:</td>
+										<td>
+											<span id="detail_tanggalP17"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>Nomor P-17</td>
+										<td>:</td>
+										<td>
+											<span id="detail_nomorP17"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>File P-17</td>
+										<td>:</td>
+										<td>
+											<a href="" class="badge btn btn-sm btn-info" id="detail_fileP17" target="_blank">
+												Unduh / Lihat file P-17
+											</a>
+										</td>
+									</tr>
+								</table>
+
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-body p-1">
+
+								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
+									<tr>
+										<td>Tanggal SOP Form 02</td>
+										<td>:</td>
+										<td>
+											<span id="detail_tanggalSopForm"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>Nomor SOP Form 02</td>
+										<td>:</td>
+										<td>
+											<span id="detail_nomorSopForm"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>File SOP Form 02</td>
+										<td>:</td>
+										<td>
+											<a href="" class="badge btn btn-sm btn-info" id="detail_fileSopForm" target="_blank">
+												Unduh / Lihat file SOP Form 02
+											</a>
+										</td>
+									</tr>
+								</table>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-body p-1">
+
+								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
+									<tr>
+										<td>Tanggal Surat Pengembalian SPDP</td>
+										<td>:</td>
+										<td>
+											<span id="detail_tanggalSuratPengembalianSpdp"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>Nomor Surat Pengembalian SPDP</td>
+										<td>:</td>
+										<td>
+											<span id="detail_nomorSuratPengembalianSpdp"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>File Surat Pengembalian SPDP</td>
+										<td>:</td>
+										<td>
+											<a href="" class="badge btn btn-sm btn-info" id="detail_fileSuratPengembalianSpdp" target="_blank">
+												Unduh / Lihat file Surat Pengembalian SPDP
+											</a>
+										</td>
+									</tr>
+								</table>
+
+							</div>
+						</div>
+					</div>
+
 				</div>
 
 			</div>
@@ -1087,7 +1172,7 @@
 					$("#data-table-custom").toggleClass("card");
 				});
 
-				var instansiPenyidik = this.api().column(6);
+				var instansiPenyidik = this.api().column(5);
 				var instansiPenyidikSelect = $('<select class="filter form-control form-control-sm js-select-2"><option value="">Semua</option></select>')
 					.appendTo('#instansiPenyidikSelect')
 					.on('change', function() {
@@ -1100,7 +1185,7 @@
 				<?php endforeach; ?>
 					`);
 
-				var status = this.api().column(8);
+				var status = this.api().column(7);
 				var statusSelect = $('<select class="filter form-control js-select-2"><option value="">Semua</option></select>')
 					.appendTo('#statusSelect')
 					.on('change', function() {
