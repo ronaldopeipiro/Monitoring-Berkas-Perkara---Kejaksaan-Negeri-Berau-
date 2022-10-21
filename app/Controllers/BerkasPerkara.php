@@ -33,6 +33,7 @@ class BerkasPerkara extends BaseController
 		$data_user = $this->UserModel->getUser($this->id_user);
 
 		$this->user_nama_lengkap = $data_user['nama_lengkap'];
+		$this->user_nip = $data_user['nip'];
 		$this->user_username = $data_user['username'];
 		$this->user_no_hp = $data_user['no_hp'];
 		$this->user_email = $data_user['email'];
@@ -49,11 +50,22 @@ class BerkasPerkara extends BaseController
 
 	public function index()
 	{
+		$text_title = "";
+		if ($this->user_level <= 2) {
+			$text_title = "Berkas Perkara";
+			$data_berkas_perkara = $this->BerkasPerkaraModel->getBerkasPerkara();
+		} else if ($this->user_level == 3) {
+			$text_title = "Berkas Perkara - " . $this->user_nama_lengkap . " (NIP.)" . $this->user_nip;
+			$data_berkas_perkara = $this->db->query(
+				"SELECT * FROM berkas_perkara WHERE FIND_IN_SET('$this->id_user', jaksa_terkait) ORDER BY id_berkas_perkara DESC"
+			)->getResult("array");
+		}
+
 		$data = [
 			'request' => $this->request,
 			'db' => $this->db,
 			'validation' => $this->validation,
-			'title' => 'Berkas Perkara',
+			'title' => $text_title,
 			'user_id' => $this->id_user,
 			'user_nama_lengkap' => $this->user_nama_lengkap,
 			'user_username' => $this->user_username,
@@ -61,7 +73,7 @@ class BerkasPerkara extends BaseController
 			'user_email' => $this->user_email,
 			'user_level' => $this->user_level,
 			'user_foto' => $this->user_foto,
-			'data_berkas_perkara' => $this->BerkasPerkaraModel->getBerkasPerkara(),
+			'data_berkas_perkara' => $data_berkas_perkara,
 			'list_instansi' => $this->InstansiModel->getListInstansiAktif(),
 			'list_jaksa' => $this->UserModel->getListUserAktifByLevel(3),
 		];
@@ -72,6 +84,7 @@ class BerkasPerkara extends BaseController
 	public function add()
 	{
 		$id_user = $this->request->getVar('id_user');
+		$tanggal_penerimaan = $this->request->getVar('tanggal_penerimaan');
 		$pidana_anak = $this->request->getVar('pidana_anak');
 		$nomor_berkas = $this->request->getVar('nomor_berkas');
 		$tanggal_berkas = $this->request->getVar('tanggal_berkas');
@@ -79,7 +92,6 @@ class BerkasPerkara extends BaseController
 		$tanggal_p16 = $this->request->getVar('tanggal_p16');
 		$status_berkas = $this->request->getVar('status_berkas');
 		$id_instansi_penyidik = $this->request->getVar('id_instansi_penyidik');
-		$id_instansi_pelaksana_penyidikan = $this->request->getVar('id_instansi_pelaksana_penyidikan');
 		$jaksa_terkait = $this->request->getVar('jaksa_terkait');
 
 		$nama_file_berkas = "";
@@ -100,6 +112,14 @@ class BerkasPerkara extends BaseController
 			echo json_encode(array(
 				'success' => '0',
 				'pesan' => 'Terjadi kesalahan !'
+			));
+			return false;
+		}
+
+		if ($tanggal_penerimaan == "") {
+			echo json_encode(array(
+				'success' => '0',
+				'pesan' => 'Tanggal penerimaan tidak boleh kosong !'
 			));
 			return false;
 		}
@@ -136,14 +156,6 @@ class BerkasPerkara extends BaseController
 			return false;
 		}
 
-		if ($id_instansi_pelaksana_penyidikan == "") {
-			echo json_encode(array(
-				'success' => '0',
-				'pesan' => 'Instansi pelaksana penyidikan tidak boleh kosong !'
-			));
-			return false;
-		}
-
 		if ($jaksa_terkait == "") {
 			echo json_encode(array(
 				'success' => '0',
@@ -152,11 +164,8 @@ class BerkasPerkara extends BaseController
 			return false;
 		}
 
-		// if ($pidana_anak != "Ya") {
-		// 	$pidana_anak = "Tidak";
-		// }
-
 		$query = $this->BerkasPerkaraModel->save([
+			'tanggal_penerimaan' => $tanggal_penerimaan,
 			'nomor_berkas' => $nomor_berkas,
 			'tanggal_berkas' => $tanggal_berkas,
 			'file_berkas' => $nama_file_berkas,
@@ -165,11 +174,11 @@ class BerkasPerkara extends BaseController
 			'file_p16' => $nama_file_p16,
 			'status_berkas' => $status_berkas,
 			'id_instansi_penyidik' => $id_instansi_penyidik,
-			'id_instansi_pelaksana_penyidikan' => $id_instansi_pelaksana_penyidikan,
 			'jaksa_terkait' => $jaksa_terkait,
 			'pidana_anak' => $pidana_anak,
 			'status' => "Proses",
 			'notifikasi_send' => "N",
+			'create_datetime' => date("Y-m-d H:i:s"),
 			'id_user_create' => $id_user
 		]);
 
@@ -188,20 +197,30 @@ class BerkasPerkara extends BaseController
 
 	public function edit()
 	{
-		$id_BerkasPerkara = $this->request->getPost('id_BerkasPerkara');
-		$nomor_berkas = $this->request->getPost('nomor_berkas');
-		$id_pltd = $this->request->getPost('id_pltd');
-		$id_mesin = $this->request->getPost('id_mesin');
-		$unit = $this->request->getPost('unit');
-		$id_jenis_periodik = $this->request->getPost('id_jenis_periodik');
-		$rencana = $this->request->getPost('rencana');
-		$realisasi = $this->request->getPost('realisasi');
-		$catatan = $this->request->getPost('catatan');
+		$id_berkas_perkara = $this->request->getVar('id_berkas_perkara');
+		$id_user = $this->request->getVar('id_user');
+		$tanggal_penerimaan = $this->request->getVar('tanggal_penerimaan');
+		$pidana_anak = $this->request->getVar('pidana_anak');
+		$nomor_berkas = $this->request->getVar('nomor_berkas');
+		$tanggal_berkas = $this->request->getVar('tanggal_berkas');
+		$nomor_p16 = $this->request->getVar('nomor_p16');
+		$tanggal_p16 = $this->request->getVar('tanggal_p16');
+		$status_berkas = $this->request->getVar('status_berkas');
+		$id_instansi_penyidik = $this->request->getVar('id_instansi_penyidik');
+		$jaksa_terkait = $this->request->getVar('jaksa_terkait');
 
-		if ($id_BerkasPerkara == "") {
+		if ($id_user == "") {
 			echo json_encode(array(
 				'success' => '0',
-				'pesan' => 'Terjadi kesalahan teknis !'
+				'pesan' => 'Terjadi kesalahan !'
+			));
+			return false;
+		}
+
+		if ($tanggal_penerimaan == "") {
+			echo json_encode(array(
+				'success' => '0',
+				'pesan' => 'Tanggal penerimaan tidak boleh kosong !'
 			));
 			return false;
 		}
@@ -209,79 +228,92 @@ class BerkasPerkara extends BaseController
 		if ($nomor_berkas == "") {
 			echo json_encode(array(
 				'success' => '0',
-				'pesan' => 'Tanggal & Waktu tidak boleh kosong !'
+				'pesan' => 'Nomor berkas tidak boleh kosong !'
 			));
 			return false;
 		}
 
-		if ($id_pltd == "") {
+		if ($tanggal_berkas == "") {
 			echo json_encode(array(
 				'success' => '0',
-				'pesan' => 'Data ULPL/PLTD tidak boleh kosong !'
+				'pesan' => 'Tanggal berkas tidak boleh kosong !'
 			));
 			return false;
 		}
 
-		if ($id_mesin == "") {
+		if ($status_berkas == "") {
 			echo json_encode(array(
 				'success' => '0',
-				'pesan' => 'Data Mesin tidak boleh kosong !'
+				'pesan' => 'Status berkas tidak boleh kosong !'
 			));
 			return false;
 		}
 
-		if ($unit == "") {
+		if ($id_instansi_penyidik == "") {
 			echo json_encode(array(
 				'success' => '0',
-				'pesan' => 'Unit tidak boleh kosong !'
+				'pesan' => 'Instansi penyidik tidak boleh kosong !'
 			));
 			return false;
 		}
 
-		if ($id_jenis_periodik == "") {
+		if ($jaksa_terkait == "") {
 			echo json_encode(array(
 				'success' => '0',
-				'pesan' => 'Jenis periodik tidak boleh kosong !'
+				'pesan' => 'Jaksa terkait tidak boleh kosong !'
 			));
 			return false;
 		}
 
-		if ($rencana == "") {
-			echo json_encode(array(
-				'success' => '0',
-				'pesan' => 'Rencana tidak boleh kosong !'
-			));
-			return false;
+		$file_berkas = $this->request->getFile('file_berkas');
+		if (!empty($file_berkas)) {;
+			$nama_file_berkas = "berkas-" . $file_berkas->getRandomName();
+			$file_berkas->move('assets/berkas', $nama_file_berkas);
+
+			$query_update_file_berkas = $this->BerkasPerkaraModel->updateBerkasPerkara(
+				[
+					'file_berkas' => $nama_file_berkas,
+				],
+				$id_berkas_perkara
+			);
 		}
 
-		if ($realisasi == "") {
-			echo json_encode(array(
-				'success' => '0',
-				'pesan' => 'Realisasi tidak boleh kosong !'
-			));
-			return false;
+		$file_p16 = $this->request->getFile('file_p16');
+		if (!empty($file_p16)) {
+			$nama_file_p16 = "p16-" . $file_p16->getRandomName();
+			$file_p16->move('assets/berkas', $nama_file_p16);
+
+			$query_update_file_p16 = $this->BerkasPerkaraModel->updateBerkasPerkara(
+				[
+					'file_p16' => $nama_file_p16,
+				],
+				$id_berkas_perkara
+			);
 		}
 
 		$query = $this->BerkasPerkaraModel->updateBerkasPerkara([
+			'tanggal_penerimaan' => $tanggal_penerimaan,
 			'nomor_berkas' => $nomor_berkas,
-			'id_pltd' => $id_pltd,
-			'id_mesin' => $id_mesin,
-			'unit' => $unit,
-			'id_jenis_periodik' => $id_jenis_periodik,
-			'rencana' => $rencana,
-			'realisasi' => $realisasi,
-			'catatan' => $catatan
-		], $id_BerkasPerkara);
+			'tanggal_berkas' => $tanggal_berkas,
+			'nomor_p16' => $nomor_p16,
+			'tanggal_p16' => $tanggal_p16,
+			'status_berkas' => $status_berkas,
+			'id_instansi_penyidik' => $id_instansi_penyidik,
+			'jaksa_terkait' => $jaksa_terkait,
+			'pidana_anak' => $pidana_anak,
+			'update_datetime' => date("Y-m-d H:i:s"),
+			'id_user_update' => $id_user
+		], $id_berkas_perkara);
 
 		if ($query) {
 			echo json_encode(array(
 				'success' => '1',
-				'pesan' => 'Data berhasil disimpan !'
+				'pesan' => 'Data berhasil diubah !'
 			));
 		} else {
 			echo json_encode(array(
 				'success' => '0',
-				'pesan' => 'Data gagal disimpan !'
+				'pesan' => 'Data gagal diubah !'
 			));
 		}
 	}

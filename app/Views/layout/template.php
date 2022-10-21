@@ -1,5 +1,5 @@
 <?php
-setlocale(LC_ALL, 'id-ID', 'id_ID');
+// setlocale(LC_ALL, 'id-ID', 'id_ID');
 ?>
 
 <!DOCTYPE html>
@@ -14,39 +14,39 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 	<meta name="keywords" content="monitoring, berkas, perkara, kejari, kejaksaan, jaksa, kejagung, tersangka, p16, website, web, aplikasi">
 
 	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link rel="shortcut icon" href="<?= base_url(); ?>/assets/img/logo.png" />
+	<link rel="shortcut icon" href="<?= base_url() ?>/assets/img/logo.png" />
 
 	<title><?= $title; ?> | APP MONITORING BERKAS PERKARA - KEJARI BERAU</title>
-	<link href="<?= base_url(); ?>/template/css/app.css" rel="stylesheet">
+	<link href="<?= base_url() ?>/template/css/app.css" rel="stylesheet">
 
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-	<link rel="stylesheet" href="<?= base_url(); ?>/template/fontawesome-free/css/all.min.css">
-	<link rel="stylesheet" href="<?= base_url(); ?>/template/select2/css/select2.min.css">
-	<link rel="stylesheet" href="<?= base_url(); ?>/template/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-	<link rel="stylesheet" href="<?= base_url(); ?>/template/dropzone/min/dropzone.min.css">
-	<link rel="stylesheet" href="<?= base_url(); ?>/template/datatables-bs4/css/dataTables.bootstrap4.min.css">
-	<link rel="stylesheet" href="<?= base_url(); ?>/template/datatables-responsive/css/responsive.bootstrap4.min.css">
-	<link rel="stylesheet" href="<?= base_url(); ?>/template/toastr/toastr.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>/template/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>/template/select2/css/select2.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>/template/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>/template/dropzone/min/dropzone.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>/template/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>/template/datatables-responsive/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" href="<?= base_url() ?>/template/toastr/toastr.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-	<!-- <link rel="stylesheet" href="<?= base_url(); ?>/template/dropify/dist/css/dropify.min.css"> -->
+	<!-- <link rel="stylesheet" href="<?= base_url() ?>/template/dropify/dist/css/dropify.min.css"> -->
 	<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
 
 	<link rel="stylesheet" href="<?= base_url() ?>/template/sweetalert2/sweetalert2.min.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
 
-	<script src="<?= base_url(); ?>/template/js/app.js"></script>
 
-	<script src="<?= base_url(); ?>/template/jquery/jquery.min.js"></script>
-	<script src="<?= base_url(); ?>/template/datatables/jquery.dataTables.min.js"></script>
-	<script src="<?= base_url(); ?>/template/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-	<script src="<?= base_url(); ?>/template/datatables-responsive/js/dataTables.responsive.min.js"></script>
-	<script src="<?= base_url(); ?>/template/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<script src="<?= base_url() ?>/template/js/app.js"></script>
+	<script src="<?= base_url() ?>/template/jquery/jquery.min.js"></script>
+	<script src="<?= base_url() ?>/template/datatables/jquery.dataTables.min.js"></script>
+	<script src="<?= base_url() ?>/template/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="<?= base_url() ?>/template/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="<?= base_url() ?>/template/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 
-	<script src="<?= base_url(); ?>/template/select2/js/select2.min.js"></script>
-	<script src="<?= base_url(); ?>/template/toastr/toastr.min.js"></script>
-	<script src="<?= base_url(); ?>/template/sweetalert2/sweetalert2.min.js"></script>
+	<script src="<?= base_url() ?>/template/select2/js/select2.min.js"></script>
+	<script src="<?= base_url() ?>/template/toastr/toastr.min.js"></script>
+	<script src="<?= base_url() ?>/template/sweetalert2/sweetalert2.min.js"></script>
 
 	<script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -59,7 +59,7 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
-	<!-- <script type="text/javascript" src="<?= base_url(); ?>/template/dropify/dist/js/dropify.min.js"></script> -->
+	<!-- <script type="text/javascript" src="<?= base_url() ?>/template/dropify/dist/js/dropify.min.js"></script> -->
 
 	<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
 
@@ -127,7 +127,7 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 
 	<div id="loader" style="display: none;">
 		<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-			<img src="<?= base_url(); ?>/assets/img/loading.gif" style="width: 350px; height: 350px; object-fit: cover; object-position: center;">
+			<img src="<?= base_url() ?>/assets/img/loading.gif" style="width: 350px; height: 350px; object-fit: cover; object-position: center;">
 		</div>
 	</div>
 
@@ -135,9 +135,9 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 
 		<nav id="sidebar" class="sidebar js-sidebar">
 			<div class="sidebar-content js-simplebar">
-				<a class="sidebar-brand" href="<?= base_url(); ?>">
+				<a class="sidebar-brand" href="<?= base_url() ?>">
 					<span class="align-middle d-flex">
-						<img src="<?= base_url(); ?>/assets/img/logo.png" style="height: 55px; margin-top: 7px;" alt="logo">
+						<img src="<?= base_url() ?>/assets/img/logo.png" style="height: 55px; margin-top: 7px;" alt="logo">
 						<span style="line-height: 20px; margin-top: 5px; margin-left: 5px; font-size: 11px;">
 							APLIKASI MONITORING <br>
 							BERKAS PERKARA <br>
@@ -157,14 +157,14 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 
 				<ul class="sidebar-nav">
 					<li class="sidebar-item <?= $request->uri->getSegment(1) == '' ? 'active' : ''; ?>">
-						<a class="sidebar-link" href="<?= base_url(); ?>">
+						<a class="sidebar-link" href="<?= base_url() ?>">
 							<i class="align-middle" data-feather="home"></i>
 							<span class="align-middle">Dashboard</span>
 						</a>
 					</li>
 
 					<li class="sidebar-item <?= $request->uri->getSegment(1) == 'berkas-perkara' ? 'active' : ''; ?>">
-						<a class="sidebar-link" href="<?= base_url(); ?>/berkas-perkara">
+						<a class="sidebar-link" href="<?= base_url() ?>/berkas-perkara">
 							<i class="align-middle" data-feather="file-text"></i>
 							<span class="align-middle">
 								Berkas Perkara
@@ -180,13 +180,13 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 							</a>
 							<ul id="data-master" class="sidebar-dropdown list-unstyled collapse <?= $request->uri->getSegment(1) == 'data-master' ? 'show' : ''; ?>" data-parent="#sidebar">
 								<li class="sidebar-item <?= (($request->uri->getSegment(1) == 'data-master') and ($request->uri->getSegment(2) == 'jaksa')) ? 'active' : ''; ?>">
-									<a class="sidebar-link" href="<?= base_url(); ?>/data-master/jaksa">
+									<a class="sidebar-link" href="<?= base_url() ?>/data-master/jaksa">
 										Data Jaksa
 									</a>
 								</li>
 								<li class="sidebar-item <?= (($request->uri->getSegment(1) == 'data-master') and ($request->uri->getSegment(2) == 'instansi')) ? 'active' : ''; ?>">
-									<a class="sidebar-link" href="<?= base_url(); ?>/data-master/instansi">
-										Instansi Penyidik/Pelaksana
+									<a class="sidebar-link" href="<?= base_url() ?>/data-master/instansi">
+										Data Instansi
 									</a>
 								</li>
 							</ul>
@@ -194,7 +194,7 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 					<?php endif; ?>
 
 					<li class="sidebar-item <?= $request->uri->getSegment(1) == 'pengaturan' ? 'active' : ''; ?>">
-						<a class="sidebar-link" href="<?= base_url(); ?>/pengaturan">
+						<a class="sidebar-link" href="<?= base_url() ?>/pengaturan">
 							<i class="align-middle" data-feather="sliders"></i>
 							<span class="align-middle">
 								Pengaturan
@@ -203,7 +203,7 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link btn-logout" href="<?= base_url(); ?>/logout-user">
+						<a class="sidebar-link btn-logout" href="<?= base_url() ?>/logout-user">
 							<i class="align-middle" data-feather="log-out"></i>
 							<span class="align-middle">Logout</span>
 						</a>
@@ -244,11 +244,11 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 								</div>
 
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="<?= base_url(); ?>/pengaturan">
+								<a class="dropdown-item" href="<?= base_url() ?>/pengaturan">
 									<i class="align-middle me-1" data-feather="settings"></i> Pengaturan
 								</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item btn-logout" href="<?= base_url(); ?>/logout-user">
+								<a class="dropdown-item btn-logout" href="<?= base_url() ?>/logout-user">
 									<i class="align-middle me-1" data-feather="user"></i> Keluar
 								</a>
 								<div class="dropdown-divider"></div>
@@ -269,7 +269,7 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 					<div class="row text-muted">
 						<div class="col-lg-9 text-start">
 							<p class="mb-0">
-								<a href="<?= base_url(); ?>" class="text-muted">
+								<a href="<?= base_url() ?>" class="text-muted">
 									<strong>KEJAKSAAN NEGERI BERAU</strong>
 								</a> &copy; <?= date("Y"); ?>
 							</p>
@@ -280,10 +280,10 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 									<a class="text-muted" href="https://wa.me/+6285750597580" target="_blank">Bantuan</a>
 								</li>
 								<li class="list-inline-item">
-									<a class="text-muted" href="<?= base_url(); ?>/panduan-aplikasi">Panduan</a>
+									<a class="text-muted" href="<?= base_url() ?>/panduan-aplikasi">Panduan</a>
 								</li>
 								<li class="list-inline-item">
-									<a class="text-muted" href="<?= base_url(); ?>/tentang-aplikasi">Versi 1.0</a>
+									<a class="text-muted" href="<?= base_url() ?>/tentang-aplikasi">Versi 1.0</a>
 								</li>
 							</ul>
 						</div>
@@ -357,10 +357,9 @@ setlocale(LC_ALL, 'id-ID', 'id_ID');
 			}
 		}
 
-		$(function() {
-			$('[data-toggle="tooltip"]').tooltip()
-
-		})
+		// $(function() {
+		// 	$('[data-toggle="tooltip"]').tooltip()
+		// })
 	</script>
 
 </body>
