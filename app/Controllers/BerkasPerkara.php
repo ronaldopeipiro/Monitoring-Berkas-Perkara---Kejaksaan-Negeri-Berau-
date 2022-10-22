@@ -86,13 +86,26 @@ class BerkasPerkara extends BaseController
 		$id_user = $this->request->getVar('id_user');
 		$tanggal_penerimaan = $this->request->getVar('tanggal_penerimaan');
 		$pidana_anak = $this->request->getVar('pidana_anak');
+
+		$nomor_spdp = $this->request->getVar('nomor_spdp');
+		$tanggal_spdp = $this->request->getVar('tanggal_spdp');
+
 		$nomor_berkas = $this->request->getVar('nomor_berkas');
 		$tanggal_berkas = $this->request->getVar('tanggal_berkas');
+
 		$nomor_p16 = $this->request->getVar('nomor_p16');
 		$tanggal_p16 = $this->request->getVar('tanggal_p16');
+
 		$status_berkas = $this->request->getVar('status_berkas');
 		$id_instansi_penyidik = $this->request->getVar('id_instansi_penyidik');
 		$jaksa_terkait = $this->request->getVar('jaksa_terkait');
+
+		$nama_file_spdp = "";
+		$file_spdp = $this->request->getFile('file_spdp');
+		if (!empty($file_spdp)) {;
+			$nama_file_spdp = "spdp-" . $file_spdp->getRandomName();
+			$file_spdp->move('assets/berkas', $nama_file_spdp);
+		}
 
 		$nama_file_berkas = "";
 		$file_berkas = $this->request->getFile('file_berkas');
@@ -124,22 +137,6 @@ class BerkasPerkara extends BaseController
 			return false;
 		}
 
-		if ($nomor_berkas == "") {
-			echo json_encode(array(
-				'success' => '0',
-				'pesan' => 'Nomor berkas tidak boleh kosong !'
-			));
-			return false;
-		}
-
-		if ($tanggal_berkas == "") {
-			echo json_encode(array(
-				'success' => '0',
-				'pesan' => 'Tanggal berkas tidak boleh kosong !'
-			));
-			return false;
-		}
-
 		if ($status_berkas == "") {
 			echo json_encode(array(
 				'success' => '0',
@@ -166,6 +163,9 @@ class BerkasPerkara extends BaseController
 
 		$query = $this->BerkasPerkaraModel->save([
 			'tanggal_penerimaan' => $tanggal_penerimaan,
+			'nomor_spdp' => $nomor_spdp,
+			'tanggal_spdp' => $tanggal_spdp,
+			'file_spdp' => $nama_file_spdp,
 			'nomor_berkas' => $nomor_berkas,
 			'tanggal_berkas' => $tanggal_berkas,
 			'file_berkas' => $nama_file_berkas,
@@ -201,6 +201,8 @@ class BerkasPerkara extends BaseController
 		$id_user = $this->request->getVar('id_user');
 		$tanggal_penerimaan = $this->request->getVar('tanggal_penerimaan');
 		$pidana_anak = $this->request->getVar('pidana_anak');
+		$nomor_spdp = $this->request->getVar('nomor_spdp');
+		$tanggal_spdp = $this->request->getVar('tanggal_spdp');
 		$nomor_berkas = $this->request->getVar('nomor_berkas');
 		$tanggal_berkas = $this->request->getVar('tanggal_berkas');
 		$nomor_p16 = $this->request->getVar('nomor_p16');
@@ -221,22 +223,6 @@ class BerkasPerkara extends BaseController
 			echo json_encode(array(
 				'success' => '0',
 				'pesan' => 'Tanggal penerimaan tidak boleh kosong !'
-			));
-			return false;
-		}
-
-		if ($nomor_berkas == "") {
-			echo json_encode(array(
-				'success' => '0',
-				'pesan' => 'Nomor berkas tidak boleh kosong !'
-			));
-			return false;
-		}
-
-		if ($tanggal_berkas == "") {
-			echo json_encode(array(
-				'success' => '0',
-				'pesan' => 'Tanggal berkas tidak boleh kosong !'
 			));
 			return false;
 		}
@@ -263,6 +249,19 @@ class BerkasPerkara extends BaseController
 				'pesan' => 'Jaksa terkait tidak boleh kosong !'
 			));
 			return false;
+		}
+
+		$file_spdp = $this->request->getFile('file_spdp');
+		if (!empty($file_spdp)) {;
+			$nama_file_spdp = "spdp-" . $file_spdp->getRandomName();
+			$file_spdp->move('assets/berkas', $nama_file_spdp);
+
+			$query_update_file_spdp = $this->BerkasPerkaraModel->updateBerkasPerkara(
+				[
+					'file_spdp' => $nama_file_spdp,
+				],
+				$id_berkas_perkara
+			);
 		}
 
 		$file_berkas = $this->request->getFile('file_berkas');
@@ -293,6 +292,8 @@ class BerkasPerkara extends BaseController
 
 		$query = $this->BerkasPerkaraModel->updateBerkasPerkara([
 			'tanggal_penerimaan' => $tanggal_penerimaan,
+			'nomor_spdp' => $nomor_spdp,
+			'tanggal_spdp' => $tanggal_spdp,
 			'nomor_berkas' => $nomor_berkas,
 			'tanggal_berkas' => $tanggal_berkas,
 			'nomor_p16' => $nomor_p16,

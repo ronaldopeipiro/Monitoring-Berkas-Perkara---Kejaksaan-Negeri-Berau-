@@ -58,11 +58,22 @@
 				</li>
 			<?php endif; ?>
 
+			<?php if ($user_level <= 2) : ?>
+				<li class="sidebar-item <?= $request->uri->getSegment(1) == 'pengaturan-email' ? 'active' : ''; ?>">
+					<a class="sidebar-link" href="<?= base_url() ?>/pengaturan-email">
+						<i class="align-middle" data-feather="sliders"></i>
+						<span class="align-middle">
+							Email Aplikasi
+						</span>
+					</a>
+				</li>
+			<?php endif; ?>
+
 			<li class="sidebar-item <?= $request->uri->getSegment(1) == 'pengaturan' ? 'active' : ''; ?>">
 				<a class="sidebar-link" href="<?= base_url() ?>/pengaturan">
-					<i class="align-middle" data-feather="sliders"></i>
+					<i class="align-middle" data-feather="settings"></i>
 					<span class="align-middle">
-						Pengaturan
+						Pengaturan Akun
 					</span>
 				</a>
 			</li>

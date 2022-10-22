@@ -7,20 +7,19 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+
 			<form id="formInput" enctype="multipart/form-data">
 				<div class="modal-body">
 
 					<input type="hidden" id="action" name="action" value="">
 					<input type="hidden" id="id_berkas_perkara" name="id_berkas_perkara" value="">
 					<input type="hidden" id="id_user" name="id_user" value="<?= $user_id; ?>">
-					<input type="hidden" id="file_berkas_lama" name="file_berkas_lama" value="">
-					<input type="hidden" id="file_p16_lama" name="file_p16_lama" value="">
 
 					<div class="row">
 
 						<div class="col-lg-6">
 
-							<div class="form-group row mb-3">
+							<div class="form-group row mb-2">
 								<label for="tanggal_penerimaan p-1" class="col-sm-12 col-form-label">
 									Tanggal Penerimaan
 									<small class="text-danger">(*Wajib diisi !)</small>
@@ -30,7 +29,7 @@
 								</div>
 							</div>
 
-							<div class="form-group row mb-3">
+							<div class="form-group row mb-2">
 								<label for="id_instansi_penyidik p-1" class="col-sm-12 col-form-label">
 									Instansi Penyidik
 									<small class="text-danger">(*Wajib diisi !)</small>
@@ -49,7 +48,7 @@
 
 							<div class="row">
 								<div class="col-lg-6">
-									<div class="form-group row mb-3">
+									<div class="form-group row mb-2">
 										<label for="pidana_anak" class="col-sm-12 col-form-label">
 											Pidana Anak
 											<small class="text-danger">(*Wajib diisi !)</small>
@@ -63,7 +62,7 @@
 									</div>
 								</div>
 								<div class="col-lg-6">
-									<div class="form-group row mb-1">
+									<div class="form-group row mb-2">
 										<label for="status_berkas" class="col-sm-12 col-form-label">
 											Status Berkas
 											<small class="text-danger">(*Wajib diisi !)</small>
@@ -89,8 +88,7 @@
 								<div class="col-lg-8 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="nomor_spdp" class="col-sm-12 col-form-label">
-											Nomor SPDP <br>
-											<small class="text-danger">(*Wajib diisi !)</small>
+											Nomor SPDP
 										</label>
 										<div class="col-sm-12">
 											<input type="text" class="form-control" id="nomor_spdp" name="nomor_spdp" placeholder="Masukkan Nomor SPDP ..." value="">
@@ -101,8 +99,7 @@
 								<div class="col-lg-4 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="tanggal_spdp" class="col-sm-12 col-form-label">
-											Tanggal SPDP <br>
-											<small class="text-danger">(*Wajib diisi !)</small>
+											Tanggal SPDP
 										</label>
 										<div class="col-sm-12">
 											<input type="date" class="form-control" id="tanggal_spdp" name="tanggal_spdp" placeholder="0" value="">
@@ -134,8 +131,7 @@
 								<div class="col-lg-8 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="nomor_berkas" class="col-sm-12 col-form-label">
-											Nomor Berkas Tahap 1 <br>
-											<small class="text-danger">(*Wajib diisi !)</small>
+											Nomor Berkas Tahap 1
 										</label>
 										<div class="col-sm-12">
 											<input type="text" class="form-control" id="nomor_berkas" name="nomor_berkas" placeholder="Masukkan Nomor Berkas ..." value="">
@@ -146,8 +142,7 @@
 								<div class="col-lg-4 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="tanggal_berkas" class="col-sm-12 col-form-label">
-											Tanggal Berkas Tahap 1 <br>
-											<small class="text-danger">(*Wajib diisi !)</small>
+											Tanggal Berkas Tahap 1
 										</label>
 										<div class="col-sm-12">
 											<input type="date" class="form-control" id="tanggal_berkas" name="tanggal_berkas" placeholder="0" value="">
@@ -176,8 +171,7 @@
 								<div class="col-lg-8 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="nomor_p16" class="col-sm-12 col-form-label">
-											Nomor P-16 <br>
-											<small class="text-info">(*Jika ada)</small>
+											Nomor P-16
 										</label>
 										<div class="col-sm-12">
 											<input type="text" class="form-control" id="nomor_p16" name="nomor_p16" placeholder="Masukkan Nomor P-16 ..." value="">
@@ -188,8 +182,7 @@
 								<div class="col-lg-4 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="tanggal_p16" class="col-sm-12 col-form-label">
-											Tanggal P-16 <br>
-											<small class="text-info">(*Jika ada)</small>
+											Tanggal P-16
 										</label>
 										<div class="col-sm-12">
 											<input type="date" class="form-control" id="tanggal_p16" name="tanggal_p16" placeholder="0" value="">
@@ -598,59 +591,60 @@
 				var statusPerkara = $(this).data('statusPerkara');
 				var intervalHari = $(this).data('intervalHari');
 
-				$('#modalDetail #judulFormDetail').text(title);
-				$('#modalDetail #detail_idBerkasPerkara').text(idBerkasPerkara);
+				$('#modalDetail #judulFormDetail').html(title);
+				$('#modalDetail #detail_idBerkasPerkara').html(idBerkasPerkara);
 
-				$('#modalDetail #detail_tanggalPenerimaan').text(tanggalPenerimaan);
-				$('#modalDetail #detail_tanggalBerkas').text(tanggalBerkas);
-				$('#modalDetail #detail_nomorBerkas').text(nomorBerkas);
-				if (fileBerkas != "") {
-					$('#modalDetail #detail_fileBerkas').attr("href", fileBerkas);
-				} else {
-					$('#modalDetail #detail_fileBerkas').hide();
-				}
+				$('#modalDetail #detail_tanggalPenerimaan').html(tanggalPenerimaan);
 
-				$('#modalDetail #detail_tanggalSpdp').text(tanggalSpdp);
-				$('#modalDetail #detail_nomorSpdp').text(nomorSpdp);
+				$('#modalDetail #detail_tanggalSpdp').html(tanggalSpdp);
+				$('#modalDetail #detail_nomorSpdp').html(nomorSpdp);
 				if (fileSpdp != "") {
 					$('#modalDetail #detail_fileSpdp').attr("href", fileSpdp);
 				} else {
 					$('#modalDetail #detail_fileSpdp').hide();
 				}
 
-				$('#modalDetail #detail_tanggalP16').text(tanggalP16);
-				$('#modalDetail #detail_nomorP16').text(nomorP16);
+				$('#modalDetail #detail_tanggalBerkas').html(tanggalBerkas);
+				$('#modalDetail #detail_nomorBerkas').html(nomorBerkas);
+				if (fileBerkas != "") {
+					$('#modalDetail #detail_fileBerkas').attr("href", fileBerkas);
+				} else {
+					$('#modalDetail #detail_fileBerkas').hide();
+				}
+
+				$('#modalDetail #detail_tanggalP16').html(tanggalP16);
+				$('#modalDetail #detail_nomorP16').html(nomorP16);
 				if (fileP16 != "") {
 					$('#modalDetail #detail_fileP16').attr("href", fileP16);
 				} else {
 					$('#modalDetail #detail_fileP16').hide();
 				}
 
-				$('#modalDetail #detail_tanggalP17').text(tanggalP17);
-				$('#modalDetail #detail_nomorP17').text(nomorP17);
+				$('#modalDetail #detail_tanggalP17').html(tanggalP17);
+				$('#modalDetail #detail_nomorP17').html(nomorP17);
 				if (fileP17 != "") {
 					$('#modalDetail #detail_fileP17').attr("href", fileP17);
 				} else {
 					$('#modalDetail #detail_fileP17').hide();
 				}
 
-				$('#modalDetail #detail_tanggalSopForm').text(tanggalSopForm);
-				$('#modalDetail #detail_nomorSopForm').text(nomorSopForm);
+				$('#modalDetail #detail_tanggalSopForm').html(tanggalSopForm);
+				$('#modalDetail #detail_nomorSopForm').html(nomorSopForm);
 				if (fileSopForm != "") {
 					$('#modalDetail #detail_fileSopForm').attr("href", fileSopForm);
 				} else {
 					$('#modalDetail #detail_fileSopForm').hide();
 				}
 
-				$('#modalDetail #detail_tanggalSuratPengembalianSpdp').text(tanggalSuratPengembalianSpdp);
-				$('#modalDetail #detail_nomorSuratPengembalianSpdp').text(nomorSuratPengembalianSpdp);
+				$('#modalDetail #detail_tanggalSuratPengembalianSpdp').html(tanggalSuratPengembalianSpdp);
+				$('#modalDetail #detail_nomorSuratPengembalianSpdp').html(nomorSuratPengembalianSpdp);
 				if (fileSuratPengembalianSpdp != "") {
 					$('#modalDetail #detail_fileSuratPengembalianSpdp').attr("href", fileSuratPengembalianSpdp);
 				} else {
 					$('#modalDetail #detail_fileSuratPengembalianSpdp').hide();
 				}
 
-				$('#modalDetail #detail_instansiPenyidik').text(instansiPenyidik);
+				$('#modalDetail #detail_instansiPenyidik').html(instansiPenyidik);
 				$('#modalDetail #detail_jaksaTerkait').html(jaksaTerkait);
 				$('#modalDetail #detail_pidanaAnak').html(pidanaAnak);
 				$('#modalDetail #detail_statusBerkas').html(statusBerkas);
@@ -702,6 +696,9 @@
 					var idBerkasPerkara = $(this).data('idBerkasPerkara');
 					var tanggalPenerimaan = $(this).data('tanggalPenerimaan');
 					var idInstansiPenyidik = $(this).data('idInstansiPenyidik');
+					var tanggalSpdp = $(this).data('tanggalSpdp');
+					var nomorSpdp = $(this).data('nomorSpdp');
+					var fileSpdp = $(this).data('fileSpdp');
 					var tanggalBerkas = $(this).data('tanggalBerkas');
 					var nomorBerkas = $(this).data('nomorBerkas');
 					var fileBerkas = $(this).data('fileBerkas');
@@ -715,23 +712,14 @@
 					$('#modalInput #id_berkas_perkara').val(idBerkasPerkara);
 					$('#modalInput #tanggal_penerimaan').val(tanggalPenerimaan);
 					$('#modalInput #id_instansi_penyidik').val(idInstansiPenyidik).trigger('change');
+					$('#modalInput #tanggal_spdp').val(tanggalSpdp);
+					$('#modalInput #nomor_spdp').val(nomorSpdp);
 					$('#modalInput #tanggal_berkas').val(tanggalBerkas);
 					$('#modalInput #nomor_berkas').val(nomorBerkas);
-					$('#modalInput #file_berkas_lama').val(fileBerkas);
 					$('#modalInput #tanggal_p16').val(tanggalP16);
 					$('#modalInput #nomor_p16').val(nomorP16);
-					$('#modalInput #file_p16_lama').val(fileP16);
 					$('#modalInput #status_berkas').val(statusBerkas).trigger('change');
 					$('#modalInput #pidana_anak').val(pidanaAnak).trigger('change');
-
-					if (fileBerkas != "") {
-						$('#modalInput #file_berkas').data("default-file", "/assets/berkas/" + fileBerkas);
-					}
-
-					if (fileP16 != "") {
-						$('#modalInput #file_p16').data("default-file", "/assets/berkas/" + fileP16);
-					}
-					$('.dropify').dropify();
 
 					var arrayJaksaTerkait;
 					if (arrayJaksaTerkait = jaksaTerkait.toString().split(',')) {
@@ -756,6 +744,9 @@
 					var urlPost = base_url + "/berkas-perkara/add";
 
 					var tanggal_penerimaan = $('#tanggal_penerimaan').val();
+					var nomor_spdp = $('#nomor_spdp').val();
+					var tanggal_spdp = $('#tanggal_spdp').val();
+					var file_spdp = $('#file_spdp').prop('files')[0];
 					var nomor_berkas = $('#nomor_berkas').val();
 					var tanggal_berkas = $('#tanggal_berkas').val();
 					var file_berkas = $('#file_berkas').prop('files')[0];
@@ -769,6 +760,9 @@
 
 					formData.append('pidana_anak', pidana_anak);
 					formData.append('tanggal_penerimaan', tanggal_penerimaan);
+					formData.append('nomor_spdp', nomor_spdp);
+					formData.append('tanggal_spdp', tanggal_spdp);
+					formData.append('file_spdp', file_spdp);
 					formData.append('nomor_berkas', nomor_berkas);
 					formData.append('tanggal_berkas', tanggal_berkas);
 					formData.append('file_berkas', file_berkas);
@@ -785,6 +779,9 @@
 
 					var id_berkas_perkara = $('#id_berkas_perkara').val();
 					var tanggal_penerimaan = $('#tanggal_penerimaan').val();
+					var nomor_spdp = $('#nomor_spdp').val();
+					var tanggal_spdp = $('#tanggal_spdp').val();
+					var file_spdp = $('#file_spdp').prop('files')[0];
 					var nomor_berkas = $('#nomor_berkas').val();
 					var tanggal_berkas = $('#tanggal_berkas').val();
 					var file_berkas = $('#file_berkas').prop('files')[0];
@@ -799,6 +796,9 @@
 					formData.append('id_berkas_perkara', id_berkas_perkara);
 					formData.append('pidana_anak', pidana_anak);
 					formData.append('tanggal_penerimaan', tanggal_penerimaan);
+					formData.append('nomor_spdp', nomor_spdp);
+					formData.append('tanggal_spdp', tanggal_spdp);
+					formData.append('file_spdp', file_spdp);
 					formData.append('nomor_berkas', nomor_berkas);
 					formData.append('tanggal_berkas', tanggal_berkas);
 					formData.append('file_berkas', file_berkas);

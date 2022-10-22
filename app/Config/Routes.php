@@ -44,6 +44,9 @@ $routes->post('/data-master/instansi/add', 'Instansi::add', ['filter' => 'auth_l
 $routes->post('/data-master/instansi/edit', 'Instansi::edit', ['filter' => 'auth_login']);
 $routes->post('/data-master/instansi/delete', 'Instansi::delete', ['filter' => 'auth_login']);
 
+$routes->get('/pengaturan-email', 'RefEmail::index', ['filter' => 'auth_login']);
+$routes->post('/pengaturan-email/update', 'RefEmail::update', ['filter' => 'auth_login']);
+
 $routes->get('/pengaturan', 'Pengaturan::index', ['filter' => 'auth_login']);
 $routes->post('/pengaturan/ubah-data-akun', 'Pengaturan::ubah_data_akun', ['filter' => 'auth_login']);
 $routes->post('/pengaturan/ubah-foto-profil', 'Pengaturan::ubah_foto_profil', ['filter' => 'auth_login']);

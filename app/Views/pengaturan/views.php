@@ -235,7 +235,7 @@
 					success: function(data) {
 						if (data.success == "1") {
 							toastr.success(data.pesan);
-							// location.reload();
+							location.reload();
 						} else if (data.success == "0") {
 							toastr.error(data.pesan);
 						}
