@@ -21,7 +21,7 @@
 
 							<div class="form-group row mb-2">
 								<label for="tanggal_penerimaan p-1" class="col-sm-12 col-form-label">
-									Tanggal Penerimaan
+									Tanggal Penerimaan Berkas Perkara Tahap 1
 									<small class="text-danger">(*Wajib diisi !)</small>
 								</label>
 								<div class="col-sm-12">
@@ -236,6 +236,74 @@
 	</div>
 </div>
 
+<div class="modal fade" id="modalInputTambahanBerkas" tabindex="10" role="dialog" aria-labelledby="judulFormTambahanBerkas" aria-hidden="true">
+	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="judulFormTambahanBerkas" style="color: #000;"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<form id="formInputTambahanBerkas" enctype="multipart/form-data">
+				<div class="modal-body">
+
+					<input type="hidden" id="tambahan_berkas_action" name="action" value="">
+					<input type="hidden" id="tambahan_berkas_id_berkas_perkara" name="id_berkas_perkara" value="">
+					<input type="hidden" id="tambahan_berkas_id_user" name="id_user" value="<?= $user_id; ?>">
+
+					<div class="row">
+
+						<div class="col-lg-6">
+							<div class="form-group row">
+								<div class="col-lg-8 mb-3 mb-lg-0">
+									<div class="row">
+										<label for="nomorTambahanBerkas" class="col-sm-12 col-form-label">
+										</label>
+										<div class="col-sm-12">
+											<input type="text" class="form-control" id="nomorTambahanBerkas" name="nomorTambahanBerkas" placeholder="..." value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-4 mb-3 mb-lg-0">
+									<div class="row">
+										<label for="tanggalTambahanBerkas" class="col-sm-12 col-form-label">
+										</label>
+										<div class="col-sm-12">
+											<input type="date" class="form-control" id="tanggalTambahanBerkas" name="tanggalTambahanBerkas" placeholder="dd/mm/yyyy" value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-12 mb-3 mb-lg-0 mt-3">
+									<div class="form-group row mb-2">
+										<label for="fileTambahanBerkas" class="col-sm-12 col-form-label">
+										</label>
+										<div class="col-sm-12">
+											<input type="file" data-default-file="" name="fileTambahanBerkas" id="fileTambahanBerkas" class="dropify" data-height="72" data-show-remove="true" data-show-loader="true" data-show-errors="true" data-errors-position="outside" style="font-size: 12px;" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="mt-4 d-flex justify-content-between align-items-center w-100">
+						<button type="submit" class="btn btn-lg btn-success btn-block">
+							<i class="fa fa-save"></i> SIMPAN
+						</button>
+					</div>
+
+				</div>
+
+			</form>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade" id="modalDetail" tabindex="10" role="dialog" aria-labelledby="judulFormDetail" aria-hidden="true">
 	<div class="modal-lg modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
@@ -263,7 +331,7 @@
 								<td>Interval Hari</td>
 								<td>:</td>
 								<td>
-									<span id="detail_intervalHari"></span>
+									<span id="detail_interval"></span>
 								</td>
 							</tr>
 
@@ -338,14 +406,14 @@
 										<td>Tanggal SPDP</td>
 										<td>:</td>
 										<td>
-											<span id="detail_tanggalSPDP"></span>
+											<span id="detail_tanggalSpdp"></span>
 										</td>
 									</tr>
 									<tr>
 										<td>Nomor SPDP</td>
 										<td>:</td>
 										<td>
-											<span id="detail_nomorSPDP"></span>
+											<span id="detail_nomorSpdp"></span>
 										</td>
 									</tr>
 									<tr>
@@ -589,7 +657,8 @@
 				var userUpdate = $(this).data('userUpdate');
 				var statusNotifikasi = $(this).data('statusNotifikasi');
 				var statusPerkara = $(this).data('statusPerkara');
-				var intervalHari = $(this).data('intervalHari');
+				var intervalPenerimaan = $(this).data('intervalPenerimaan');
+				var intervalSpdp = $(this).data('intervalSpdp');
 
 				$('#modalDetail #judulFormDetail').html(title);
 				$('#modalDetail #detail_idBerkasPerkara').html(idBerkasPerkara);
@@ -658,21 +727,32 @@
 				$('#modalDetail #detail_statusNotifikasi').html(statusNotifikasi);
 				$('#modalDetail #detail_statusPerkara').html(statusPerkara);
 
-				var classIntervalHari = "";
-				if (intervalHari <= 5) {
-					classIntervalHari = "badge btn-success";
-				} else if ((intervalHari > 5) && (intervalHari <= 14)) {
-					classIntervalHari = "badge btn-warning";
-				} else if ((intervalHari > 14) && (intervalHari <= 21)) {
-					classIntervalHari = "badge btn-danger";
-				} else if ((intervalHari > 21)) {
-					classIntervalHari = "badge btn-dark";
+				var classInterval = "";
+				if (intervalPenerimaan <= 5) {
+					classInterval = "badge btn-success";
+				} else if ((intervalPenerimaan > 5) && (intervalPenerimaan <= 14)) {
+					classInterval = "badge btn-warning";
+				} else if ((intervalPenerimaan > 14) && (intervalPenerimaan <= 21)) {
+					classInterval = "badge btn-danger";
+				} else if ((intervalPenerimaan > 21)) {
+					classInterval = "badge btn-dark";
 				}
 
-				$('#modalDetail #detail_intervalHari').html(`<span class="` + classIntervalHari + `">` +
-					intervalHari + ` hari berkas diterima sejak tanggal penerimaan` +
-					`</span>`
-				);
+				$('#modalDetail #detail_interval').html(`
+					<span class="` + classInterval + `">` +
+					intervalPenerimaan + ` hari berkas diterima sejak tanggal penerimaan` +
+					`</span>
+				`);
+
+				if (intervalSpdp >= 30 && ((nomorBerkas == "") || (tanggalBerkas == ""))) {
+					$('#modalDetail #detail_interval').html(`
+						<br>
+						<a href="#" class="btn btn-primary text-white btnShowModalTambahanBerkas" data-toggle="modal" data-target="#modalInputTambahanBerkas" data-title="Tambah / Upload Berkas P-17" data-action="tambah" data-mode="P-17" data-toggle="tooltip" data-placement="bottom" title="Tambah / Upload Berkas P-17">
+							<i class="align-middle" data-feather="plus"></i> Tambah / Upload Berkas P-17
+						</a>
+					`);
+				}
+
 			});
 
 			$("#modalInput").appendTo('body');
@@ -687,11 +767,13 @@
 					$("form").trigger("reset");
 					$('.js-select-2').val('').trigger('change');
 
-					$(".text-file-update").html(`(*Jika ada)`);
+					$(".text-file-update").html(`( * Jika ada)
+					`);
 				} else if (action == "ubah") {
 					$("form").trigger("reset");
 
-					$(".text-file-update").html(`(*Pilih jika ingin menambah atau mengubah file !)`);
+					$(".text-file-update").html(`( * Pilih jika ingin menambah atau mengubah file!)
+					`);
 
 					var idBerkasPerkara = $(this).data('idBerkasPerkara');
 					var tanggalPenerimaan = $(this).data('tanggalPenerimaan');
@@ -838,8 +920,159 @@
 
 			});
 
+
+			$("#modalInputTambahanBerkas").appendTo('body');
+			$(document).on('click', '.btnShowModalTambahanBerkas', function() {
+				var title = $(this).data('title');
+				var action = $(this).data('action');
+				var mode = $(this).data('mode');
+
+				$('#modalInputTambahanBerkas #judulFormTambahanBerkas').text(title);
+				$('#modalInputTambahanBerkas #tambahan_berkas_action').val(action);
+				$('#modalInputTambahanBerkas #tambahan_berkas_mode').val(mode);
+
+				if (mode == "P-17") {
+					$("#modalInputTambahanBerkas label[for=nomorTambahanBerkas]").html(`
+					Nomor P - 17 `);
+					$("#modalInputTambahanBerkas label[for=tanggalTambahanBerkas]").html(`
+					Tanggal P - 17 `);
+					$("#modalInputTambahanBerkas label[for=fileTambahanBerkas]").html(`
+					File Berkas P - 17 < br > < small class = "text-info" > ( * Jika ada) < /small>`);
+				} else if (mode == "SOP Form 02") {
+					$("#modalInputTambahanBerkas label[for=nomorTambahanBerkas]").html(`Nomor SOP Form 02`);
+					$("#modalInputTambahanBerkas label[for=tanggalTambahanBerkas]").html(`Tanggal SOP Form 02`);
+					$("#modalInputTambahanBerkas label[for=fileTambahanBerkas]").html(`File Berkas SOP Form 02 <br> <small class="text-info">(*Jika ada)</small>`);
+				} else if (mode == "Surat Pengembalian SPDP") {
+					$("#modalInputTambahanBerkas label[for=nomorTambahanBerkas]").html(`Nomor Surat Pengembalian SPDP`);
+					$("#modalInputTambahanBerkas label[for=tanggalTambahanBerkas]").html(`Tanggal Surat Pengembalian SPDP`);
+					$("#modalInputTambahanBerkas label[for=fileTambahanBerkas]").html(`File Berkas Surat Pengembalian SPDP <br> <small class="text-info">(*Jika ada)</small>`);
+				}
+
+				if (action == "tambah") {
+					$("form").trigger("reset");
+					$('.js-select-2').val('').trigger('change');
+
+				} else if (action == "ubah") {
+					$("form").trigger("reset");
+					$('.js-select-2').val('').trigger('change');
+
+					if (mode == "P-17") {
+						$("#modalInputTambahanBerkas label[for=fileTambahanBerkas]").html(`File Berkas P-17 <br> <small class="text-info">(*Pilih file untuk menambah atau mengubah)</small>`);
+					} else if (mode == "SOP Form 02") {
+						$("#modalInputTambahanBerkas label[for=fileTambahanBerkas]").html(`File Berkas SOP Form 02 <br> <small class="text-info">(*Pilih file untuk menambah atau mengubah)</small>`);
+					} else if (mode == "Surat Pengembalian SPDP") {
+						$("#modalInputTambahanBerkas label[for=fileTambahanBerkas]").html(`File Berkas Surat Pengembalian SPDP <br> <small class="text-info">(*Pilih file untuk menambah atau mengubah)</small>`);
+					}
+
+					var idBerkasPerkara = $(this).data('idBerkasPerkara');
+					var tanggalTambahanBerkas = $(this).data('tanggalTambahanBerkas');
+					var nomorTambahanBerkas = $(this).data('nomorTambahanBerkas');
+
+					$('#modalInputTambahanBerkas #tambahan_berkas_id_berkas_perkara').val(idBerkasPerkara);
+					$('#modalInputTambahanBerkas #tanggalTambahanBerkas').val(tanggalTambahanBerkas);
+					$('#modalInputTambahanBerkas #tanggalTambahanBerkas').val(nomorTambahanBerkas);
+				}
+			});
+
+			$("#formInputTambahanBerkas").submit(function(e) {
+				e.preventDefault();
+
+				let formData = new FormData();
+				var action = $('#tambahan_berkas_action').val();
+				var id_user = $('#tambahan_berkas_id_user').val();
+				var id_berkas_perkara = $('#tambahan_berkas_id_berkas_perkara').val();
+				var mode = $('#tambahan_berkas_mode').val();
+
+				var nomorTambahanBerkas = $('#nomorTambahanBerkas').val();
+				var tanggalTambahanBerkas = $('#tanggalTambahanBerkas').val();
+				var fileTambahanBerkas = $('#fileTambahanBerkas').prop('files')[0];
+
+				formData.append('id_user', id_user);
+				formData.append('id_berkas_perkara', id_berkas_perkara);
+				formData.append('mode', mode);
+				formData.append('nomorTambahanBerkas', nomorTambahanBerkas);
+				formData.append('tanggalTambahanBerkas', tanggalTambahanBerkas);
+				formData.append('fileTambahanBerkas', fileTambahanBerkas);
+
+				if (action == "tambah") {
+					var urlPost = base_url + "/berkas-perkara/add-tambahan-berkas";
+				} else if (action == "ubah") {
+					var urlPost = base_url + "/berkas-perkara/edit-tambahan-berkas";
+				}
+
+				$.ajax({
+					type: "POST",
+					url: urlPost,
+					dataType: "JSON",
+					data: formData,
+					cache: false,
+					processData: false,
+					contentType: false,
+					beforeSend: function() {
+						$("#loader").show();
+					},
+					success: function(data) {
+						if (data.success == "1") {
+							toastr.success(data.pesan);
+							$('#modalInputTambahanBerkas').hide();
+							$('#modalInput').hide();
+							location.reload();
+						} else if (data.success == "0") {
+							toastr.error(data.pesan);
+						}
+					},
+					complete: function(data) {
+						$("#loader").hide();
+					}
+				});
+
+			});
+
 		});
 	});
+
+	function reset_tambahan_berkas(id_berkas_perkara, mode) {
+		event.preventDefault(); // prevent form submit
+
+		var urlPost = base_url + "/berkas-perkara/delete-tambahan-berkas";
+
+		Swal.fire({
+			title: "Hapus Data",
+			text: "Apakah anda yakin melakukan reset berkas " + mode + " ini ?",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Ya",
+			cancelButtonText: "Tidak",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					type: "POST",
+					url: urlPost,
+					dataType: "JSON",
+					data: {
+						id_berkas_perkara: id_berkas_perkara,
+						mode: mode
+					},
+					beforeSend: function() {
+						$("#loader").show();
+					},
+					success: function(data) {
+						if (data.success == "1") {
+							toastr.success(data.pesan);
+							location.reload();
+						} else if (data.success == "0") {
+							toastr.error(data.pesan);
+						}
+					},
+					complete: function(data) {
+						$("#loader").hide();
+					}
+				});
+			}
+		});
+	}
 
 	$('.dropify').dropify({
 		messages: {

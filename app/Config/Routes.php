@@ -31,6 +31,9 @@ $routes->get('/berkas-perkara', 'BerkasPerkara::index', ['filter' => 'auth_login
 $routes->post('/berkas-perkara/add', 'BerkasPerkara::add', ['filter' => 'auth_login']);
 $routes->post('/berkas-perkara/edit', 'BerkasPerkara::edit', ['filter' => 'auth_login']);
 $routes->post('/berkas-perkara/delete', 'BerkasPerkara::delete', ['filter' => 'auth_login']);
+$routes->post('/berkas-perkara/add-tambahan-berkas', 'BerkasPerkara::add_tambahan_berkas', ['filter' => 'auth_login']);
+$routes->post('/berkas-perkara/edit-tambahan-berkas', 'BerkasPerkara::edit_tambahan_berkas', ['filter' => 'auth_login']);
+$routes->post('/berkas-perkara/delete-tambahan-berkas', 'BerkasPerkara::delete_tambahan_berkas', ['filter' => 'auth_login']);
 
 $routes->get('/data-master/jaksa', 'Jaksa::index', ['filter' => 'auth_login']);
 $routes->post('/data-master/jaksa/add', 'Jaksa::add', ['filter' => 'auth_login']);

@@ -251,6 +251,8 @@ class BerkasPerkara extends BaseController
 			return false;
 		}
 
+		$cek_berkas = $this->BerkasPerkaraModel->getBerkasPerkara($id_berkas_perkara);
+
 		$file_spdp = $this->request->getFile('file_spdp');
 		if (!empty($file_spdp)) {;
 			$nama_file_spdp = "spdp-" . $file_spdp->getRandomName();
@@ -262,6 +264,12 @@ class BerkasPerkara extends BaseController
 				],
 				$id_berkas_perkara
 			);
+
+			if ($cek_berkas['file_spdp'] != "") {
+				if (file_exists(base_url() . "/assets/berkas/" . $cek_berkas['file_spdp'])) {
+					unlink('assets/berkas/' . $cek_berkas['file_spdp']);
+				}
+			}
 		}
 
 		$file_berkas = $this->request->getFile('file_berkas');
@@ -275,6 +283,12 @@ class BerkasPerkara extends BaseController
 				],
 				$id_berkas_perkara
 			);
+
+			if ($cek_berkas['file_berkas'] != "") {
+				if (file_exists(base_url() . "/assets/berkas/" . $cek_berkas['file_berkas'])) {
+					unlink('assets/berkas/' . $cek_berkas['file_berkas']);
+				}
+			}
 		}
 
 		$file_p16 = $this->request->getFile('file_p16');
@@ -288,6 +302,12 @@ class BerkasPerkara extends BaseController
 				],
 				$id_berkas_perkara
 			);
+
+			if ($cek_berkas['file_p16'] != "") {
+				if (file_exists(base_url() . "/assets/berkas/" . $cek_berkas['file_p16'])) {
+					unlink('assets/berkas/' . $cek_berkas['file_p16']);
+				}
+			}
 		}
 
 		$query = $this->BerkasPerkaraModel->updateBerkasPerkara([
