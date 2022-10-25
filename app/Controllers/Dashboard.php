@@ -11,6 +11,9 @@ use \App\Models\LogSendNotifModel;
 use \App\Models\LevelUserModel;
 use \App\Models\UserModel;
 
+use Minishlink\WebPush\WebPush;
+use Minishlink\WebPush\Subscription;
+
 class Dashboard extends BaseController
 {
     public function __construct()

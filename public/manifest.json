@@ -1,0 +1,32 @@
+{
+  "start_url": "/?utm_source=homescreen",
+  "lang": "Indonesia",
+  "name": "Monitoring Perkara APP",
+  "background_color": "#1E293B",
+  "theme_color": "#1E293B",
+  "short_name": "Monitoring Perkara - KEJARI BERAU",
+  "description": "Aplikasi Monitoring Perkara - Kejaksaan Negeri Berau",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "gcm_sender_id": "1026992600116",
+  "generated": "true",
+  "icons": [
+    {
+      "src": "https://kejari-berau.djknkalbar.net/img/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "https://kejari-berau.djknkalbar.net/img/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://kejari-berau.djknkalbar.net/img/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -195,6 +195,109 @@ class BerkasPerkara extends BaseController
 		}
 	}
 
+	public function add_tambahan_berkas()
+	{
+		$id_user = $this->request->getVar('id_user');
+		$id_berkas_perkara = $this->request->getVar('id_berkas_perkara');
+		$mode = $this->request->getVar('mode');
+
+		$nomorTambahanBerkas = $this->request->getVar('nomorTambahanBerkas');
+		$tanggalTambahanBerkas = $this->request->getVar('tanggalTambahanBerkas');
+
+		if ($id_user == "") {
+			echo json_encode(array(
+				'success' => '0',
+				'pesan' => 'iduser Terjadi kesalahan !'
+			));
+			return false;
+		}
+
+		if ($mode == "") {
+			echo json_encode(array(
+				'success' => '0',
+				'pesan' => ' mode Terjadi kesalahan !'
+			));
+			return false;
+		}
+
+		if ($id_berkas_perkara == "") {
+			echo json_encode(array(
+				'success' => '0',
+				'pesan' => 'idberkas Terjadi kesalahan !'
+			));
+			return false;
+		}
+
+		if ($tanggalTambahanBerkas == "") {
+			echo json_encode(array(
+				'success' => '0',
+				'pesan' => 'Tanggal berkas tidak boleh kosong !'
+			));
+			return false;
+		}
+
+		if ($nomorTambahanBerkas == "") {
+			echo json_encode(array(
+				'success' => '0',
+				'pesan' => 'Nomor berkas tidak boleh kosong !'
+			));
+			return false;
+		}
+
+		$namaFileTambahanBerkas = "";
+		$title_mode = "";
+		$fileTambahanBerkas = $this->request->getFile('fileTambahanBerkas');
+
+		$namaFileTambahanBerkas = $title_mode . $fileTambahanBerkas->getRandomName();
+		$fileTambahanBerkas->move('assets/berkas', $namaFileTambahanBerkas);
+
+		if (!empty($fileTambahanBerkas)) {;
+			if ($mode == "P-17") {
+				$title_mode = "P17-";
+
+				$query = $this->BerkasPerkaraModel->updateBerkasPerkara([
+					'nomor_p17' => $nomorTambahanBerkas,
+					'tanggal_p17' => $tanggalTambahanBerkas,
+					'file_p17' => $namaFileTambahanBerkas,
+					'update_datetime' => date("Y-m-d H:i:s"),
+					'id_user_update' => $id_user
+				], $id_berkas_perkara);
+			} elseif ($mode == "SOP-Form 02") {
+				$title_mode = "sop-form-02-";
+
+				$query = $this->BerkasPerkaraModel->updateBerkasPerkara([
+					'nomor_sop_form_02' => $nomorTambahanBerkas,
+					'tanggal_sop_form_02' => $tanggalTambahanBerkas,
+					'file_sop_form_02' => $namaFileTambahanBerkas,
+					'update_datetime' => date("Y-m-d H:i:s"),
+					'id_user_update' => $id_user
+				], $id_berkas_perkara);
+			} elseif ($mode == "Surat Pengembalian SPDP") {
+				$title_mode = "surat-pengembalian-spdp-";
+
+				$query = $this->BerkasPerkaraModel->updateBerkasPerkara([
+					'nomor_surat_pengembalian_spdp' => $nomorTambahanBerkas,
+					'tanggal_surat_pengembalian_spdp' => $tanggalTambahanBerkas,
+					'file_surat_pengembalian_spdp' => $namaFileTambahanBerkas,
+					'update_datetime' => date("Y-m-d H:i:s"),
+					'id_user_update' => $id_user
+				], $id_berkas_perkara);
+			}
+		}
+
+		if ($query) {
+			echo json_encode(array(
+				'success' => '1',
+				'pesan' => 'Data berhasil disimpan !'
+			));
+		} else {
+			echo json_encode(array(
+				'success' => '0',
+				'pesan' => 'Data gagal disimpan !'
+			));
+		}
+	}
+
 	public function edit()
 	{
 		$id_berkas_perkara = $this->request->getVar('id_berkas_perkara');

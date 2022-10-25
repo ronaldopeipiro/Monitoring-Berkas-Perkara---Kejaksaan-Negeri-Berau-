@@ -25,12 +25,17 @@ $routes->post('/reset-password-akun', 'Authorize::reset_password_akun', ['filter
 
 $routes->get('/logout-user', 'Authorize::logout', ['filter' => 'auth_login']);
 
+$routes->get('/offline', 'Offline::index');
+$routes->post('/notif/push-subscribe', 'Notif::push_subscribe');
+$routes->post('/notif/send-push-notif', 'Notif::send_push_notif');
+
 $routes->get('/', 'Dashboard::index', ['filter' => 'auth_login']);
 
 $routes->get('/berkas-perkara', 'BerkasPerkara::index', ['filter' => 'auth_login']);
 $routes->post('/berkas-perkara/add', 'BerkasPerkara::add', ['filter' => 'auth_login']);
 $routes->post('/berkas-perkara/edit', 'BerkasPerkara::edit', ['filter' => 'auth_login']);
 $routes->post('/berkas-perkara/delete', 'BerkasPerkara::delete', ['filter' => 'auth_login']);
+
 $routes->post('/berkas-perkara/add-tambahan-berkas', 'BerkasPerkara::add_tambahan_berkas', ['filter' => 'auth_login']);
 $routes->post('/berkas-perkara/edit-tambahan-berkas', 'BerkasPerkara::edit_tambahan_berkas', ['filter' => 'auth_login']);
 $routes->post('/berkas-perkara/delete-tambahan-berkas', 'BerkasPerkara::delete_tambahan_berkas', ['filter' => 'auth_login']);

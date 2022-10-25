@@ -11,8 +11,23 @@
 
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link rel="shortcut icon" href="<?= base_url() ?>/assets/img/logo.png" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-title" content="Brew">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<meta name="theme-color" content="black">
+
+	<link rel="apple-touch-icon" sizes="152x152" href="<?= base_url(); ?>/assets/img/logo.png" type="image/png">
+	<link rel="apple-touch-icon" sizes="167x167" href="<?= base_url(); ?>/assets/img/logo.png" type="image/png">
+	<link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(); ?>/assets/img/logo.png" type="image/png">
+	<link rel="icon" type="image/png" sizes="32x32" href="<?= base_url(); ?>/assets/img/logo.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url(); ?>/assets/img/logo.png">
+	<link rel="shortcut icon" type="image/x-icon" href="<?= base_url(); ?>/assets/img/logo.png">
 
 	<title><?= $title; ?> | APP MONITORING BERKAS PERKARA - KEJARI BERAU</title>
+	<link rel="manifest" href="<?= base_url(); ?>/manifest.json">
+
+
 	<link href="<?= base_url() ?>/template/css/app.css" rel="stylesheet">
 
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -86,7 +101,225 @@
 			display: block;
 			border: 0;
 		}
+
+		.modal:nth-of-type(even) {
+			z-index: 1052 !important;
+		}
+
+		.modal-backdrop.show:nth-of-type(even) {
+			z-index: 1051 !important;
+		}
 	</style>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const applicationServerKey =
+				'BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0';
+
+			if (!('serviceWorker' in navigator)) {
+				console.warn('Service workers are not supported by this browser');
+				return;
+			}
+
+			if (!('PushManager' in window)) {
+				console.warn('Push notifications are not supported by this browser');
+				return;
+			}
+
+			if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
+				console.warn('Notifications are not supported by this browser');
+				return;
+			}
+
+			if (Notification.permission === 'denied') {
+				console.warn('Notifications are denied by the user');
+				return;
+			}
+
+			push_subscribe();
+
+			navigator.serviceWorker.register(base_url + '/service-worker-notif.js').then(
+				() => {
+					console.log('[SW] Service worker has been registered');
+					push_updateSubscription();
+				},
+				e => {
+					console.error('[SW] Service worker registration failed', e);
+				}
+			);
+
+			function urlBase64ToUint8Array(base64String) {
+				const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+				const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+
+				const rawData = window.atob(base64);
+				const outputArray = new Uint8Array(rawData.length);
+
+				for (let i = 0; i < rawData.length; ++i) {
+					outputArray[i] = rawData.charCodeAt(i);
+				}
+				return outputArray;
+			}
+
+			function checkNotificationPermission() {
+				return new Promise((resolve, reject) => {
+					if (Notification.permission === 'denied') {
+						return reject(new Error('Push messages are blocked.'));
+					}
+
+					if (Notification.permission === 'granted') {
+						return resolve();
+					}
+
+					if (Notification.permission === 'default') {
+						return Notification.requestPermission().then(result => {
+							if (result !== 'granted') {
+								reject(new Error('Bad permission result'));
+							} else {
+								resolve();
+							}
+						});
+					}
+					return reject(new Error('Unknown permission'));
+				});
+			}
+
+			function push_subscribe() {
+				return checkNotificationPermission()
+					.then(() => navigator.serviceWorker.ready)
+					.then(serviceWorkerRegistration =>
+						serviceWorkerRegistration.pushManager.subscribe({
+							userVisibleOnly: true,
+							applicationServerKey: urlBase64ToUint8Array(applicationServerKey),
+						})
+					)
+					.then(subscription => {
+						return subscribe_user(subscription);
+					})
+					.then(subscription => subscription) // update your UI
+					.catch(e => {
+						if (Notification.permission === 'denied') {
+							console.warn('Notifications are denied by the user.');
+						} else {
+							console.error('Impossible to subscribe to push notifications', e);
+						}
+					});
+			}
+
+			function push_updateSubscription() {
+				navigator.serviceWorker.ready
+					.then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
+					.then(subscription => {
+						if (!subscription) {
+							return;
+						}
+						return subscribe_user(subscription);
+					})
+					.then(subscription => subscription)
+					.catch(e => {
+						console.error('Error when updating the subscription', e);
+					});
+			}
+
+			function push_unsubscribe() {
+				navigator.serviceWorker.ready
+					.then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
+					.then(subscription => {
+						if (!subscription) {
+							return;
+						}
+						// return subscribe_user(subscription);
+					})
+					.then(subscription => subscription.unsubscribe())
+					.catch(e => {
+						console.error('Error when unsubscribing the user', e);
+					});
+			}
+
+			function subscribe_user(subscription) {
+				const key = subscription.getKey('p256dh');
+				const token = subscription.getKey('auth');
+				const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+
+				var endpoint = getEndpoint(subscription);
+				var p256dh = key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null;
+				var auth = token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null;
+
+				// console.log(endpoint);
+				// console.log(p256dh);
+				// console.log(auth);
+				// console.log(contentEncoding);
+
+				var id_user = '<?= $user_id ?>';
+				var tipe_user = '<?= $user_level ?>';
+
+				$.ajax({
+					type: "POST",
+					url: base_url + "/notif/push-subscribe",
+					dataType: "JSON",
+					enctype: 'multipart/form-data',
+					data: {
+						id_user: id_user,
+						tipe_user: tipe_user,
+						endpoint: endpoint,
+						p256dh: p256dh,
+						auth: auth,
+						ce: contentEncoding
+					},
+					beforeSend: function() {
+						$("#loader").show();
+					},
+					success: function(data) {
+						if (data.success == "1") {
+							toastr.success(data.pesan);
+						} else if (data.success == "0") {
+							toastr.error(data.pesan);
+						}
+					},
+					complete: function() {
+						$("#loader").hide();
+					}
+				});
+
+			}
+		});
+
+		function getEndpoint(pushSubscription) {
+			var endpoint = pushSubscription.endpoint;
+			var subscriptionId = pushSubscription.subscriptionId;
+
+			// fix Chrome < 45
+			if (subscriptionId && endpoint.indexOf(subscriptionId) === -1) {
+				endpoint += '/' + subscriptionId;
+			}
+
+			return endpoint;
+		}
+
+		function send_notif(id_user, tipe_user, text_pesan) {
+			const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+			$.ajax({
+				type: "POST",
+				url: base_url + "/notif/send-push-notif",
+				dataType: "JSON",
+				data: {
+					id_user: id_user,
+					tipe_user: tipe_user,
+					text_pesan: text_pesan,
+					ce: contentEncoding
+				},
+				beforeSend: function() {
+					$("#loader").show();
+				},
+				success: function(data) {
+					console.log(data.pesan);
+				},
+				complete: function() {
+					$("#loader").hide();
+				}
+			});
+		}
+	</script>
 </head>
 
 <body>
@@ -205,9 +438,11 @@
 			}
 		}
 
-		// $(function() {
-		// 	$('[data-toggle="tooltip"]').tooltip()
-		// })
+		$(document).on('show.bs.modal', '.modal', function() {
+			const zIndex = 1040 + 10 * $('.modal:visible').length;
+			$(this).css('z-index', zIndex);
+			setTimeout(() => $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack'));
+		});
 	</script>
 
 </body>
