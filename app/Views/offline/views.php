@@ -16,6 +16,10 @@
 								<h3 class="mt-5">
 									Anda sedang offline ...
 								</h3>
+								<br>
+								<a href="<?= base_url(); ?>" class="">
+									<i class="fa fa-sync"></i> Muat Ulang
+								</a>
 							</div>
 						</div>
 					</div>

@@ -102,13 +102,13 @@
 			border: 0;
 		}
 
-		.modal:nth-of-type(even) {
+		/* .modal:nth-of-type(even) {
 			z-index: 1052 !important;
 		}
 
 		.modal-backdrop.show:nth-of-type(even) {
 			z-index: 1051 !important;
-		}
+		} */
 	</style>
 
 	<script>
@@ -251,7 +251,13 @@
 				// console.log(contentEncoding);
 
 				var id_user = '<?= $user_id ?>';
-				var tipe_user = '<?= $user_level ?>';
+				<?php if ($user_level == 1) : ?>
+					var tipe_user = 'admin';
+				<?php elseif ($user_level == 2) : ?>
+					var tipe_user = 'admin';
+				<?php elseif ($user_level == 3) : ?>
+					var tipe_user = 'jaksa';
+				<?php endif; ?>
 
 				$.ajax({
 					type: "POST",
@@ -319,6 +325,8 @@
 				}
 			});
 		}
+
+		send_notif(2, 'admin', "Hallo admin test notifikasi");
 	</script>
 </head>
 

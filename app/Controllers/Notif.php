@@ -63,7 +63,8 @@ class Notif extends BaseController
                 'tipe_user' => $tipe_user,
                 'endpoint' => $endpoint,
                 'p256dh' => $p256dh,
-                'auth' => $auth
+                'auth' => $auth,
+                'create_datetime' => date("Y-m-d H:i:s"),
             ]);
         } else {
             $data = $cek_data->getRow();

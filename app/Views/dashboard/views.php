@@ -70,7 +70,7 @@ if ($user_level <= 2) {
 				<?php if ($user_level <= 2) : ?>
 					<div class="row">
 
-						<div class="col-lg-2">
+						<div class="col-lg-2 col-6">
 							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
 								<div class="card">
 									<div class="card-body">
@@ -83,7 +83,7 @@ if ($user_level <= 2) {
 							</a>
 						</div>
 
-						<div class="col-lg-2">
+						<div class="col-lg-2 col-6">
 							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
 								<div class="card">
 									<div class="card-body">
@@ -96,7 +96,7 @@ if ($user_level <= 2) {
 							</a>
 						</div>
 
-						<div class="col-lg-2">
+						<div class="col-lg-2 col-6">
 							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
 								<div class="card">
 									<div class="card-body">
@@ -109,7 +109,7 @@ if ($user_level <= 2) {
 							</a>
 						</div>
 
-						<div class="col-lg-2">
+						<div class="col-lg-2 col-6">
 							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
 								<div class="card">
 									<div class="card-body">
@@ -122,7 +122,7 @@ if ($user_level <= 2) {
 							</a>
 						</div>
 
-						<div class="col-lg-2">
+						<div class="col-lg-2 col-6">
 							<a href="<?= base_url(); ?>/data-master/instansi" style="text-decoration: none;">
 								<div class="card">
 									<div class="card-body">
@@ -135,7 +135,7 @@ if ($user_level <= 2) {
 							</a>
 						</div>
 
-						<div class="col-lg-2">
+						<div class="col-lg-2 col-6">
 							<a href="<?= base_url(); ?>/data-master/jaksa" style="text-decoration: none;">
 								<div class="card">
 									<div class="card-body">
@@ -152,7 +152,7 @@ if ($user_level <= 2) {
 				<?php elseif ($user_level == 3) : ?>
 					<div class="row">
 
-						<div class="col-lg-4">
+						<div class="col-lg-4 col-6">
 							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
 								<div class="card">
 									<div class="card-body">
@@ -165,7 +165,7 @@ if ($user_level <= 2) {
 							</a>
 						</div>
 
-						<div class="col-lg-4">
+						<div class="col-lg-4 col-6">
 							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
 								<div class="card">
 									<div class="card-body">
@@ -178,7 +178,7 @@ if ($user_level <= 2) {
 							</a>
 						</div>
 
-						<div class="col-lg-4">
+						<div class="col-lg-4 col-6">
 							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
 								<div class="card">
 									<div class="card-body">

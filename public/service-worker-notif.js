@@ -1,60 +1,12 @@
 "use strict";
-var promises = [];
 
-self.addEventListener("push", async function (e) {
-  var body;
-  // const analyticsPromise = pushReceivedTracking();
-
-  if (e.data) {
-    body = e.data.text();
-  } else {
-    body = "Push message no payload";
-  }
-
-  var options = {
-    body: body,
-    icon: "https://kejari-berau.djknkalbar.net/assets/img/logo.png",
-    vibrate: [100, 50, 100, 100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1,
-    },
-    actions: [
-      {
-        action: "explore",
-        title: "Buka",
-        icon: "https://kejari-berau.djknkalbar.net/assets/img/checkmark.png",
-      },
-      {
-        action: "close",
-        title: "Tutup",
-        icon: "https://kejari-berau.djknkalbar.net/assets/img/xmark.png",
-      },
-    ],
-  };
-
-  promises.push(
-    self.registration.showNotification(
-      "MONITORING PERKARA KEJARI BERAU APP",
-      options
-    )
-  );
-  Promise.all(promises);
-});
-
-// self.addEventListener("notificationclick", function (event) {
-//   console.log("[Service Worker] Notification click Received.");
-//   event.notification.close();
-//   event.waitUntil(clients.openWindow("https//kejari-berau.djknkalbar.net/"));
-// });
-
-var CACHE_NAME = "monitoring-perkara-kejari-berau-app-cache-v2022";
+var CACHE_NAME = "monitoring-perkara-kejariberau-id-v2022";
 
 var urlsToCache = [
   // "./",
   "./offline",
-  "./img/logo.png",
-  "./img/offline-logo.png",
+  "./assets/img/logo.png",
+  "./assets/img/offline-logo.png",
 ];
 
 self.addEventListener("install", function (event) {
@@ -74,7 +26,7 @@ self.addEventListener("fetch", function (event) {
         return response || fetch(event.request);
       })
       .catch(function () {
-        return caches.match("https://kejari-berau.djknkalbar.net/offline");
+        return caches.match("https://kejariberau.id/offline");
       })
   );
 });
@@ -115,3 +67,52 @@ function updateCache(request, response) {
     return cache.put(request, response);
   });
 }
+
+var promises = [];
+
+self.addEventListener("push", async function (e) {
+  var body;
+  // const analyticsPromise = pushReceivedTracking();
+
+  if (e.data) {
+    body = e.data.text();
+  } else {
+    body = "Push message no payload";
+  }
+
+  var options = {
+    body: body,
+    icon: "https://kejariberau.id/assets/img/logo.png",
+    vibrate: [100, 50, 100, 100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1,
+    },
+    actions: [
+      {
+        action: "explore",
+        title: "Buka",
+        icon: "https://kejariberau.id/assets/img/checkmark.png",
+      },
+      {
+        action: "close",
+        title: "Tutup",
+        icon: "https://kejariberau.id/assets/img/xmark.png",
+      },
+    ],
+  };
+
+  promises.push(
+    self.registration.showNotification(
+      "MONITORING PERKARA - KEJARI BERAU",
+      options
+    )
+  );
+  Promise.all(promises);
+});
+
+self.addEventListener("notificationclick", function (event) {
+  console.log("[Service Worker] Notification click Received.");
+  event.notification.close();
+  event.waitUntil(clients.openWindow("./berkas-perkara"));
+});
