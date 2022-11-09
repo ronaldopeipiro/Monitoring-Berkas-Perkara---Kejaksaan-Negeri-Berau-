@@ -30,22 +30,24 @@ class Notif extends BaseController
         $this->request = \Config\Services::request();
         $this->db = \Config\Database::connect();
         $this->validation = \Config\Services::validation();
+    }
 
-        $this->session = session();
-        $this->id_user = $this->session->get('id_user');
-        $data_user = $this->UserModel->getUser($this->id_user);
-        $this->user_level = $data_user['id_level'];
-        $this->user_username = $data_user['username'];
-        $this->user_nama_lengkap = $data_user['nama_lengkap'];
-        $this->user_no_hp = $data_user['no_hp'];
-        $this->user_email = $data_user['email'];
+    public function index($id_berkas_perkara)
+    {
+        $data_berkas_perkara = $this->BerkasPerkaraModel->getBerkasPerkara();
+        // if ($id_berkas_perkara == 'all') {
+        // } else {
+        //     $data_berkas_perkara = $this->BerkasPerkaraModel->getBerkasPerkara($id_berkas_perkara);
+        // }
 
-        if ($data_user['foto'] != "") {
-            $this->user_foto = base_url() . "/assets/img/user/" .    $data_user['foto'];
-            $this->user_foto_thumbnail = base_url() . "/assets/img/user/" .    $data_user['foto'];
-        } else {
-            $this->user_foto = base_url() . "/assets/img/noimg.png";
-        }
+        $data = [
+            'request' => $this->request,
+            'db' => $this->db,
+            'validation' => $this->validation,
+            'title' => 'Notif Sender',
+            'berkas_perkara' => $data_berkas_perkara
+        ];
+        return view('notif/views', $data);
     }
 
     public function push_subscribe()
@@ -68,7 +70,7 @@ class Notif extends BaseController
             ]);
         } else {
             $data = $cek_data->getRow();
-            $this->PushNotifSubscribeModel->updatePushNotif([
+            $this->PushNotifSubscribeModel->updatePushNotifSubscribe([
                 'p256dh' => $p256dh,
                 'auth' => $auth
             ], $data->id_push_notif);
@@ -77,23 +79,26 @@ class Notif extends BaseController
 
     public function send_push_notif()
     {
-        $id_user = $this->request->getPost('id_user');
-        $tipe_user = $this->request->getPost('tipe_user');
-        $text_pesan = $this->request->getPost('text_pesan');
-        $contentencoding = $this->request->getPost('ce');
+        $id_user = $this->request->getVar('id_user');
+        $tipe_user = $this->request->getVar('tipe_user');
+        $text_pesan = $this->request->getVar('text_pesan');
+        $contentencoding = $this->request->getVar('ce');
+        if ($contentencoding == "") {
+            $contentencoding = "aes128gcm";
+        }
 
         $auth = [
             'VAPID' => [
-                'subject' => 'https://kejari-berau.djknkalbar.net/',
-                'publicKey' => file_get_contents(base_url() . '/notif-keys/public_key.txt'),
-                'privateKey' => file_get_contents(base_url() . '/notif-keys/private_key.txt')
+                'subject' => 'https://kejariberau.id/',
+                'publicKey' => 'BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0',
+                'privateKey' => 'vplfkITvu0cwHqzK9Kj-DYStbCH_9AhGx9LqMyaeI6w'
+                // 'publicKey' => file_get_contents(base_url() . '/notif-keys/public_key.txt'),
+                // 'privateKey' => file_get_contents(base_url() . '/notif-keys/private_key.txt')
             ],
         ];
 
         $user = $this->UserModel->getUser($id_user);
-
-        $email_user = $user["email"];
-        $confirm_send_notif = "Notif to User [$email_user] -> ";
+        $confirm_send_notif = "Notif to User [$id_user] -> ";
 
         $cek_user = $this->db->query("SELECT * FROM push_notif_subscribe WHERE id_user='$id_user' AND tipe_user='$tipe_user' ORDER BY id_push_notif DESC");
         foreach ($cek_user->getResult('array') as $result) {
@@ -118,10 +123,10 @@ class Notif extends BaseController
             $endpoint = $report->getRequest()->getUri()->__toString();
 
             if ($report->isSuccess()) {
-                $result_success = true;
+                $result_success = 1;
                 $confirm_send_notif .= "Sent to $endpoint -> ";
             } else {
-                $result_success = false;
+                $result_success = 0;
                 $confirm_send_notif .= "Failed to $endpoint -> ";
 
                 $this->db->query("DELETE FROM push_notif_subscribe WHERE endpoint='$endpoint' ");
@@ -130,6 +135,7 @@ class Notif extends BaseController
 
         if ($confirm_send_notif != "") {
             echo json_encode(array(
+                'result' => $result_success,
                 'pesan' => "$confirm_send_notif"
             ));
         }

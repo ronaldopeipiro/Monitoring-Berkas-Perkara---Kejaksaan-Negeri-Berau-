@@ -251,9 +251,7 @@
 				// console.log(contentEncoding);
 
 				var id_user = '<?= $user_id ?>';
-				<?php if ($user_level == 1) : ?>
-					var tipe_user = 'admin';
-				<?php elseif ($user_level == 2) : ?>
+				<?php if ($user_level < 3) : ?>
 					var tipe_user = 'admin';
 				<?php elseif ($user_level == 3) : ?>
 					var tipe_user = 'jaksa';
@@ -314,19 +312,13 @@
 					text_pesan: text_pesan,
 					ce: contentEncoding
 				},
-				beforeSend: function() {
-					$("#loader").show();
-				},
 				success: function(data) {
 					console.log(data.pesan);
-				},
-				complete: function() {
-					$("#loader").hide();
 				}
 			});
 		}
 
-		send_notif(2, 'admin', "Hallo admin test notifikasi");
+		// send_notif(2, 'admin', "Hallo admin test notifikasi");
 	</script>
 </head>
 

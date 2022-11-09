@@ -70,7 +70,6 @@
 										<div class="col-sm-12">
 											<select name="status_berkas" id="status_berkas" class="form-control">
 												<option value="KOSONG">KOSONG</option>
-												<option value="P-17">P-17</option>
 												<option value="P-18">P-18</option>
 												<option value="P-19">P-19</option>
 												<option value="P-20">P-20</option>
@@ -207,19 +206,35 @@
 						</div>
 					</div>
 
-					<div class="form-group row">
-						<label for="jaksa_terkait" class="col-sm-12 col-form-label">
-							Jaksa Terkait
-							<small class="text-danger">(*Wajib diisi !)</small>
-						</label>
-						<div class="col-sm-12">
-							<select name="jaksa_terkait" id="jaksa_terkait" class="form-control js-select-2" multiple>
-								<?php foreach ($list_jaksa as $jaksa) : ?>
-									<option value="<?= $jaksa['id_user']; ?>">
-										<?= $jaksa['nama_lengkap']; ?> (NIP.<?= $jaksa['nip']; ?>)
-									</option>
-								<?php endforeach; ?>
-							</select>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="tersangka" class="col-sm-12 col-form-label">
+									Nama Tersangka
+								</label>
+								<div class="col-sm-12">
+									<input type="text" class="form-control" id="tersangka" name="tersangka" placeholder="Masukkan nama tersangka ..." value="">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="jaksa_terkait" class="col-sm-12 col-form-label">
+									Jaksa Terkait
+									<small class="text-danger">(*Wajib diisi !)</small>
+								</label>
+								<div class="col-sm-12">
+									<select name="jaksa_terkait" id="jaksa_terkait" class="form-control js-select-2" multiple>
+										<?php foreach ($list_jaksa as $jaksa) : ?>
+											<option value="<?= $jaksa['id_user']; ?>">
+												<?= $jaksa['nama_lengkap']; ?> (NIP.<?= $jaksa['nip']; ?>)
+											</option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+							</div>
+
 						</div>
 					</div>
 
@@ -343,6 +358,13 @@
 								<td>:</td>
 								<td>
 									<span id="detail_instansiPenyidik"></span>
+								</td>
+							</tr>
+							<tr>
+								<td>Tersangka</td>
+								<td>:</td>
+								<td>
+									<span id="detail_tersangka"></span>
 								</td>
 							</tr>
 							<tr>
@@ -602,6 +624,8 @@
 </div>
 
 <script>
+	send_notif('3', 'jaksa', 'Anda memiliki 1 berkas perkara yang baru masuk !');
+
 	$(document).ready(function() {
 		$(function() {
 			// $("#modalInput").css("z-index", "1500");
@@ -633,6 +657,7 @@
 				var nomorSuratPengembalianSpdp = $(this).data('nomorSuratPengembalianSpdp');
 				var fileSuratPengembalianSpdp = $(this).data('fileSuratPengembalianSpdp');
 				var instansiPenyidik = $(this).data('instansiPenyidik');
+				var tersangka = $(this).data('tersangka');
 				var dataJaksaTerkait = $(this).data('jaksaTerkait');
 				var jaksaTerkait = dataJaksaTerkait.replaceAll(`'`, `"`);
 				var pidanaAnak = $(this).data('pidanaAnak');
@@ -706,6 +731,7 @@
 				}
 
 				$('#modalDetail #detail_instansiPenyidik').html(instansiPenyidik);
+				$('#modalDetail #detail_tersangka').html(tersangka);
 				$('#modalDetail #detail_jaksaTerkait').html(jaksaTerkait);
 				$('#modalDetail #detail_pidanaAnak').html(pidanaAnak);
 				$('#modalDetail #detail_statusBerkas').html(statusBerkas);
@@ -856,6 +882,7 @@
 					var tanggalP16 = $(this).data('tanggalP16');
 					var nomorP16 = $(this).data('nomorP16');
 					var fileP16 = $(this).data('fileP16');
+					var tersangka = $(this).data('tersangka');
 					var jaksaTerkait = $(this).data('jaksaTerkait');
 					var statusBerkas = $(this).data('statusBerkas');
 					var pidanaAnak = $(this).data('pidanaAnak');
@@ -871,6 +898,7 @@
 					$('#modalInput #nomor_p16').val(nomorP16);
 					$('#modalInput #status_berkas').val(statusBerkas).trigger('change');
 					$('#modalInput #pidana_anak').val(pidanaAnak).trigger('change');
+					$('#modalInput #tersangka').val(tersangka);
 
 					var arrayJaksaTerkait;
 					if (arrayJaksaTerkait = jaksaTerkait.toString().split(',')) {
@@ -906,6 +934,7 @@
 					var file_p16 = $('#file_p16').prop('files')[0];
 					var status_berkas = $('#status_berkas').val();
 					var id_instansi_penyidik = $('#id_instansi_penyidik').val();
+					var tersangka = $('#tersangka').val();
 					var jaksa_terkait = $('#jaksa_terkait').val();
 					var pidana_anak = $('#pidana_anak').val();
 
@@ -922,6 +951,7 @@
 					formData.append('file_p16', file_p16);
 					formData.append('status_berkas', status_berkas);
 					formData.append('id_instansi_penyidik', id_instansi_penyidik);
+					formData.append('tersangka', tersangka);
 					formData.append('jaksa_terkait', jaksa_terkait);
 					formData.append('pidana_anak', pidana_anak);
 
@@ -941,6 +971,7 @@
 					var file_p16 = $('#file_p16').prop('files')[0];
 					var status_berkas = $('#status_berkas').val();
 					var id_instansi_penyidik = $('#id_instansi_penyidik').val();
+					var tersangka = $('#tersangka').val();
 					var jaksa_terkait = $('#jaksa_terkait').val();
 					var pidana_anak = $('#pidana_anak').val();
 
@@ -958,6 +989,7 @@
 					formData.append('file_p16', file_p16);
 					formData.append('status_berkas', status_berkas);
 					formData.append('id_instansi_penyidik', id_instansi_penyidik);
+					formData.append('tersangka', tersangka);
 					formData.append('jaksa_terkait', jaksa_terkait);
 					formData.append('pidana_anak', pidana_anak);
 				}
@@ -976,6 +1008,11 @@
 					success: function(data) {
 						if (data.success == "1") {
 							toastr.success(data.pesan);
+
+							if (action == "tambah") {
+								send_notif('3', 'jaksa', 'Anda memiliki 1 berkas perkara yang baru masuk !');
+							}
+
 							$('#modalInput').hide();
 							location.reload();
 						} else if (data.success == "0") {
@@ -1078,6 +1115,7 @@
 					success: function(data) {
 						if (data.success == "1") {
 							toastr.success(data.pesan);
+
 							$('#modalInputTambahanBerkas').hide();
 							$('#modalInput').hide();
 							location.reload();
@@ -1101,8 +1139,8 @@
 		var urlPost = base_url + "/berkas-perkara/delete-tambahan-berkas";
 
 		Swal.fire({
-			title: "Hapus Data",
-			text: "Apakah anda yakin melakukan reset berkas " + mode + " ini ?",
+			title: "Hapus Data Berkas ?",
+			text: "Apakah anda yakin melakukan reset data berkas " + mode + " ini ?",
 			icon: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#3085d6",

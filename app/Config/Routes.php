@@ -26,6 +26,7 @@ $routes->post('/reset-password-akun', 'Authorize::reset_password_akun', ['filter
 $routes->get('/logout-user', 'Authorize::logout', ['filter' => 'auth_login']);
 
 $routes->get('/offline', 'Offline::index');
+$routes->get('/notif/(:any)', 'Notif::index/$1');
 $routes->post('/notif/push-subscribe', 'Notif::push_subscribe');
 $routes->post('/notif/send-push-notif', 'Notif::send_push_notif');
 

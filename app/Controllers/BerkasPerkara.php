@@ -98,6 +98,7 @@ class BerkasPerkara extends BaseController
 
 		$status_berkas = $this->request->getVar('status_berkas');
 		$id_instansi_penyidik = $this->request->getVar('id_instansi_penyidik');
+		$tersangka = $this->request->getVar('tersangka');
 		$jaksa_terkait = $this->request->getVar('jaksa_terkait');
 
 		$nama_file_spdp = "";
@@ -161,6 +162,8 @@ class BerkasPerkara extends BaseController
 			return false;
 		}
 
+
+
 		$query = $this->BerkasPerkaraModel->save([
 			'tanggal_penerimaan' => $tanggal_penerimaan,
 			'nomor_spdp' => $nomor_spdp,
@@ -174,6 +177,7 @@ class BerkasPerkara extends BaseController
 			'file_p16' => $nama_file_p16,
 			'status_berkas' => $status_berkas,
 			'id_instansi_penyidik' => $id_instansi_penyidik,
+			'tersangka' => $tersangka,
 			'jaksa_terkait' => $jaksa_terkait,
 			'pidana_anak' => $pidana_anak,
 			'status' => "Proses",
@@ -312,6 +316,7 @@ class BerkasPerkara extends BaseController
 		$tanggal_p16 = $this->request->getVar('tanggal_p16');
 		$status_berkas = $this->request->getVar('status_berkas');
 		$id_instansi_penyidik = $this->request->getVar('id_instansi_penyidik');
+		$tersangka = $this->request->getVar('tersangka');
 		$jaksa_terkait = $this->request->getVar('jaksa_terkait');
 
 		if ($id_user == "") {
@@ -423,6 +428,7 @@ class BerkasPerkara extends BaseController
 			'tanggal_p16' => $tanggal_p16,
 			'status_berkas' => $status_berkas,
 			'id_instansi_penyidik' => $id_instansi_penyidik,
+			'tersangka' => $tersangka,
 			'jaksa_terkait' => $jaksa_terkait,
 			'pidana_anak' => $pidana_anak,
 			'update_datetime' => date("Y-m-d H:i:s"),
@@ -444,9 +450,10 @@ class BerkasPerkara extends BaseController
 
 	public function delete()
 	{
-		$id_BerkasPerkara = $this->request->getPost('id_BerkasPerkara');
+		$id_berkas_perkara = $this->request->getPost('id_berkas_perkara');
+		$data_berkas = $this->BerkasPerkaraModel->getBerkasPerkara($id_berkas_perkara);
 
-		if ($id_BerkasPerkara == "") {
+		if ($id_berkas_perkara == "") {
 			echo json_encode(array(
 				'success' => '0',
 				'pesan' => 'Terjadi kesalahan teknis !'
@@ -454,7 +461,43 @@ class BerkasPerkara extends BaseController
 			return false;
 		}
 
-		$query = $this->BerkasPerkaraModel->deleteBerkasPerkara($id_BerkasPerkara);
+		if ($data_berkas['file_berkas'] != "") {
+			if (file_exists(base_url() . "/assets/berkas/" . $data_berkas['file_berkas'])) {
+				unlink('assets/berkas/' . $data_berkas['file_berkas']);
+			}
+		}
+
+		if ($data_berkas['file_spdp'] != "") {
+			if (file_exists(base_url() . "/assets/berkas/" . $data_berkas['file_spdp'])) {
+				unlink('assets/berkas/' . $data_berkas['file_spdp']);
+			}
+		}
+
+		if ($data_berkas['file_p16'] != "") {
+			if (file_exists(base_url() . "/assets/berkas/" . $data_berkas['file_p16'])) {
+				unlink('assets/berkas/' . $data_berkas['file_p16']);
+			}
+		}
+
+		if ($data_berkas['file_p17'] != "") {
+			if (file_exists(base_url() . "/assets/berkas/" . $data_berkas['file_p17'])) {
+				unlink('assets/berkas/' . $data_berkas['file_p17']);
+			}
+		}
+
+		if ($data_berkas['file_sop_form_02'] != "") {
+			if (file_exists(base_url() . "/assets/berkas/" . $data_berkas['file_sop_form_02'])) {
+				unlink('assets/berkas/' . $data_berkas['file_sop_form_02']);
+			}
+		}
+
+		if ($data_berkas['file_surat_pengembalian_spdp'] != "") {
+			if (file_exists(base_url() . "/assets/berkas/" . $data_berkas['file_surat_pengembalian_spdp'])) {
+				unlink('assets/berkas/' . $data_berkas['file_surat_pengembalian_spdp']);
+			}
+		}
+
+		$query = $this->BerkasPerkaraModel->deleteBerkasPerkara($id_berkas_perkara);
 
 		if ($query) {
 			echo json_encode(array(

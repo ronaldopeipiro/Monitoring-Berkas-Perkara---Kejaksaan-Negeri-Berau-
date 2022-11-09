@@ -31,6 +31,7 @@ class BerkasPerkaraModel extends Model
 		'file_surat_pengembalian_spdp',
 		'status_berkas',
 		'id_instansi_penyidik',
+		'tersangka',
 		'jaksa_terkait',
 		'pidana_anak',
 		'status',
