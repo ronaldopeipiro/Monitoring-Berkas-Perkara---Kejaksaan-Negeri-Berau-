@@ -9,7 +9,7 @@
 			<div class="card h-100">
 
 				<div class="card-header">
-					<h3 class="card-title">Pengaturan Email Aplikasi</h3>
+					<h3 class="card-title font-weight-bold">Pengaturan Email Aplikasi</h3>
 				</div>
 
 				<div class="card-body border-bottom py-3">

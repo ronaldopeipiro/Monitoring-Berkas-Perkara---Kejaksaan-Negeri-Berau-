@@ -10,7 +10,7 @@
 
 				<div class="card-header">
 					<div class="d-flex align-items-center justify-content-between">
-						<h3 class="card-title">
+						<h3 class="card-title font-weight-bold">
 							Data Berkas Perkara
 						</h3>
 
@@ -43,9 +43,14 @@
 						</div>
 					</div>
 
-					<div class="col-lg-4 mb-3">
+					<div class="col-lg-3 mb-3">
 						<label for="instansiPenyidikSelect">Instansi Penyidik</label>
 						<div id="instansiPenyidikSelect"></div>
+					</div>
+
+					<div class="col-lg-4 mb-3">
+						<label for="tersangkaSelect">Tersangka</label>
+						<div id="tersangkaSelect"></div>
 					</div>
 
 					<div class="col-lg-2 mb-3">
@@ -63,6 +68,7 @@
 									<th>SPDP</th>
 									<th>Berkas Tahap 1</th>
 									<th>P16</th>
+									<th>Tersangka</th>
 									<th>Instansi Penyidik</th>
 									<th>Jaksa Terkait</th>
 									<th>Status Berkas</th>
@@ -71,7 +77,18 @@
 							</thead>
 
 							<tbody>
-								<?php $no = 1; ?>
+								<?php
+								$no = 1;
+								if ($user_level <= 2) {
+									$data_berkas_perkara = $db->query(
+										"SELECT * FROM berkas_perkara ORDER BY tanggal_penerimaan DESC"
+									)->getResult('array');
+								} else if ($user_level == 3) {
+									$data_berkas_perkara = $db->query(
+										"SELECT * FROM berkas_perkara WHERE FIND_IN_SET('$user_id', jaksa_terkait) ORDER BY tanggal_penerimaan DESC"
+									)->getResult("array");
+								}
+								?>
 								<?php foreach ($data_berkas_perkara as $row) : ?>
 									<?php
 									$interval_tanggal_penerimaan = date_diff(date_create($row['tanggal_penerimaan']), date_create(date('Y-m-d')))->days;
@@ -193,6 +210,9 @@
 											<?php if (($row['tanggal_p16'] != "0000-00-00") and ($row['tanggal_p16'] != "")) : ?>
 												Tgl. : <?= date('d/m/Y', strtotime($row['tanggal_p16'])); ?>
 											<?php endif; ?>
+										</td>
+										<td class="text-left">
+											<?= $row['tersangka']; ?>
 										</td>
 										<td>
 											<?= $instansi_penyidik->nama_instansi; ?>
@@ -343,7 +363,18 @@
 					$("#data-table-custom").toggleClass("card");
 				});
 
-				var instansiPenyidik = this.api().column(5);
+				var tersangka = this.api().column(5);
+				var tersangkaSelect = $('<select class="filter form-control form-control-sm js-select-2"><option value="">Semua</option></select>')
+					.appendTo('#tersangkaSelect')
+					.on('change', function() {
+						var val = $(this).val();
+						tersangka.search(val ? '^' + $(this).val() + '$' : val, true, true).draw();
+					});
+				tersangka.data().unique().sort().each(function(data_value, j) {
+					tersangkaSelect.append('<option value="' + data_value + '">' + data_value + '</option>');
+				});
+
+				var instansiPenyidik = this.api().column(6);
 				var instansiPenyidikSelect = $('<select class="filter form-control form-control-sm js-select-2"><option value="">Semua</option></select>')
 					.appendTo('#instansiPenyidikSelect')
 					.on('change', function() {
@@ -356,7 +387,7 @@
 				<?php endforeach; ?>
 					`);
 
-				var status = this.api().column(7);
+				var status = this.api().column(8);
 				var statusSelect = $('<select class="filter form-control js-select-2"><option value="">Semua</option></select>')
 					.appendTo('#statusSelect')
 					.on('change', function() {

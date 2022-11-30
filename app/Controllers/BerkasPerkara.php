@@ -50,22 +50,11 @@ class BerkasPerkara extends BaseController
 
 	public function index()
 	{
-		$text_title = "";
-		if ($this->user_level <= 2) {
-			$text_title = "Berkas Perkara";
-			$data_berkas_perkara = $this->BerkasPerkaraModel->getBerkasPerkara();
-		} else if ($this->user_level == 3) {
-			$text_title = "Berkas Perkara - " . $this->user_nama_lengkap . " (NIP.)" . $this->user_nip;
-			$data_berkas_perkara = $this->db->query(
-				"SELECT * FROM berkas_perkara WHERE FIND_IN_SET('$this->id_user', jaksa_terkait) ORDER BY id_berkas_perkara DESC"
-			)->getResult("array");
-		}
-
 		$data = [
 			'request' => $this->request,
 			'db' => $this->db,
 			'validation' => $this->validation,
-			'title' => $text_title,
+			'title' => 'Berkas Perkara',
 			'user_id' => $this->id_user,
 			'user_nama_lengkap' => $this->user_nama_lengkap,
 			'user_username' => $this->user_username,
@@ -73,7 +62,6 @@ class BerkasPerkara extends BaseController
 			'user_email' => $this->user_email,
 			'user_level' => $this->user_level,
 			'user_foto' => $this->user_foto,
-			'data_berkas_perkara' => $data_berkas_perkara,
 			'list_instansi' => $this->InstansiModel->getListInstansiAktif(),
 			'list_jaksa' => $this->UserModel->getListUserAktifByLevel(3),
 		];

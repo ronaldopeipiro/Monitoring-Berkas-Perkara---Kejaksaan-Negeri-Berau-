@@ -42,6 +42,7 @@ $routes->post('/berkas-perkara/edit-tambahan-berkas', 'BerkasPerkara::edit_tamba
 $routes->post('/berkas-perkara/delete-tambahan-berkas', 'BerkasPerkara::delete_tambahan_berkas', ['filter' => 'auth_login']);
 
 $routes->get('/data-master/jaksa', 'Jaksa::index', ['filter' => 'auth_login']);
+$routes->get('/data-master/jaksa/berkas-perkara/(:any)', 'Jaksa::berkas_perkara/$1', ['filter' => 'auth_login']);
 $routes->post('/data-master/jaksa/add', 'Jaksa::add', ['filter' => 'auth_login']);
 $routes->post('/data-master/jaksa/edit', 'Jaksa::edit', ['filter' => 'auth_login']);
 $routes->post('/data-master/jaksa/update-password', 'Jaksa::update_password', ['filter' => 'auth_login']);

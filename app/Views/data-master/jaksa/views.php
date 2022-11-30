@@ -17,7 +17,7 @@ if ($user_level > 2) {
 
 				<div class="card-header">
 					<div class="d-flex align-items-center justify-content-between">
-						<h3 class="card-title">
+						<h3 class="card-title font-weight-bold">
 							Data Jaksa
 						</h3>
 						<div>
@@ -42,12 +42,9 @@ if ($user_level > 2) {
 									<th>Foto</th>
 									<th>Nama Lengkap</th>
 									<th>NIP</th>
-									<!-- <th>Username</th> -->
 									<th>Email</th>
-									<th>No. Handphone</th>
-									<!-- <th>Create</th>
-									<th>Update</th>
-									<th>Last Login</th> -->
+									<th>No. HP</th>
+									<th>Berkas Perkara</th>
 									<?php if ($user_level <= 2) : ?>
 										<th>Aksi</th>
 									<?php endif; ?>
@@ -85,25 +82,17 @@ if ($user_level > 2) {
 										<td class="text-left">
 											<?= $row['nip']; ?>
 										</td>
-										<!-- <td class="text-left">
-											<?= $row['username']; ?>
-										</td> -->
 										<td class="text-left">
 											<?= $row['email']; ?>
 										</td>
 										<td class="text-left">
 											<?= $row['no_hp']; ?>
 										</td>
-										<!-- <td>
-											<?= date('d/m/Y', strtotime($row['create_datetime'])); ?> <br>
-											<?= date('H:i:s', strtotime($row['create_datetime'])); ?>
+										<td class="text-center">
+											<a href="<?= base_url() ?>/data-master/jaksa/berkas-perkara/<?= $row['id_user']; ?>" class="btn btn-sm btn-primary">
+												<i class="fa fa-file-alt"></i> Lihat
+											</a>
 										</td>
-										<td>
-											<?= $update_datetime_show; ?>
-										</td>
-										<td>
-											<?= $last_login_show; ?>
-										</td> -->
 										<?php if ($user_level <= 2) : ?>
 											<td class="table-action">
 												<div class="list-unstyled d-flex align-items-center justify-content-center">

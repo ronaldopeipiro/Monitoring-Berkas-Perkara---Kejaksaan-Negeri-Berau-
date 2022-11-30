@@ -67,6 +67,30 @@ class Jaksa extends BaseController
 		return view('data-master/jaksa/views', $data);
 	}
 
+	public function berkas_perkara($id_jaksa_select)
+	{
+		$jaksa_select = $this->UserModel->getUser($id_jaksa_select);
+		$data = [
+			'request' => $this->request,
+			'db' => $this->db,
+			'validation' => $this->validation,
+			'title' => 'Berkas Perkara - ' . $jaksa_select['nama_lengkap'],
+			'user_id' => $this->id_user,
+			'user_nama_lengkap' => $this->user_nama_lengkap,
+			'user_username' => $this->user_username,
+			'user_no_hp' => $this->user_no_hp,
+			'user_email' => $this->user_email,
+			'user_level' => $this->user_level,
+			'user_foto' => $this->user_foto,
+			'list_instansi' => $this->InstansiModel->getListInstansiAktif(),
+			'list_jaksa' => $this->UserModel->getListUserAktifByLevel(3),
+			'id_jaksa_select' => $id_jaksa_select,
+			'jaksa_select' => $jaksa_select
+		];
+
+		return view('data-master/jaksa/berkas-perkara', $data);
+	}
+
 	public function add()
 	{
 		$nama_lengkap = $this->request->getPost('nama_lengkap');

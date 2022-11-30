@@ -18,7 +18,7 @@ if ($user_level > 2) {
 
 				<div class="card-header">
 					<div class="d-flex align-items-center justify-content-between">
-						<h3 class="card-title">
+						<h3 class="card-title font-weight-bold">
 							Data Instansi
 						</h3>
 						<div>
