@@ -70,6 +70,7 @@
 										<div class="col-sm-12">
 											<select name="status_berkas" id="status_berkas" class="form-control">
 												<option value="KOSONG">KOSONG</option>
+												<option value="P-17">P-17</option>
 												<option value="P-18">P-18</option>
 												<option value="P-19">P-19</option>
 												<option value="P-20">P-20</option>
@@ -225,7 +226,7 @@
 									<small class="text-danger">(*Wajib diisi !)</small>
 								</label>
 								<div class="col-sm-12">
-									<select name="jaksa_terkait" id="jaksa_terkait" class="form-control js-select-2" multiple>
+									<select name="jaksa_terkait" id="jaksa_terkait" class="form-control js-select-2">
 										<?php foreach ($list_jaksa as $jaksa) : ?>
 											<option value="<?= $jaksa['id_user']; ?>">
 												<?= $jaksa['nama_lengkap']; ?> (NIP.<?= $jaksa['nip']; ?>)

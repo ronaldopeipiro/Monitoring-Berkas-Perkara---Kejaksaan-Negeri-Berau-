@@ -27,7 +27,7 @@
 
 				<div class="card-body border-bottom pb-1 row">
 
-					<div class="col-lg-3 mb-3">
+					<div class="col-lg-3 mb-2">
 						<div class="form-group">
 							<label for="cariTanggalPenerimaan">Tanggal Penerimaan</label>
 							<div class="cariTanggal">
@@ -43,19 +43,29 @@
 						</div>
 					</div>
 
-					<div class="col-lg-3 mb-3">
+					<div class="col-lg-3 mb-2">
 						<label for="instansiPenyidikSelect">Instansi Penyidik</label>
 						<div id="instansiPenyidikSelect"></div>
 					</div>
 
-					<div class="col-lg-4 mb-3">
+					<div class="col-lg-6 mb-2">
 						<label for="tersangkaSelect">Tersangka</label>
 						<div id="tersangkaSelect"></div>
 					</div>
 
-					<div class="col-lg-2 mb-3">
-						<label for="statusSelect">Status</label>
-						<div id="statusSelect"></div>
+					<div class="col-lg-6 mb-3">
+						<label for="jaksaTerkaitSelect">Jaksa Terkait</label>
+						<div id="jaksaTerkaitSelect"></div>
+					</div>
+
+					<div class="col-lg-3 mb-3">
+						<label for="statusBerkasSelect">Status Berkas</label>
+						<div id="statusBerkasSelect"></div>
+					</div>
+
+					<div class="col-lg-3 mb-3">
+						<label for="statusPerkaraSelect">Status Perkara</label>
+						<div id="statusPerkaraSelect"></div>
 					</div>
 
 					<div class="col-12">
@@ -72,6 +82,7 @@
 									<th>Instansi Penyidik</th>
 									<th>Jaksa Terkait</th>
 									<th>Status Berkas</th>
+									<th>Status Perkara</th>
 									<th>Aksi</th>
 								</tr>
 							</thead>
@@ -131,7 +142,7 @@
 									$data_jaksa_terkait = $db->query("SELECT * FROM user WHERE id_user IN ($array_jaksa_terkait) ORDER BY nama_lengkap ASC ");
 									$jaksa_terkait = "";
 									foreach ($data_jaksa_terkait->getResult('array') as $jt) {
-										$jaksa_terkait .= "<span class='badge btn-primary'>" . $jt['nama_lengkap'] . "</span> <br>";
+										$jaksa_terkait .= $jt['nama_lengkap'] . "<br>";
 									}
 
 									$nama_user_create = "";
@@ -222,6 +233,9 @@
 										</td>
 										<td class="text-center">
 											<?= $row['status_berkas']; ?>
+										</td>
+										<td class="text-center">
+											<?= $row['status']; ?>
 										</td>
 										<td>
 											<div class="list-unstyled d-flex align-items-center justify-content-center">
@@ -370,8 +384,8 @@
 						var val = $(this).val();
 						tersangka.search(val ? '^' + $(this).val() + '$' : val, true, true).draw();
 					});
-				tersangka.data().unique().sort().each(function(data_value, j) {
-					tersangkaSelect.append('<option value="' + data_value + '">' + data_value + '</option>');
+				tersangka.data().unique().sort().each(function(d, j) {
+					tersangkaSelect.append('<option value="' + d + '">' + d + '</option>');
 				});
 
 				var instansiPenyidik = this.api().column(6);
@@ -387,16 +401,47 @@
 				<?php endforeach; ?>
 					`);
 
-				var status = this.api().column(8);
-				var statusSelect = $('<select class="filter form-control js-select-2"><option value="">Semua</option></select>')
-					.appendTo('#statusSelect')
+
+				var jaksaTerkait = this.api().column(7);
+				var jaksaTerkaitSelect = $('<select class="filter form-control form-control-sm js-select-2"><option value="">Semua</option></select>')
+					.appendTo('#jaksaTerkaitSelect')
 					.on('change', function() {
 						var val = $(this).val();
-						status.search(val ? '^' + $(this).val() + '$' : val, true, false).draw();
+						jaksaTerkait.search(val ? '^' + $(this).val() + '$' : val, true, true).draw();
 					});
-				status.data().unique().sort().each(function(d, j) {
-					statusSelect.append('<option value="' + d + '">' + d + '</option>');
-				});
+				jaksaTerkaitSelect.append(`
+				<?php foreach ($list_jaksa as $row) : ?>
+					<option value="<?= $row['nama_lengkap'] ?>"><?= $row['nama_lengkap'] ?></option>
+				<?php endforeach; ?>
+					`);
+
+				var statusBerkas = this.api().column(8);
+				var statusBerkasSelect = $('<select class="filter form-control js-select-2"><option value="">Semua</option></select>')
+					.appendTo('#statusBerkasSelect')
+					.on('change', function() {
+						var val = $(this).val();
+						statusBerkas.search(val ? '^' + $(this).val() + '$' : val, true, false).draw();
+					});
+				statusBerkasSelect.append(`
+					<option value="KOSONG">KOSONG</option>
+					<option value="P-17">P-17</option>
+					<option value="P-18">P-18</option>
+					<option value="P-19">P-19</option>
+					<option value="P-20">P-20</option>
+					<option value="P-21">P-21</option>
+					`);
+
+				var statusPerkara = this.api().column(9);
+				var statusPerkaraSelect = $('<select class="filter form-control js-select-2"><option value="">Semua</option></select>')
+					.appendTo('#statusPerkaraSelect')
+					.on('change', function() {
+						var val = $(this).val();
+						statusPerkara.search(val ? '^' + $(this).val() + '$' : val, true, false).draw();
+					});
+				statusPerkaraSelect.append(`
+					<option value="Proses">Proses</option>
+					<option value="Selesai">Selesai</option>
+					`);
 			},
 			"lengthMenu": [
 				[10, 25, 50, 100, -1],
@@ -407,7 +452,7 @@
 					filename: 'DATA BERKAS PERKARA KEJAKSAAN NEGERI BERAU - update ' + tanggalHariIni,
 					text: 'Export Excel (*xlsx)',
 					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+						columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
 						stripHtml: true,
 						modifier: {
 							page: 'current'
@@ -421,7 +466,7 @@
 					message: 'DATA BERKAS PERKARA',
 					messageBottom: 'Data dibuat otomatis oleh sistem : ' + tanggalHariIni,
 					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+						columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
 						stripHtml: true,
 						modifier: {
 							page: 'current'
