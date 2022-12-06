@@ -10,19 +10,27 @@ function rupiah($angka)
 	return $hasil_rupiah;
 }
 
+// Update Status Berkas dari Proses ke Selesai jika telah P-21
+$update_status_perkara = $db->query("UPDATE berkas_perkara SET status='Selesai' WHERE status_berkas='P-21' ");
+
 if ($user_level <= 2) {
 	$jumlah_berkas_perkara = $db->query("SELECT * FROM berkas_perkara")->getNumRows();
 	$jumlah_berkas_perkara_selesai = $db->query("SELECT * FROM berkas_perkara WHERE status='Selesai'")->getNumRows();
 	$jumlah_berkas_perkara_proses = $db->query("SELECT * FROM berkas_perkara WHERE status='Proses'")->getNumRows();
 
-	$jumlah_pengantar_berkas = $db->query("SELECT * FROM pengantar_berkas")->getNumRows();
 	$jumlah_instansi = $db->query("SELECT * FROM instansi WHERE aktif='Y' ")->getNumRows();
 	$jumlah_jaksa = $db->query("SELECT * FROM user WHERE id_level='3' AND aktif='Y'")->getNumRows();
+	$jumlah_admin = $db->query("SELECT * FROM user WHERE id_level='2' AND aktif='Y'")->getNumRows();
 } elseif ($user_level == 3) {
 	$jumlah_berkas_perkara = $db->query("SELECT * FROM berkas_perkara WHERE FIND_IN_SET('$user_id', jaksa_terkait) ")->getNumRows();
 	$jumlah_berkas_perkara_selesai = $db->query("SELECT * FROM berkas_perkara WHERE FIND_IN_SET('$user_id', jaksa_terkait) AND status='Selesai'")->getNumRows();
 	$jumlah_berkas_perkara_proses = $db->query("SELECT * FROM berkas_perkara WHERE FIND_IN_SET('$user_id', jaksa_terkait) AND status='Proses'")->getNumRows();
 }
+
+$jumlah_spdp = $db->query("SELECT * FROM berkas_perkara WHERE nomor_spdp != '' AND tanggal_spdp != '' ")->getNumRows();
+$jumlah_berkas_tahap_1 = $db->query("SELECT * FROM berkas_perkara WHERE nomor_berkas != '' AND tanggal_berkas != '' ")->getNumRows();
+
+
 
 ?>
 
@@ -64,148 +72,163 @@ if ($user_level <= 2) {
 			</div>
 		</div>
 
-		<div class="col-lg-12 d-flex">
+		<div class="col-12 col-lg-9 d-flex">
 			<div class="w-100">
 
-				<?php if ($user_level <= 2) : ?>
-					<div class="row">
+				<div class="card">
+					<div class="card-body pb-0" style="background-color: #ddd;">
+						<div class="row">
 
-						<div class="col-lg-2 col-6">
-							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
-								<div class="card">
-									<div class="card-body">
-										<h5 class="card-title text-success font-weight-bold mb-4">Berkas Masuk</h5>
-										<h1 class="mt-1">
-											<?= $jumlah_berkas_perkara; ?>
-										</h1>
-									</div>
-								</div>
-							</a>
-						</div>
+							<div class="col-12">
+								<h3>
+									Rekap Data
+								</h3>
+								<hr>
+							</div>
 
-						<div class="col-lg-2 col-6">
-							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
-								<div class="card">
-									<div class="card-body">
-										<h5 class="card-title text-success font-weight-bold mb-4">Berkas Selesai</h5>
-										<h1 class="mt-1">
-											<?= $jumlah_berkas_perkara_selesai; ?>
-										</h1>
+							<div class="col-lg-3 col-6">
+								<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
+									<div class="card">
+										<div class="card-body">
+											<h5 class="card-title text-success font-weight-bold mb-4">Berkas Masuk</h5>
+											<h1 class="mt-1">
+												<?= $jumlah_berkas_perkara; ?>
+											</h1>
+											<hr>
+											<a href="<?= base_url(); ?>/berkas-perkara" class="disabled">
+												Lihat Detail
+											</a>
+										</div>
 									</div>
-								</div>
-							</a>
-						</div>
+								</a>
+							</div>
 
-						<div class="col-lg-2 col-6">
-							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
-								<div class="card">
-									<div class="card-body">
-										<h5 class="card-title text-success font-weight-bold mb-4">Berkas Proses</h5>
-										<h1 class="mt-1">
-											<?= $jumlah_berkas_perkara_proses; ?>
-										</h1>
+							<div class="col-lg-3 col-6">
+								<a href="<?= base_url(); ?>/berkas-perkara/proses" style="text-decoration: none;">
+									<div class="card">
+										<div class="card-body">
+											<h5 class="card-title text-success font-weight-bold mb-4">Berkas Proses</h5>
+											<h1 class="mt-1">
+												<?= $jumlah_berkas_perkara_proses; ?>
+											</h1>
+											<hr>
+											<a href="<?= base_url(); ?>/berkas-perkara/proses" class="disabled">
+												Lihat Detail
+											</a>
+										</div>
 									</div>
-								</div>
-							</a>
-						</div>
+								</a>
+							</div>
 
-						<div class="col-lg-2 col-6">
-							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
-								<div class="card">
-									<div class="card-body">
-										<h5 class="card-title text-success font-weight-bold mb-4">Pengantar Berkas</h5>
-										<h1 class="mt-1">
-											<?= $jumlah_pengantar_berkas; ?>
-										</h1>
+							<div class="col-lg-3 col-6">
+								<a href="<?= base_url(); ?>/berkas-perkara/selesai" style="text-decoration: none;">
+									<div class="card">
+										<div class="card-body">
+											<h5 class="card-title text-success font-weight-bold mb-4">Berkas Selesai</h5>
+											<h1 class="mt-1">
+												<?= $jumlah_berkas_perkara_selesai; ?>
+											</h1>
+											<hr>
+											<a href="<?= base_url(); ?>/berkas-perkara/selesai" class="disabled">
+												Lihat Detail
+											</a>
+										</div>
 									</div>
-								</div>
-							</a>
-						</div>
+								</a>
+							</div>
 
-						<div class="col-lg-2 col-6">
-							<a href="<?= base_url(); ?>/data-master/instansi" style="text-decoration: none;">
-								<div class="card">
-									<div class="card-body">
-										<h5 class="card-title text-success font-weight-bold mb-4">Data Instansi</h5>
-										<h1 class="mt-1">
-											<?= $jumlah_instansi; ?>
-										</h1>
+							<div class="col-lg-3 col-6">
+								<a href="<?= base_url(); ?>/berkas-perkara/spdp" style="text-decoration: none;">
+									<div class="card">
+										<div class="card-body">
+											<h5 class="card-title text-success font-weight-bold mb-4">SPDP</h5>
+											<h1 class="mt-1">
+												<?= $jumlah_spdp; ?>
+											</h1>
+											<hr>
+											<a href="<?= base_url(); ?>/berkas-perkara/spdp" class="disabled">
+												Lihat Detail
+											</a>
+										</div>
 									</div>
-								</div>
-							</a>
-						</div>
+								</a>
+							</div>
 
-						<div class="col-lg-2 col-6">
-							<a href="<?= base_url(); ?>/data-master/jaksa" style="text-decoration: none;">
-								<div class="card">
-									<div class="card-body">
-										<h5 class="card-title text-success font-weight-bold mb-4">Jaksa</h5>
-										<h1 class="mt-1">
-											<?= $jumlah_jaksa; ?>
-										</h1>
+							<div class="col-lg-3 col-6">
+								<a href="<?= base_url(); ?>/berkas-perkara/tahap-1" style="text-decoration: none;">
+									<div class="card">
+										<div class="card-body">
+											<h5 class="card-title text-success font-weight-bold mb-4">Berkas Tahap 1</h5>
+											<h1 class="mt-1">
+												<?= $jumlah_berkas_tahap_1; ?>
+											</h1>
+											<hr>
+											<a href="<?= base_url(); ?>/berkas-perkara/tahap-1" class="disabled">
+												Lihat Detail
+											</a>
+										</div>
 									</div>
+								</a>
+							</div>
+
+							<?php if ($user_level <= 2) : ?>
+								<div class="col-lg-3 col-6">
+									<a href="<?= base_url(); ?>/data-master/instansi" style="text-decoration: none;">
+										<div class="card">
+											<div class="card-body">
+												<h5 class="card-title text-success font-weight-bold mb-4">Instansi</h5>
+												<h1 class="mt-1">
+													<?= $jumlah_instansi; ?>
+												</h1>
+												<hr>
+												<a href="<?= base_url(); ?>/data-master/instansi">
+													Lihat Detail
+												</a>
+											</div>
+										</div>
+									</a>
 								</div>
-							</a>
+
+								<div class="col-lg-3 col-6">
+									<a href="<?= base_url(); ?>/data-master/jaksa" style="text-decoration: none;">
+										<div class="card">
+											<div class="card-body">
+												<h5 class="card-title text-success font-weight-bold mb-4">Jaksa</h5>
+												<h1 class="mt-1">
+													<?= $jumlah_jaksa; ?>
+												</h1>
+												<hr>
+												<a href="<?= base_url(); ?>/data-master/jaksa">
+													Lihat Detail
+												</a>
+											</div>
+										</div>
+									</a>
+								</div>
+
+								<div class="col-lg-3 col-6">
+									<a href="#" style="text-decoration: none;">
+										<div class="card">
+											<div class="card-body">
+												<h5 class="card-title text-success font-weight-bold mb-4">Administrator</h5>
+												<h1 class="mt-1">
+													<?= $jumlah_admin; ?>
+												</h1>
+												<hr>
+												<a href="#" class="disabled">
+													Lihat Detail
+												</a>
+											</div>
+										</div>
+									</a>
+								</div>
+							<?php endif; ?>
+
 						</div>
 
 					</div>
-				<?php elseif ($user_level == 3) : ?>
-					<div class="row">
-
-						<div class="col-lg-4 col-6">
-							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
-								<div class="card">
-									<div class="card-body">
-										<h5 class="card-title text-success font-weight-bold mb-4">Berkas Masuk</h5>
-										<h1 class="mt-1">
-											<?= $jumlah_berkas_perkara; ?>
-										</h1>
-									</div>
-								</div>
-							</a>
-						</div>
-
-						<div class="col-lg-4 col-6">
-							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
-								<div class="card">
-									<div class="card-body">
-										<h5 class="card-title text-success font-weight-bold mb-4">Berkas Selesai</h5>
-										<h1 class="mt-1">
-											<?= $jumlah_berkas_perkara_selesai; ?>
-										</h1>
-									</div>
-								</div>
-							</a>
-						</div>
-
-						<div class="col-lg-4 col-6">
-							<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
-								<div class="card">
-									<div class="card-body">
-										<h5 class="card-title text-success font-weight-bold mb-4">Berkas Proses</h5>
-										<h1 class="mt-1">
-											<?= $jumlah_berkas_perkara_proses; ?>
-										</h1>
-									</div>
-								</div>
-							</a>
-						</div>
-
-					</div>
-				<?php endif; ?>
-			</div>
-		</div>
-
-		<div class="col-12 col-lg-9">
-			<div class="card flex-fill w-100">
-				<div class="card-header">
-					<h5 class="card-title text-success font-weight-bold mb-0 font-weight-bold">Grafik Data Berkas Perkara Perbulan Tahun <?= date("Y"); ?></h5>
 				</div>
-				<div class="card-body py-3">
-					<div class="chart chart-sm">
-						<canvas id="chartjs-dashboard-line" style="height: 320px;"></canvas>
-					</div>
-				</div>
+
 			</div>
 		</div>
 
@@ -216,6 +239,19 @@ if ($user_level <= 2) {
 						<div class="chart">
 							<div id="datetimepicker-dashboard"></div>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 col-lg-12">
+			<div class="card flex-fill w-100">
+				<div class="card-header">
+					<h5 class="card-title text-success font-weight-bold mb-0 font-weight-bold">Grafik Data Berkas Perkara Perbulan Tahun <?= date("Y"); ?></h5>
+				</div>
+				<div class="card-body py-3">
+					<div class="chart chart-sm">
+						<canvas id="chartjs-dashboard-line" style="height: 320px;"></canvas>
 					</div>
 				</div>
 			</div>

@@ -90,13 +90,32 @@
 							<tbody>
 								<?php
 								$no = 1;
+								$whereDataAdmin = "";
+								$whereDataJaksa = "";
+
+								if (isset($getData)) {
+									if ($getData == "proses") {
+										$whereDataAdmin = " WHERE status='Proses' ";
+										$whereDataJaksa = " AND status='Proses' ";
+									} else if ($getData == "selesai") {
+										$whereDataAdmin = " WHERE status='Selesai' ";
+										$whereDataJaksa = " AND status='Selesai' ";
+									} else if ($getData == "spdp") {
+										$whereDataAdmin = " WHERE nomor_spdp != '' AND tanggal_spdp != '' ";
+										$whereDataJaksa = " AND nomor_spdp != '' AND tanggal_spdp != '' ";
+									} else if ($getData == "tahap-1") {
+										$whereDataAdmin = " WHERE nomor_berkas != '' AND tanggal_berkas != '' ";
+										$whereDataJaksa = " AND nomor_berkas != '' AND tanggal_berkas != '' ";
+									}
+								}
+
 								if ($user_level <= 2) {
 									$data_berkas_perkara = $db->query(
-										"SELECT * FROM berkas_perkara ORDER BY tanggal_penerimaan DESC"
+										"SELECT * FROM berkas_perkara $whereDataAdmin ORDER BY tanggal_penerimaan DESC"
 									)->getResult('array');
 								} else if ($user_level == 3) {
 									$data_berkas_perkara = $db->query(
-										"SELECT * FROM berkas_perkara WHERE FIND_IN_SET('$user_id', jaksa_terkait) ORDER BY tanggal_penerimaan DESC"
+										"SELECT * FROM berkas_perkara WHERE FIND_IN_SET('$user_id', jaksa_terkait) $whereDataJaksa ORDER BY tanggal_penerimaan DESC"
 									)->getResult("array");
 								}
 								?>

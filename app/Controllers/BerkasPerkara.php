@@ -69,6 +69,28 @@ class BerkasPerkara extends BaseController
 		return view('berkas-perkara/views', $data);
 	}
 
+	public function getBerkas($getData)
+	{
+		$data = [
+			'request' => $this->request,
+			'db' => $this->db,
+			'validation' => $this->validation,
+			'title' => 'Berkas Perkara',
+			'user_id' => $this->id_user,
+			'user_nama_lengkap' => $this->user_nama_lengkap,
+			'user_username' => $this->user_username,
+			'user_no_hp' => $this->user_no_hp,
+			'user_email' => $this->user_email,
+			'user_level' => $this->user_level,
+			'user_foto' => $this->user_foto,
+			'list_instansi' => $this->InstansiModel->getListInstansiAktif(),
+			'list_jaksa' => $this->UserModel->getListUserAktifByLevel(3),
+			'getData' => $getData
+		];
+
+		return view('berkas-perkara/views', $data);
+	}
+
 	public function add()
 	{
 		$id_user = $this->request->getVar('id_user');

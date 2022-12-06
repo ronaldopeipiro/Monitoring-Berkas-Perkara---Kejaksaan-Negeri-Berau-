@@ -33,6 +33,8 @@ $routes->post('/notif/send-push-notif', 'Notif::send_push_notif');
 $routes->get('/', 'Dashboard::index', ['filter' => 'auth_login']);
 
 $routes->get('/berkas-perkara', 'BerkasPerkara::index', ['filter' => 'auth_login']);
+$routes->get('/berkas-perkara/(:any)', 'BerkasPerkara::getBerkas/$1', ['filter' => 'auth_login']);
+
 $routes->post('/berkas-perkara/add', 'BerkasPerkara::add', ['filter' => 'auth_login']);
 $routes->post('/berkas-perkara/edit', 'BerkasPerkara::edit', ['filter' => 'auth_login']);
 $routes->post('/berkas-perkara/delete', 'BerkasPerkara::delete', ['filter' => 'auth_login']);
