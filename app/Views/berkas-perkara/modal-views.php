@@ -71,6 +71,7 @@
 											<select name="status_berkas" id="status_berkas" class="form-control">
 												<option value="KOSONG">KOSONG</option>
 												<option value="P-17">P-17</option>
+												<option value="SP-3">SP-3</option>
 												<option value="P-18">P-18</option>
 												<option value="P-19">P-19</option>
 												<option value="P-20">P-20</option>
@@ -1011,7 +1012,7 @@
 							toastr.success(data.pesan);
 
 							if (action == "tambah") {
-								send_notif('3', 'jaksa', 'Anda memiliki 1 berkas perkara yang baru masuk !');
+								// send_notif('3', 'jaksa', 'Anda memiliki 1 berkas perkara yang baru masuk !');
 							}
 
 							$('#modalInput').hide();

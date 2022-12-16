@@ -48,8 +48,87 @@ class BerkasPerkara extends BaseController
 		$this->user_status_aktif = $data_user['aktif'];
 	}
 
+	public function encrypt_openssl($string)
+	{
+		$ciphering = "AES-256-CTR";
+		$iv_length = openssl_cipher_iv_length($ciphering);
+		$options = 0;
+		$encryption_iv = '1234567891011121';
+		$encryption_key = "#*PelaporanKecelakaan2021SkripsiRonal#@";
+
+		$encryption = openssl_encrypt(
+			$string,
+			$ciphering,
+			$encryption_key,
+			$options,
+			$encryption_iv
+		);
+
+		return $encryption;
+	}
+
+	public function decrypt_openssl($string_encrypt)
+	{
+		$ciphering = "AES-256-CTR";
+		$iv_length = openssl_cipher_iv_length($ciphering);
+		$options = 0;
+
+		$decryption_iv = '1234567891011121';
+		$decryption_key = "#*PelaporanKecelakaan2021SkripsiRonal#@";
+
+		$decryption = openssl_decrypt(
+			$string_encrypt,
+			$ciphering,
+			$decryption_key,
+			$options,
+			$decryption_iv
+		);
+
+		return $decryption;
+	}
+
+	function crypto_rand_secure($min, $max)
+	{
+		$range = $max - $min;
+		if ($range < 1) return $min; // not so random...
+		$log = ceil(log($range, 2));
+		$bytes = (int) ($log / 8) + 1; // length in bytes
+		$bits = (int) $log + 1; // length in bits
+		$filter = (int) (1 << $bits) - 1; // set all lower bits to 1
+		do {
+			$rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
+			$rnd = $rnd & $filter; // discard irrelevant bits
+		} while ($rnd > $range);
+		return $min + $rnd;
+	}
+
+	function getToken($length)
+	{
+		$token = "";
+		$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$codeAlphabet .= "abcdefghijklmnopqrstuvwxyz";
+		$codeAlphabet .= "0123456789";
+		$max = strlen($codeAlphabet); // edited
+
+		for ($i = 0; $i < $length; $i++) {
+			$token .= $codeAlphabet[$this->crypto_rand_secure(0, $max - 1)];
+		}
+
+		return $token;
+	}
+
 	public function index()
 	{
+		// $berkas_perkara = $this->BerkasPerkaraModel->getBerkasPerkara();
+		// foreach ($berkas_perkara as $row) {
+
+		// 	$slug = $this->getToken(100);
+
+		// 	$update_berkas_perkara = $this->BerkasPerkaraModel->updateBerkasPerkara([
+		// 		'slug' => $slug
+		// 	], $row['id_berkas_perkara']);
+		// }
+
 		$data = [
 			'request' => $this->request,
 			'db' => $this->db,
@@ -93,6 +172,8 @@ class BerkasPerkara extends BaseController
 
 	public function add()
 	{
+		$slug = $this->getToken(100);
+
 		$id_user = $this->request->getVar('id_user');
 		$tanggal_penerimaan = $this->request->getVar('tanggal_penerimaan');
 		$pidana_anak = $this->request->getVar('pidana_anak');
@@ -172,9 +253,8 @@ class BerkasPerkara extends BaseController
 			return false;
 		}
 
-
-
 		$query = $this->BerkasPerkaraModel->save([
+			'slug' => $slug,
 			'tanggal_penerimaan' => $tanggal_penerimaan,
 			'nomor_spdp' => $nomor_spdp,
 			'tanggal_spdp' => $tanggal_spdp,

@@ -345,6 +345,7 @@ if ($user_level > 2) {
 
 				} else if (action == "ubah") {
 					$('#inputDataAkunForm').show();
+					$('#inputFotoProfilForm').hide();
 					$('#inputPasswordForm').hide();
 
 					var id_user = $(this).data('id');

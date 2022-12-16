@@ -31,7 +31,6 @@ $jumlah_spdp = $db->query("SELECT * FROM berkas_perkara WHERE nomor_spdp != '' A
 $jumlah_berkas_tahap_1 = $db->query("SELECT * FROM berkas_perkara WHERE nomor_berkas != '' AND tanggal_berkas != '' ")->getNumRows();
 
 
-
 ?>
 
 <div class="container-fluid p-0">
@@ -87,15 +86,32 @@ $jumlah_berkas_tahap_1 = $db->query("SELECT * FROM berkas_perkara WHERE nomor_be
 							</div>
 
 							<div class="col-lg-3 col-6">
-								<a href="<?= base_url(); ?>/berkas-perkara" style="text-decoration: none;">
+								<a href="<?= base_url(); ?>/berkas-perkara/spdp" style="text-decoration: none;">
 									<div class="card">
 										<div class="card-body">
-											<h5 class="card-title text-success font-weight-bold mb-4">Berkas Masuk</h5>
+											<h5 class="card-title text-success font-weight-bold mb-4">SPDP</h5>
 											<h1 class="mt-1">
-												<?= $jumlah_berkas_perkara; ?>
+												<?= $jumlah_spdp; ?>
 											</h1>
 											<hr>
-											<a href="<?= base_url(); ?>/berkas-perkara" class="disabled">
+											<a href="<?= base_url(); ?>/berkas-perkara/spdp" class="disabled">
+												Lihat Detail
+											</a>
+										</div>
+									</div>
+								</a>
+							</div>
+
+							<div class="col-lg-3 col-6">
+								<a href="<?= base_url(); ?>/berkas-perkara/tahap-1" style="text-decoration: none;">
+									<div class="card">
+										<div class="card-body">
+											<h5 class="card-title text-success font-weight-bold mb-4">Berkas Tahap 1</h5>
+											<h1 class="mt-1">
+												<?= $jumlah_berkas_tahap_1; ?>
+											</h1>
+											<hr>
+											<a href="<?= base_url(); ?>/berkas-perkara/tahap-1" class="disabled">
 												Lihat Detail
 											</a>
 										</div>
@@ -137,39 +153,7 @@ $jumlah_berkas_tahap_1 = $db->query("SELECT * FROM berkas_perkara WHERE nomor_be
 								</a>
 							</div>
 
-							<div class="col-lg-3 col-6">
-								<a href="<?= base_url(); ?>/berkas-perkara/spdp" style="text-decoration: none;">
-									<div class="card">
-										<div class="card-body">
-											<h5 class="card-title text-success font-weight-bold mb-4">SPDP</h5>
-											<h1 class="mt-1">
-												<?= $jumlah_spdp; ?>
-											</h1>
-											<hr>
-											<a href="<?= base_url(); ?>/berkas-perkara/spdp" class="disabled">
-												Lihat Detail
-											</a>
-										</div>
-									</div>
-								</a>
-							</div>
 
-							<div class="col-lg-3 col-6">
-								<a href="<?= base_url(); ?>/berkas-perkara/tahap-1" style="text-decoration: none;">
-									<div class="card">
-										<div class="card-body">
-											<h5 class="card-title text-success font-weight-bold mb-4">Berkas Tahap 1</h5>
-											<h1 class="mt-1">
-												<?= $jumlah_berkas_tahap_1; ?>
-											</h1>
-											<hr>
-											<a href="<?= base_url(); ?>/berkas-perkara/tahap-1" class="disabled">
-												Lihat Detail
-											</a>
-										</div>
-									</div>
-								</a>
-							</div>
 
 							<?php if ($user_level <= 2) : ?>
 								<div class="col-lg-3 col-6">

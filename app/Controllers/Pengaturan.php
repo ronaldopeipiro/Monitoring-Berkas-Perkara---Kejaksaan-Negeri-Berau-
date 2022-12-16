@@ -228,7 +228,6 @@ class Pengaturan extends BaseController
 			unlink($get_file);
 		}
 
-
 		if ($query) {
 			echo json_encode(array(
 				'success' => '1',

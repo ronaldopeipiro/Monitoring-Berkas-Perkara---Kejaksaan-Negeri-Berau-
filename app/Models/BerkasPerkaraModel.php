@@ -10,6 +10,7 @@ class BerkasPerkaraModel extends Model
 	protected $table = 'berkas_perkara';
 	protected $allowedFields = [
 		'id_berkas_perkara',
+		'slug',
 		'nomor_berkas',
 		'tanggal_berkas',
 		'tanggal_penerimaan',
