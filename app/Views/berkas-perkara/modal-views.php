@@ -21,7 +21,7 @@
 
 							<div class="form-group row mb-2">
 								<label for="tanggal_penerimaan p-1" class="col-sm-12 col-form-label">
-									Tanggal Penerimaan Berkas Perkara Tahap 1
+									Tgl. Penerimaan Berkas
 									<small class="text-danger">(*Wajib diisi !)</small>
 								</label>
 								<div class="col-sm-12">
@@ -89,7 +89,7 @@
 								<div class="col-lg-8 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="nomor_spdp" class="col-sm-12 col-form-label">
-											Nomor SPDP
+											No. SPDP
 										</label>
 										<div class="col-sm-12">
 											<input type="text" class="form-control" id="nomor_spdp" name="nomor_spdp" placeholder="Masukkan Nomor SPDP ..." value="">
@@ -100,7 +100,7 @@
 								<div class="col-lg-4 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="tanggal_spdp" class="col-sm-12 col-form-label">
-											Tanggal SPDP
+											Tgl. SPDP
 										</label>
 										<div class="col-sm-12">
 											<input type="date" class="form-control" id="tanggal_spdp" name="tanggal_spdp" placeholder="0" value="">
@@ -132,7 +132,7 @@
 								<div class="col-lg-8 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="nomor_berkas" class="col-sm-12 col-form-label">
-											Nomor Berkas Tahap 1
+											No. Berkas Tahap 1
 										</label>
 										<div class="col-sm-12">
 											<input type="text" class="form-control" id="nomor_berkas" name="nomor_berkas" placeholder="Masukkan Nomor Berkas ..." value="">
@@ -143,7 +143,7 @@
 								<div class="col-lg-4 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="tanggal_berkas" class="col-sm-12 col-form-label">
-											Tanggal Berkas Tahap 1
+											Tgl. Berkas Tahap 1
 										</label>
 										<div class="col-sm-12">
 											<input type="date" class="form-control" id="tanggal_berkas" name="tanggal_berkas" placeholder="0" value="">
@@ -171,8 +171,50 @@
 							<div class="form-group row">
 								<div class="col-lg-8 mb-3 mb-lg-0">
 									<div class="row">
+										<label for="nomor_pengantar_berkas" class="col-sm-12 col-form-label">
+											No. Pengantar Berkas
+										</label>
+										<div class="col-sm-12">
+											<input type="text" class="form-control" id="nomor_pengantar_berkas" name="nomor_pengantar_berkas" placeholder="Masukkan Nomor Pengantar Berkas ..." value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-4 mb-3 mb-lg-0">
+									<div class="row">
+										<label for="tanggal_pengantar_berkas" class="col-sm-12 col-form-label">
+											Tgl. Pengantar Berkas
+										</label>
+										<div class="col-sm-12">
+											<input type="date" class="form-control" id="tanggal_pengantar_berkas" name="tanggal_pengantar_berkas" placeholder="0" value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-12 mb-3 mb-lg-0 mt-3">
+									<div class="form-group row mb-2">
+										<label for="file_pengantar_berkas" class="col-sm-12 col-form-label">
+											File Pengantar Berkas
+											<small class="text-info text-file-update">
+												(*Jika Ada)
+											</small>
+										</label>
+										<div class="col-sm-12">
+											<input type="file" data-default-file="" name="file_pengantar_berkas" id="file_pengantar_berkas" class="dropify" data-height="72" data-show-remove="true" data-show-loader="true" data-show-errors="true" data-errors-position="outside" style="font-size: 12px;" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group row">
+								<div class="col-lg-8 mb-3 mb-lg-0">
+									<div class="row">
 										<label for="nomor_p16" class="col-sm-12 col-form-label">
-											Nomor P-16
+											No. P-16
 										</label>
 										<div class="col-sm-12">
 											<input type="text" class="form-control" id="nomor_p16" name="nomor_p16" placeholder="Masukkan Nomor P-16 ..." value="">
@@ -183,7 +225,7 @@
 								<div class="col-lg-4 mb-3 mb-lg-0">
 									<div class="row">
 										<label for="tanggal_p16" class="col-sm-12 col-form-label">
-											Tanggal P-16
+											Tgl. P-16
 										</label>
 										<div class="col-sm-12">
 											<input type="date" class="form-control" id="tanggal_p16" name="tanggal_p16" placeholder="0" value="">
@@ -206,9 +248,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="row">
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label for="tersangka" class="col-sm-12 col-form-label">
@@ -218,10 +258,8 @@
 									<input type="text" class="form-control" id="tersangka" name="tersangka" placeholder="Masukkan nama tersangka ..." value="">
 								</div>
 							</div>
-						</div>
 
-						<div class="col-lg-6">
-							<div class="form-group">
+							<div class="form-group mt-4">
 								<label for="jaksa_terkait" class="col-sm-12 col-form-label">
 									Jaksa Terkait
 									<small class="text-danger">(*Wajib diisi !)</small>
@@ -236,8 +274,8 @@
 									</select>
 								</div>
 							</div>
-
 						</div>
+
 					</div>
 
 					<div class="mt-4 d-flex justify-content-between align-items-center w-100">
@@ -327,7 +365,7 @@
 					<div class="col-lg-12 mb-3">
 						<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
 							<tr>
-								<td>Tanggal Penerimaan</td>
+								<td>Tgl. Penerimaan</td>
 								<td>:</td>
 								<td>
 									<span id="detail_tanggalPenerimaan"></span>
@@ -410,31 +448,33 @@
 
 					</div>
 
-					<div class="col-lg-6">
+					<div class="col-lg-4">
 						<div class="card">
 							<div class="card-body p-1">
-
+								<h5 class="font-weight-bold ms-1">
+									SPDP
+								</h5>
 								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
 									<tr>
-										<td>Tanggal SPDP</td>
+										<td>Tgl.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_tanggalSpdp"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>Nomor SPDP</td>
+										<td>No.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_nomorSpdp"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>File SPDP</td>
+										<td>File</td>
 										<td>:</td>
 										<td>
 											<a href="" class="badge btn btn-sm btn-info" id="detail_fileSpdp" target="_blank">
-												Unduh / Lihat file SPDP
+												Unduh / Lihat
 											</a>
 										</td>
 									</tr>
@@ -445,65 +485,33 @@
 						</div>
 					</div>
 
-					<div class="col-lg-6">
+					<div class="col-lg-4">
 						<div class="card">
 							<div class="card-body p-1">
-
+								<h5 class="font-weight-bold ms-1">
+									P-16
+								</h5>
 								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
 									<tr>
-										<td>Tanggal Berkas Tahap 1</td>
-										<td>:</td>
-										<td>
-											<span id="detail_tanggalBerkas"></span>
-										</td>
-									</tr>
-									<tr>
-										<td>Nomor Berkas Tahap 1</td>
-										<td>:</td>
-										<td>
-											<span id="detail_nomorBerkas"></span>
-										</td>
-									</tr>
-									<tr>
-										<td>File Berkas Tahap 1</td>
-										<td>:</td>
-										<td>
-											<a href="" class="badge btn btn-sm btn-info" id="detail_fileBerkas" target="_blank">
-												Unduh / Lihat file berkas
-											</a>
-										</td>
-									</tr>
-								</table>
-							</div>
-
-						</div>
-					</div>
-
-					<div class="col-lg-6">
-						<div class="card">
-							<div class="card-body p-1">
-
-								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
-									<tr>
-										<td>Tanggal P-16</td>
+										<td>Tgl.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_tanggalP16"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>Nomor P-16</td>
+										<td>No.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_nomorP16"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>File P-16</td>
+										<td>File</td>
 										<td>:</td>
 										<td>
 											<a href="" class="badge btn btn-sm btn-info" id="detail_fileP16" target="_blank">
-												Unduh / Lihat file P-16
+												Unduh / Lihat
 											</a>
 										</td>
 									</tr>
@@ -514,31 +522,106 @@
 						</div>
 					</div>
 
-					<div class="col-lg-6">
+					<div class="col-lg-4">
 						<div class="card">
 							<div class="card-body p-1">
-
+								<h5 class="font-weight-bold ms-1">
+									Berkas Tahap 1
+								</h5>
 								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
 									<tr>
-										<td>Tanggal P-17</td>
+										<td>Tgl.</td>
+										<td>:</td>
+										<td>
+											<span id="detail_tanggalBerkas"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>No.</td>
+										<td>:</td>
+										<td>
+											<span id="detail_nomorBerkas"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>File</td>
+										<td>:</td>
+										<td>
+											<a href="" class="badge btn btn-sm btn-info" id="detail_fileBerkas" target="_blank">
+												Unduh / Lihat
+											</a>
+										</td>
+									</tr>
+								</table>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="card">
+							<div class="card-body p-1">
+								<h5 class="font-weight-bold ms-1">
+									Pengantar Berkas
+								</h5>
+								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
+									<tr>
+										<td>Tgl.</td>
+										<td>:</td>
+										<td>
+											<span id="detail_tanggalPengantarBerkas"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>No.</td>
+										<td>:</td>
+										<td>
+											<span id="detail_nomorPengantarBerkas"></span>
+										</td>
+									</tr>
+									<tr>
+										<td>File</td>
+										<td>:</td>
+										<td>
+											<a href="" class="badge btn btn-sm btn-info" id="detail_filePengantarBerkas" target="_blank">
+												Unduh / Lihat
+											</a>
+										</td>
+									</tr>
+								</table>
+
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="card">
+							<div class="card-body p-1">
+								<h5 class="font-weight-bold ms-1">
+									P-17
+								</h5>
+								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
+									<tr>
+										<td>Tgl.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_tanggalP17"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>Nomor P-17</td>
+										<td>No.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_nomorP17"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>File P-17</td>
+										<td>File</td>
 										<td>:</td>
 										<td>
 											<a href="" class="badge btn btn-sm btn-info" id="detail_fileP17" target="_blank">
-												Unduh / Lihat file P-17
+												Unduh / Lihat
 											</a>
 										</td>
 									</tr>
@@ -549,31 +632,33 @@
 						</div>
 					</div>
 
-					<div class="col-lg-6">
+					<div class="col-lg-4">
 						<div class="card">
 							<div class="card-body p-1">
-
+								<h5 class="font-weight-bold ms-1">
+									SOP Form 02
+								</h5>
 								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
 									<tr>
-										<td>Tanggal SOP Form 02</td>
+										<td>Tgl.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_tanggalSopForm"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>Nomor SOP Form 02</td>
+										<td>No.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_nomorSopForm"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>File SOP Form 02</td>
+										<td>File</td>
 										<td>:</td>
 										<td>
 											<a href="" class="badge btn btn-sm btn-info" id="detail_fileSopForm" target="_blank">
-												Unduh / Lihat file SOP Form 02
+												Unduh / Lihat
 											</a>
 										</td>
 									</tr>
@@ -583,31 +668,33 @@
 						</div>
 					</div>
 
-					<div class="col-lg-6">
+					<div class="col-lg-4">
 						<div class="card">
 							<div class="card-body p-1">
-
+								<h5 class="font-weight-bold ms-1">
+									Surat Pengembalian SPDP
+								</h5>
 								<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
 									<tr>
-										<td>Tanggal Surat Pengembalian SPDP</td>
+										<td>Tgl.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_tanggalSuratPengembalianSpdp"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>Nomor Surat Pengembalian SPDP</td>
+										<td>No.</td>
 										<td>:</td>
 										<td>
 											<span id="detail_nomorSuratPengembalianSpdp"></span>
 										</td>
 									</tr>
 									<tr>
-										<td>File Surat Pengembalian SPDP</td>
+										<td>File</td>
 										<td>:</td>
 										<td>
 											<a href="" class="badge btn btn-sm btn-info" id="detail_fileSuratPengembalianSpdp" target="_blank">
-												Unduh / Lihat file Surat Pengembalian SPDP
+												Unduh / Lihat
 											</a>
 										</td>
 									</tr>
@@ -626,7 +713,62 @@
 </div>
 
 <script>
-	send_notif('3', 'jaksa', 'Anda memiliki 1 berkas perkara yang baru masuk !');
+	// send_notif('3', 'jaksa', 'Anda memiliki 1 berkas perkara yang baru masuk !');
+
+	function pesanUpdateBerkas(action, noHpJaksa, namaJaksa, slug, tanggalPenerimaan, instansiPenyidik, tersangka, statusBerkas) {
+		const d = new Date();
+		let time = d.getHours();
+		// let minutes = d.Minutes();
+
+		var ucapanSalam = '';
+		if (time >= 2 && time < 12) {
+			ucapanSalam = 'Selamat Pagi 🙏';
+		} else if (time >= 12 && time < 15) {
+			ucapanSalam = 'Selamat Siang 🙏';
+		} else if (time >= 15 && time < 18) {
+			ucapanSalam = 'Selamat Sore 🙏';
+		} else {
+			ucapanSalam = 'Selamat Malam 🙏';
+		}
+
+		var isiPesan = ``;
+		if (action == "tambah") {
+			isiPesan = `📎Anda memiliki 1 berkas perkara baru`;
+		} else if (action == "ubah") {
+			isiPesan = `📎Data berkas anda berikut ini baru saja diperbaharui oleh operator`;
+		} else if (action == "berkas-tahap-1-masuk") {
+			isiPesan = `📎*Berkas Tahap 1* telah diterima dan diinput oleh operator`;
+		}
+
+		var pesanNotif = `
+*_INFORMASI MONITORING BERKAS PERKARA_*
+
+${ucapanSalam} saudara/i *${namaJaksa}*,
+
+${isiPesan}
+
+*_Detail Berkas_*
+-----------------------------
+📅 _Tgl. Penerimaan_ : ${tanggalPenerimaan} 
+👮 _Instansi Penyidik_ : ${instansiPenyidik} 
+👥 _Tersangka_ : ${tersangka} 
+🔖 _Status Berkas_ : ${statusBerkas} 
+
+Lihat lebih detail disini
+https://kejariberau.id/berkas-perkara/detail/${slug}
+
+Terima Kasih 🙏
+
+
+_(Anda menerima pesan ini karena anda terdata sebagai jaksa yang menangani perkara ini)_
+
+TTD
+*_KEJAKSAAN NEGERI BERAU_*
+`;
+
+		// Ronald
+		kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', noHpJaksa, pesanNotif, '');
+	}
 
 	$(document).ready(function() {
 		$(function() {
@@ -640,38 +782,49 @@
 				var action = $(this).data('action');
 				var idBerkasPerkara = $(this).data('idBerkas');
 				var tanggalPenerimaan = $(this).data('tanggalPenerimaan');
+
 				var tanggalBerkas = $(this).data('tanggalBerkas');
 				var nomorBerkas = $(this).data('nomorBerkas');
 				var fileBerkas = $(this).data('fileBerkas');
+
+				var tanggalPengantarBerkas = $(this).data('tanggalPengantarBerkas');
+				var nomorPengantarBerkas = $(this).data('nomorPengantarBerkas');
+				var filePengantarBerkas = $(this).data('filePengantarBerkas');
+
 				var tanggalSpdp = $(this).data('tanggalSpdp');
 				var nomorSpdp = $(this).data('nomorSpdp');
 				var fileSpdp = $(this).data('fileSpdp');
+
 				var tanggalP16 = $(this).data('tanggalP16');
 				var nomorP16 = $(this).data('nomorP16');
 				var fileP16 = $(this).data('fileP16');
+
 				var tanggalP17 = $(this).data('tanggalP17');
 				var nomorP17 = $(this).data('nomorP17');
 				var fileP17 = $(this).data('fileP17');
+
 				var tanggalSopForm = $(this).data('tanggalSopForm');
 				var nomorSopForm = $(this).data('nomorSopForm');
 				var fileSopForm = $(this).data('fileSopForm');
+
 				var tanggalSuratPengembalianSpdp = $(this).data('tanggalSuratPengembalianSpdp');
 				var nomorSuratPengembalianSpdp = $(this).data('nomorSuratPengembalianSpdp');
 				var fileSuratPengembalianSpdp = $(this).data('fileSuratPengembalianSpdp');
+
 				var instansiPenyidik = $(this).data('instansiPenyidik');
 				var tersangka = $(this).data('tersangka');
 				var dataJaksaTerkait = $(this).data('jaksaTerkait');
 				var jaksaTerkait = dataJaksaTerkait.replaceAll(`'`, `"`);
 				var pidanaAnak = $(this).data('pidanaAnak');
 				var statusBerkas = $(this).data('statusBerkas');
-				var status = $(this).data('status');
+				var statusPerkara = $(this).data('statusPerkara');
 				var notifikasiSend = $(this).data('notifikasiSend');
 				var createDatetime = $(this).data('createDatetime');
 				var updateDatetime = $(this).data('updateDatetime');
 				var userCreate = $(this).data('userCreate');
 				var userUpdate = $(this).data('userUpdate');
 				var statusNotifikasi = $(this).data('statusNotifikasi');
-				var statusPerkara = $(this).data('statusPerkara');
+
 				var intervalPenerimaan = $(this).data('intervalPenerimaan');
 				var intervalBerkas = $(this).data('intervalBerkas');
 				var intervalSpdp = $(this).data('intervalSpdp');
@@ -698,6 +851,14 @@
 					$('#modalDetail #detail_fileBerkas').attr("href", fileBerkas);
 				} else {
 					$('#modalDetail #detail_fileBerkas').hide();
+				}
+
+				$('#modalDetail #detail_tanggalPengantarBerkas').html(tanggalPengantarBerkas);
+				$('#modalDetail #detail_nomorPengantarBerkas').html(nomorPengantarBerkas);
+				if (filePengantarBerkas != "") {
+					$('#modalDetail #detail_filePengantarBerkas').attr("href", filePengantarBerkas);
+				} else {
+					$('#modalDetail #detail_filePengantarBerkas').hide();
 				}
 
 				$('#modalDetail #detail_tanggalP16').html(tanggalP16);
@@ -737,7 +898,6 @@
 				$('#modalDetail #detail_jaksaTerkait').html(jaksaTerkait);
 				$('#modalDetail #detail_pidanaAnak').html(pidanaAnak);
 				$('#modalDetail #detail_statusBerkas').html(statusBerkas);
-				$('#modalDetail #detail_status').html(status);
 				$('#modalDetail #detail_notifikasiSend').html(notifikasiSend);
 
 				$('#modalDetail #detail_createDatetime').html(createDatetime);
@@ -875,29 +1035,45 @@
 					var idBerkasPerkara = $(this).data('idBerkasPerkara');
 					var tanggalPenerimaan = $(this).data('tanggalPenerimaan');
 					var idInstansiPenyidik = $(this).data('idInstansiPenyidik');
+
 					var tanggalSpdp = $(this).data('tanggalSpdp');
 					var nomorSpdp = $(this).data('nomorSpdp');
 					var fileSpdp = $(this).data('fileSpdp');
+
 					var tanggalBerkas = $(this).data('tanggalBerkas');
 					var nomorBerkas = $(this).data('nomorBerkas');
 					var fileBerkas = $(this).data('fileBerkas');
+
+					var tanggalPengantarBerkas = $(this).data('tanggalPengantarBerkas');
+					var nomorPengantarBerkas = $(this).data('nomorPengantarBerkas');
+					var filePengantarBerkas = $(this).data('filePengantarBerkas');
+
 					var tanggalP16 = $(this).data('tanggalP16');
 					var nomorP16 = $(this).data('nomorP16');
 					var fileP16 = $(this).data('fileP16');
+
 					var tersangka = $(this).data('tersangka');
 					var jaksaTerkait = $(this).data('jaksaTerkait');
+
 					var statusBerkas = $(this).data('statusBerkas');
 					var pidanaAnak = $(this).data('pidanaAnak');
 
 					$('#modalInput #id_berkas_perkara').val(idBerkasPerkara);
 					$('#modalInput #tanggal_penerimaan').val(tanggalPenerimaan);
 					$('#modalInput #id_instansi_penyidik').val(idInstansiPenyidik).trigger('change');
+
 					$('#modalInput #tanggal_spdp').val(tanggalSpdp);
 					$('#modalInput #nomor_spdp').val(nomorSpdp);
+
 					$('#modalInput #tanggal_berkas').val(tanggalBerkas);
 					$('#modalInput #nomor_berkas').val(nomorBerkas);
+
+					$('#modalInput #tanggal_pengantar_berkas').val(tanggalPengantarBerkas);
+					$('#modalInput #nomor_pengantar_berkas').val(nomorPengantarBerkas);
+
 					$('#modalInput #tanggal_p16').val(tanggalP16);
 					$('#modalInput #nomor_p16').val(nomorP16);
+
 					$('#modalInput #status_berkas').val(statusBerkas).trigger('change');
 					$('#modalInput #pidana_anak').val(pidanaAnak).trigger('change');
 					$('#modalInput #tersangka').val(tersangka);
@@ -925,15 +1101,23 @@
 					var urlPost = base_url + "/berkas-perkara/add";
 
 					var tanggal_penerimaan = $('#tanggal_penerimaan').val();
+
 					var nomor_spdp = $('#nomor_spdp').val();
 					var tanggal_spdp = $('#tanggal_spdp').val();
 					var file_spdp = $('#file_spdp').prop('files')[0];
+
 					var nomor_berkas = $('#nomor_berkas').val();
 					var tanggal_berkas = $('#tanggal_berkas').val();
 					var file_berkas = $('#file_berkas').prop('files')[0];
+
+					var nomor_pengantar_berkas = $('#nomor_pengantar_berkas').val();
+					var tanggal_pengantar_berkas = $('#tanggal_pengantar_berkas').val();
+					var file_pengantar_berkas = $('#file_pengantar_berkas').prop('files')[0];
+
 					var nomor_p16 = $('#nomor_p16').val();
 					var tanggal_p16 = $('#tanggal_p16').val();
 					var file_p16 = $('#file_p16').prop('files')[0];
+
 					var status_berkas = $('#status_berkas').val();
 					var id_instansi_penyidik = $('#id_instansi_penyidik').val();
 					var tersangka = $('#tersangka').val();
@@ -942,15 +1126,23 @@
 
 					formData.append('pidana_anak', pidana_anak);
 					formData.append('tanggal_penerimaan', tanggal_penerimaan);
+
 					formData.append('nomor_spdp', nomor_spdp);
 					formData.append('tanggal_spdp', tanggal_spdp);
 					formData.append('file_spdp', file_spdp);
+
 					formData.append('nomor_berkas', nomor_berkas);
 					formData.append('tanggal_berkas', tanggal_berkas);
 					formData.append('file_berkas', file_berkas);
+
+					formData.append('nomor_pengantar_berkas', nomor_pengantar_berkas);
+					formData.append('tanggal_pengantar_berkas', tanggal_pengantar_berkas);
+					formData.append('file_pengantar_berkas', file_pengantar_berkas);
+
 					formData.append('nomor_p16', nomor_p16);
 					formData.append('tanggal_p16', tanggal_p16);
 					formData.append('file_p16', file_p16);
+
 					formData.append('status_berkas', status_berkas);
 					formData.append('id_instansi_penyidik', id_instansi_penyidik);
 					formData.append('tersangka', tersangka);
@@ -962,15 +1154,23 @@
 
 					var id_berkas_perkara = $('#id_berkas_perkara').val();
 					var tanggal_penerimaan = $('#tanggal_penerimaan').val();
+
 					var nomor_spdp = $('#nomor_spdp').val();
 					var tanggal_spdp = $('#tanggal_spdp').val();
 					var file_spdp = $('#file_spdp').prop('files')[0];
+
 					var nomor_berkas = $('#nomor_berkas').val();
 					var tanggal_berkas = $('#tanggal_berkas').val();
 					var file_berkas = $('#file_berkas').prop('files')[0];
+
+					var nomor_pengantar_berkas = $('#nomor_pengantar_berkas').val();
+					var tanggal_pengantar_berkas = $('#tanggal_pengantar_berkas').val();
+					var file_pengantar_berkas = $('#file_pengantar_berkas').prop('files')[0];
+
 					var nomor_p16 = $('#nomor_p16').val();
 					var tanggal_p16 = $('#tanggal_p16').val();
 					var file_p16 = $('#file_p16').prop('files')[0];
+
 					var status_berkas = $('#status_berkas').val();
 					var id_instansi_penyidik = $('#id_instansi_penyidik').val();
 					var tersangka = $('#tersangka').val();
@@ -980,15 +1180,23 @@
 					formData.append('id_berkas_perkara', id_berkas_perkara);
 					formData.append('pidana_anak', pidana_anak);
 					formData.append('tanggal_penerimaan', tanggal_penerimaan);
+
 					formData.append('nomor_spdp', nomor_spdp);
 					formData.append('tanggal_spdp', tanggal_spdp);
 					formData.append('file_spdp', file_spdp);
+
 					formData.append('nomor_berkas', nomor_berkas);
 					formData.append('tanggal_berkas', tanggal_berkas);
 					formData.append('file_berkas', file_berkas);
+
+					formData.append('nomor_pengantar_berkas', nomor_pengantar_berkas);
+					formData.append('tanggal_pengantar_berkas', tanggal_pengantar_berkas);
+					formData.append('file_pengantar_berkas', file_pengantar_berkas);
+
 					formData.append('nomor_p16', nomor_p16);
 					formData.append('tanggal_p16', tanggal_p16);
 					formData.append('file_p16', file_p16);
+
 					formData.append('status_berkas', status_berkas);
 					formData.append('id_instansi_penyidik', id_instansi_penyidik);
 					formData.append('tersangka', tersangka);
@@ -1010,12 +1218,24 @@
 					success: function(data) {
 						if (data.success == "1") {
 							toastr.success(data.pesan);
+							$('#modalInput').hide();
 
 							if (action == "tambah") {
+								pesanUpdateBerkas('tambah', data.noHpJaksa, data.namaJaksa, data.slug, data.tanggalPenerimaan, data.instansiPenyidik, data.tersangka, data.statusBerkas);
 								// send_notif('3', 'jaksa', 'Anda memiliki 1 berkas perkara yang baru masuk !');
+
+								if (nomor_berkas != '' && tanggal_berkas != "") {
+									pesanUpdateBerkas('berkas-tahap-1-masuk', data.noHpJaksa, data.namaJaksa, data.slug, data.tanggalPenerimaan, data.instansiPenyidik, data.tersangka, data.statusBerkas);
+								}
+							} else if (action == "ubah") {
+								pesanUpdateBerkas('ubah', data.noHpJaksa, data.namaJaksa, data.slug, data.tanggalPenerimaan, data.instansiPenyidik, data.tersangka, data.statusBerkas);
+
+								if (data.kirimNotifTahap1 == "Y") {
+									pesanUpdateBerkas('berkas-tahap-1-masuk', data.noHpJaksa, data.namaJaksa, data.slug, data.tanggalPenerimaan, data.instansiPenyidik, data.tersangka, data.statusBerkas);
+								}
+
 							}
 
-							$('#modalInput').hide();
 							location.reload();
 						} else if (data.success == "0") {
 							toastr.error(data.pesan);

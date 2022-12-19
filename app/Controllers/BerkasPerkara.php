@@ -184,6 +184,9 @@ class BerkasPerkara extends BaseController
 		$nomor_berkas = $this->request->getVar('nomor_berkas');
 		$tanggal_berkas = $this->request->getVar('tanggal_berkas');
 
+		$nomor_pengantar_berkas = $this->request->getVar('nomor_pengantar_berkas');
+		$tanggal_pengantar_berkas = $this->request->getVar('tanggal_pengantar_berkas');
+
 		$nomor_p16 = $this->request->getVar('nomor_p16');
 		$tanggal_p16 = $this->request->getVar('tanggal_p16');
 
@@ -204,6 +207,13 @@ class BerkasPerkara extends BaseController
 		if (!empty($file_berkas)) {;
 			$nama_file_berkas = "berkas-" . $file_berkas->getRandomName();
 			$file_berkas->move('assets/berkas', $nama_file_berkas);
+		}
+
+		$nama_file_pengantar_berkas = "";
+		$file_pengantar_berkas = $this->request->getFile('file_pengantar_berkas');
+		if (!empty($file_pengantar_berkas)) {;
+			$nama_file_pengantar_berkas = "pengantar-berkas-" . $file_pengantar_berkas->getRandomName();
+			$file_pengantar_berkas->move('assets/berkas', $nama_file_pengantar_berkas);
 		}
 
 		$nama_file_p16 = "";
@@ -253,6 +263,25 @@ class BerkasPerkara extends BaseController
 			return false;
 		}
 
+		$tanggal_penerimaan_format = "";
+		if (($tanggal_penerimaan != "0000-00-00") and ($tanggal_penerimaan != "")) {
+			$tanggal_penerimaan_format = date('d/m/Y', strtotime($tanggal_penerimaan));
+		}
+
+		$nama_jaksa = "";
+		$no_hp_jaksa = "";
+		$data_jaksa = $this->UserModel->getUser($jaksa_terkait);
+		if ($data_jaksa) {
+			$nama_jaksa = $data_jaksa['nama_lengkap'];
+			$no_hp_jaksa = $data_jaksa['no_hp'];
+		}
+
+		$nama_intansi_penyidik = "";
+		$data_intansi_penyidik = $this->InstansiModel->getInstansi($id_instansi_penyidik);
+		if ($data_intansi_penyidik) {
+			$nama_intansi_penyidik = $data_intansi_penyidik['nama_instansi'];
+		}
+
 		$query = $this->BerkasPerkaraModel->save([
 			'slug' => $slug,
 			'tanggal_penerimaan' => $tanggal_penerimaan,
@@ -262,6 +291,9 @@ class BerkasPerkara extends BaseController
 			'nomor_berkas' => $nomor_berkas,
 			'tanggal_berkas' => $tanggal_berkas,
 			'file_berkas' => $nama_file_berkas,
+			'nomor_pengantar_berkas' => $nomor_pengantar_berkas,
+			'tanggal_pengantar_berkas' => $tanggal_pengantar_berkas,
+			'file_pengantar_berkas' => $nama_file_pengantar_berkas,
 			'nomor_p16' => $nomor_p16,
 			'tanggal_p16' => $tanggal_p16,
 			'file_p16' => $nama_file_p16,
@@ -279,7 +311,14 @@ class BerkasPerkara extends BaseController
 		if ($query) {
 			echo json_encode(array(
 				'success' => '1',
-				'pesan' => 'Data berhasil disimpan !'
+				'pesan' => 'Data berhasil disimpan !',
+				'noHpJaksa' => $no_hp_jaksa,
+				'namaJaksa' => $nama_jaksa,
+				'slug' => $slug,
+				'tanggalPenerimaan' => $tanggal_penerimaan_format,
+				'instansiPenyidik' => $nama_intansi_penyidik,
+				'tersangka' => $tersangka,
+				'statusBerkas' => $status_berkas,
 			));
 		} else {
 			echo json_encode(array(
@@ -402,6 +441,8 @@ class BerkasPerkara extends BaseController
 		$tanggal_spdp = $this->request->getVar('tanggal_spdp');
 		$nomor_berkas = $this->request->getVar('nomor_berkas');
 		$tanggal_berkas = $this->request->getVar('tanggal_berkas');
+		$nomor_pengantar_berkas = $this->request->getVar('nomor_pengantar_berkas');
+		$tanggal_pengantar_berkas = $this->request->getVar('tanggal_pengantar_berkas');
 		$nomor_p16 = $this->request->getVar('nomor_p16');
 		$tanggal_p16 = $this->request->getVar('tanggal_p16');
 		$status_berkas = $this->request->getVar('status_berkas');
@@ -489,6 +530,25 @@ class BerkasPerkara extends BaseController
 			}
 		}
 
+		$file_pengantar_berkas = $this->request->getFile('file_pengantar_berkas');
+		if (!empty($file_pengantar_berkas)) {;
+			$nama_file_pengantar_berkas = "pengantar-berkas-" . $file_pengantar_berkas->getRandomName();
+			$file_pengantar_berkas->move('assets/berkas', $nama_file_pengantar_berkas);
+
+			$query_update_file_pengantar_berkas = $this->BerkasPerkaraModel->updateBerkasPerkara(
+				[
+					'file_pengantar_berkas' => $nama_file_pengantar_berkas,
+				],
+				$id_berkas_perkara
+			);
+
+			if ($cek_berkas['file_pengantar_berkas'] != "") {
+				if (file_exists(base_url() . "/assets/berkas/" . $cek_berkas['file_pengantar_berkas'])) {
+					unlink('assets/berkas/' . $cek_berkas['file_pengantar_berkas']);
+				}
+			}
+		}
+
 		$file_p16 = $this->request->getFile('file_p16');
 		if (!empty($file_p16)) {
 			$nama_file_p16 = "p16-" . $file_p16->getRandomName();
@@ -508,12 +568,40 @@ class BerkasPerkara extends BaseController
 			}
 		}
 
+		$tanggal_penerimaan_format = "";
+		if (($tanggal_penerimaan != "0000-00-00") and ($tanggal_penerimaan != "")) {
+			$tanggal_penerimaan_format = date('d/m/Y', strtotime($tanggal_penerimaan));
+		}
+
+		$nama_jaksa = "";
+		$no_hp_jaksa = "";
+		$data_jaksa = $this->UserModel->getUser($jaksa_terkait);
+		if ($data_jaksa) {
+			$nama_jaksa = $data_jaksa['nama_lengkap'];
+			$no_hp_jaksa = $data_jaksa['no_hp'];
+		}
+
+		$nama_intansi_penyidik = "";
+		$data_intansi_penyidik = $this->InstansiModel->getInstansi($id_instansi_penyidik);
+		if ($data_intansi_penyidik) {
+			$nama_intansi_penyidik = $data_intansi_penyidik['nama_instansi'];
+		}
+
+		$kirimNotifTahap1 = "N";
+		if (($cek_berkas['nomor_berkas'] == '') or ($cek_berkas['nomor_berkas'] == null) or ($cek_berkas['tanggal_berkas'] == '') or ($cek_berkas['tanggal_berkas'] == null) or ($cek_berkas['tanggal_berkas'] == '0000-00-00')) {
+			if ($nomor_berkas != "" and $tanggal_berkas != "") {
+				$kirimNotifTahap1 = "Y";
+			}
+		}
+
 		$query = $this->BerkasPerkaraModel->updateBerkasPerkara([
 			'tanggal_penerimaan' => $tanggal_penerimaan,
 			'nomor_spdp' => $nomor_spdp,
 			'tanggal_spdp' => $tanggal_spdp,
 			'nomor_berkas' => $nomor_berkas,
 			'tanggal_berkas' => $tanggal_berkas,
+			'nomor_pengantar_berkas' => $nomor_pengantar_berkas,
+			'tanggal_pengantar_berkas' => $tanggal_pengantar_berkas,
 			'nomor_p16' => $nomor_p16,
 			'tanggal_p16' => $tanggal_p16,
 			'status_berkas' => $status_berkas,
@@ -528,7 +616,15 @@ class BerkasPerkara extends BaseController
 		if ($query) {
 			echo json_encode(array(
 				'success' => '1',
-				'pesan' => 'Data berhasil diubah !'
+				'pesan' => 'Data berhasil diubah !',
+				'noHpJaksa' => $no_hp_jaksa,
+				'namaJaksa' => $nama_jaksa,
+				'slug' => $cek_berkas['slug'],
+				'tanggalPenerimaan' => $tanggal_penerimaan_format,
+				'instansiPenyidik' => $nama_intansi_penyidik,
+				'tersangka' => $tersangka,
+				'statusBerkas' => $status_berkas,
+				'kirimNotifTahap1' => $kirimNotifTahap1,
 			));
 		} else {
 			echo json_encode(array(
@@ -554,6 +650,12 @@ class BerkasPerkara extends BaseController
 		if ($data_berkas['file_berkas'] != "") {
 			if (file_exists(base_url() . "/assets/berkas/" . $data_berkas['file_berkas'])) {
 				unlink('assets/berkas/' . $data_berkas['file_berkas']);
+			}
+		}
+
+		if ($data_berkas['file_pengantar_berkas'] != "") {
+			if (file_exists(base_url() . "/assets/berkas/" . $data_berkas['file_pengantar_berkas'])) {
+				unlink('assets/berkas/' . $data_berkas['file_pengantar_berkas']);
 			}
 		}
 

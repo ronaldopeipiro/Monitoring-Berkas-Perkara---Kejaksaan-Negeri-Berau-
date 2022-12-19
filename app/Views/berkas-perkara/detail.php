@@ -184,6 +184,15 @@
 							`;
 						}
 
+						var url_pengantar_berkas = '';
+						if (dataDetail.file_pengantar_berkas != "" && dataDetail.file_pengantar_berkas != null) {
+							url_pengantar_berkas = `
+								<a href="` + base_url + `/assets/berkas/` + dataDetail.file_pengantar_berkas + `" class="badge btn btn-sm btn-info" target="_blank">
+									Unduh / Lihat
+								</a>
+							`;
+						}
+
 						var url_spdp = '';
 						if (dataDetail.file_spdp != "" && dataDetail.file_spdp != null) {
 							url_spdp = `
@@ -368,6 +377,38 @@
 															<td>:</td>
 															<td>
 																${url_berkas}
+															</td>
+														</tr>
+													</table>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="col-lg-4">
+											<div class="card">
+												<div class="card-body p-1">
+													<h5 class="font-weight-bold ml-1">Pengantar Berkas</h5>
+													<table class="table-sm table-borderless table-responsive" style="font-size: 12px;">
+														<tr>
+															<td>Tanggal</td>
+															<td>:</td>
+															<td>
+																${dataDetail.tanggal_pengantar_berkas_format}
+															</td>
+														</tr>
+														<tr>
+															<td>Nomor</td>
+															<td>:</td>
+															<td>
+																${dataDetail.nomor_pengantar_berkas}
+															</td>
+														</tr>
+														<tr>
+															<td>File</td>
+															<td>:</td>
+															<td>
+																${url_pengantar_berkas}
 															</td>
 														</tr>
 													</table>

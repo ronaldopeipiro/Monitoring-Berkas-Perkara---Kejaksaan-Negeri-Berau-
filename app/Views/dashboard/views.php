@@ -10,9 +10,6 @@ function rupiah($angka)
 	return $hasil_rupiah;
 }
 
-// Update Status Berkas dari Proses ke Selesai jika telah P-21
-$update_status_perkara = $db->query("UPDATE berkas_perkara SET status='Selesai' WHERE status_berkas='P-21' ");
-
 if ($user_level <= 2) {
 	$jumlah_berkas_perkara = $db->query("SELECT * FROM berkas_perkara")->getNumRows();
 	$jumlah_berkas_perkara_selesai = $db->query("SELECT * FROM berkas_perkara WHERE status='Selesai'")->getNumRows();
@@ -29,7 +26,6 @@ if ($user_level <= 2) {
 
 $jumlah_spdp = $db->query("SELECT * FROM berkas_perkara WHERE nomor_spdp != '' AND tanggal_spdp != '' ")->getNumRows();
 $jumlah_berkas_tahap_1 = $db->query("SELECT * FROM berkas_perkara WHERE nomor_berkas != '' AND tanggal_berkas != '' ")->getNumRows();
-
 
 ?>
 

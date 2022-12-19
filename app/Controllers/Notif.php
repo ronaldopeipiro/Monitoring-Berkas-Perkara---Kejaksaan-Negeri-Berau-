@@ -188,18 +188,17 @@ class Notif extends BaseController
         $slug = $this->request->getVar('slug');
 
         $listData = [];
-        $query = $this->db->query("SELECT * FROM berkas_perkara WHERE slug = '$slug' LIMIT 1");
+        $query = $this->db->query("SELECT * FROM berkas_perkara ORDER BY id_berkas_perkara DESC LIMIT 1");
         foreach ($query->getResult('array') as $row) {
 
             $interval_tanggal_penerimaan = 0;
-            $interval_tanggal_penerimaan = date_diff(date_create($row['tanggal_penerimaan']), date_create(date('Y-m-d')))->days;
-
             $interval_tanggal_berkas = 0;
             $interval_tanggal_spdp = 0;
             $interval_tanggal_p16 = 0;
             $interval_tanggal_p17 = 0;
             $interval_tanggal_sop_form_02 = 0;
             $interval_tanggal_surat_pengembalian_spdp = 0;
+            $interval_tanggal_penerimaan = date_diff(date_create($row['tanggal_penerimaan']), date_create(date('Y-m-d')))->days;
 
             if ($row['notifikasi_send'] == "Y") {
                 $status_notifikasi = "Notifikasi telah dikirim kepada jaksa terkait";
@@ -242,6 +241,12 @@ class Notif extends BaseController
                 $interval_tanggal_berkas = date_diff(date_create($row['tanggal_berkas']), date_create(date('Y-m-d')))->days;
             }
 
+            $tanggal_pengantar_berkas_format = "";
+            if (($row['tanggal_pengantar_berkas'] != "0000-00-00") and ($row['tanggal_pengantar_berkas'] != "")) {
+                $tanggal_pengantar_berkas_format = date('d/m/Y', strtotime($row['tanggal_pengantar_berkas']));
+                $interval_tanggal_pengantar_berkas = date_diff(date_create($row['tanggal_pengantar_berkas']), date_create(date('Y-m-d')))->days;
+            }
+
             $tanggal_spdp_format = "";
             if (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != "")) {
                 $tanggal_spdp_format = date('d/m/Y', strtotime($row['tanggal_spdp']));
@@ -281,6 +286,10 @@ class Notif extends BaseController
                 'tanggal_berkas' => $row['tanggal_berkas'],
                 'tanggal_berkas_format' => $tanggal_berkas_format,
                 'file_berkas' => $row['file_berkas'],
+                'nomor_pengantar_berkas' => $row['nomor_pengantar_berkas'],
+                'tanggal_pengantar_berkas' => $row['tanggal_pengantar_berkas'],
+                'tanggal_pengantar_berkas_format' => $tanggal_pengantar_berkas_format,
+                'file_pengantar_berkas' => $row['file_pengantar_berkas'],
                 'nomor_spdp' => $row['nomor_spdp'],
                 'tanggal_spdp' => $row['tanggal_spdp'],
                 'tanggal_spdp_format' => $tanggal_spdp_format,
@@ -342,14 +351,13 @@ class Notif extends BaseController
         foreach ($query->getResult('array') as $row) {
 
             $interval_tanggal_penerimaan = 0;
-            $interval_tanggal_penerimaan = date_diff(date_create($row['tanggal_penerimaan']), date_create(date('Y-m-d')))->days;
-
             $interval_tanggal_berkas = 0;
             $interval_tanggal_spdp = 0;
             $interval_tanggal_p16 = 0;
             $interval_tanggal_p17 = 0;
             $interval_tanggal_sop_form_02 = 0;
             $interval_tanggal_surat_pengembalian_spdp = 0;
+            $interval_tanggal_penerimaan = date_diff(date_create($row['tanggal_penerimaan']), date_create(date('Y-m-d')))->days;
 
             if ($row['notifikasi_send'] == "Y") {
                 $status_notifikasi = "Notifikasi telah dikirim kepada jaksa terkait";
@@ -392,6 +400,12 @@ class Notif extends BaseController
                 $interval_tanggal_berkas = date_diff(date_create($row['tanggal_berkas']), date_create(date('Y-m-d')))->days;
             }
 
+            $tanggal_pengantar_berkas_format = "";
+            if (($row['tanggal_pengantar_berkas'] != "0000-00-00") and ($row['tanggal_pengantar_berkas'] != "")) {
+                $tanggal_pengantar_berkas_format = date('d/m/Y', strtotime($row['tanggal_pengantar_berkas']));
+                $interval_tanggal_pengantar_berkas = date_diff(date_create($row['tanggal_pengantar_berkas']), date_create(date('Y-m-d')))->days;
+            }
+
             $tanggal_spdp_format = "";
             if (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != "")) {
                 $tanggal_spdp_format = date('d/m/Y', strtotime($row['tanggal_spdp']));
@@ -431,6 +445,10 @@ class Notif extends BaseController
                 'tanggal_berkas' => $row['tanggal_berkas'],
                 'tanggal_berkas_format' => $tanggal_berkas_format,
                 'file_berkas' => $row['file_berkas'],
+                'nomor_pengantar_berkas' => $row['nomor_pengantar_berkas'],
+                'tanggal_pengantar_berkas' => $row['tanggal_pengantar_berkas'],
+                'tanggal_pengantar_berkas_format' => $tanggal_pengantar_berkas_format,
+                'file_pengantar_berkas' => $row['file_pengantar_berkas'],
                 'nomor_spdp' => $row['nomor_spdp'],
                 'tanggal_spdp' => $row['tanggal_spdp'],
                 'tanggal_spdp_format' => $tanggal_spdp_format,
@@ -493,37 +511,13 @@ class Notif extends BaseController
         foreach ($query->getResult('array') as $row) {
 
             $interval_tanggal_penerimaan = 0;
-            $interval_tanggal_penerimaan = date_diff(date_create($row['tanggal_penerimaan']), date_create(date('Y-m-d')))->days;
-
             $interval_tanggal_berkas = 0;
-            if ($row['tanggal_berkas'] != "") {
-                $interval_tanggal_berkas = date_diff(date_create($row['tanggal_berkas']), date_create(date('Y-m-d')))->days;
-            }
-
             $interval_tanggal_spdp = 0;
-            if ($row['tanggal_spdp'] != "") {
-                $interval_tanggal_spdp = date_diff(date_create($row['tanggal_spdp']), date_create(date('Y-m-d')))->days;
-            }
-
             $interval_tanggal_p16 = 0;
-            if ($row['tanggal_p16'] != "") {
-                $interval_tanggal_p16 = date_diff(date_create($row['tanggal_p16']), date_create(date('Y-m-d')))->days;
-            }
-
             $interval_tanggal_p17 = 0;
-            if ($row['tanggal_p17'] != "") {
-                $interval_tanggal_p17 = date_diff(date_create($row['tanggal_p17']), date_create(date('Y-m-d')))->days;
-            }
-
             $interval_tanggal_sop_form_02 = 0;
-            if ($row['tanggal_sop_form_02'] != "") {
-                $interval_tanggal_sop_form_02 = date_diff(date_create($row['tanggal_sop_form_02']), date_create(date('Y-m-d')))->days;
-            }
-
             $interval_tanggal_surat_pengembalian_spdp = 0;
-            if ($row['tanggal_surat_pengembalian_spdp'] != "") {
-                $interval_tanggal_surat_pengembalian_spdp = date_diff(date_create($row['tanggal_surat_pengembalian_spdp']), date_create(date('Y-m-d')))->days;
-            }
+            $interval_tanggal_penerimaan = date_diff(date_create($row['tanggal_penerimaan']), date_create(date('Y-m-d')))->days;
 
             if ($row['notifikasi_send'] == "Y") {
                 $status_notifikasi = "Notifikasi telah dikirim kepada jaksa terkait";
@@ -544,7 +538,7 @@ class Notif extends BaseController
             if ($row['id_user_create'] != "") {
                 $id_user_create = $row['id_user_create'];
                 $user_create = $this->db->query("SELECT * FROM user WHERE id_user='$id_user_create' ")->getRow();
-                $nama_user_create = " by " . $user_create->nama_lengkap;
+                $nama_user_create = $user_create->nama_lengkap;
             }
 
             $nama_user_update = "";
@@ -552,7 +546,7 @@ class Notif extends BaseController
                 $id_user_update = $row['id_user_update'];
 
                 $user_update = $this->db->query("SELECT * FROM user WHERE id_user='$id_user_update' ")->getRow();
-                $nama_user_update = " by " . $user_update->nama_lengkap;
+                $nama_user_update = $user_update->nama_lengkap;
             }
 
             $tanggal_penerimaan_format = "";
@@ -563,31 +557,43 @@ class Notif extends BaseController
             $tanggal_berkas_format = "";
             if (($row['tanggal_berkas'] != "0000-00-00") and ($row['tanggal_berkas'] != "")) {
                 $tanggal_berkas_format = date('d/m/Y', strtotime($row['tanggal_berkas']));
+                $interval_tanggal_berkas = date_diff(date_create($row['tanggal_berkas']), date_create(date('Y-m-d')))->days;
+            }
+
+            $tanggal_pengantar_berkas_format = "";
+            if (($row['tanggal_pengantar_berkas'] != "0000-00-00") and ($row['tanggal_pengantar_berkas'] != "")) {
+                $tanggal_pengantar_berkas_format = date('d/m/Y', strtotime($row['tanggal_pengantar_berkas']));
+                $interval_tanggal_pengantar_berkas = date_diff(date_create($row['tanggal_pengantar_berkas']), date_create(date('Y-m-d')))->days;
             }
 
             $tanggal_spdp_format = "";
             if (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != "")) {
                 $tanggal_spdp_format = date('d/m/Y', strtotime($row['tanggal_spdp']));
+                $interval_tanggal_spdp = date_diff(date_create($row['tanggal_spdp']), date_create(date('Y-m-d')))->days;
             }
 
             $tanggal_p16_format = "";
             if (($row['tanggal_p16'] != "0000-00-00") and ($row['tanggal_p16'] != "")) {
                 $tanggal_p16_format = date('d/m/Y', strtotime($row['tanggal_p16']));
+                $interval_tanggal_p16 = date_diff(date_create($row['tanggal_p16']), date_create(date('Y-m-d')))->days;
             }
 
             $tanggal_p17_format = "";
             if (($row['tanggal_p17'] != "0000-00-00") and ($row['tanggal_p17'] != "")) {
                 $tanggal_p17_format = date('d/m/Y', strtotime($row['tanggal_p17']));
+                $interval_tanggal_p17 = date_diff(date_create($row['tanggal_p17']), date_create(date('Y-m-d')))->days;
             }
 
             $tanggal_sop_form_02_format = "";
             if (($row['tanggal_sop_form_02'] != "0000-00-00") and ($row['tanggal_sop_form_02'] != "")) {
                 $tanggal_sop_form_02_format = date('d/m/Y', strtotime($row['tanggal_sop_form_02']));
+                $interval_tanggal_sop_form_02 = date_diff(date_create($row['tanggal_sop_form_02']), date_create(date('Y-m-d')))->days;
             }
 
             $tanggal_surat_pengembalian_spdp_format = "";
             if (($row['tanggal_surat_pengembalian_spdp'] != "0000-00-00") and ($row['tanggal_surat_pengembalian_spdp'] != "")) {
                 $tanggal_surat_pengembalian_spdp_format = date('d/m/Y', strtotime($row['tanggal_surat_pengembalian_spdp']));
+                $interval_tanggal_surat_pengembalian_spdp = date_diff(date_create($row['tanggal_surat_pengembalian_spdp']), date_create(date('Y-m-d')))->days;
             }
 
             array_push($listData, [
@@ -595,27 +601,31 @@ class Notif extends BaseController
                 'id_berkas_perkara' => $row['id_berkas_perkara'],
                 'tanggal_penerimaan' => $row['tanggal_penerimaan'],
                 'tanggal_penerimaan_format' => $tanggal_penerimaan_format,
-                'nomor_berkas' => ($row['nomor_berkas'] != "" and $row['nomor_berkas'] != null) ? $row['nomor_berkas'] : "",
+                'nomor_berkas' => $row['nomor_berkas'],
                 'tanggal_berkas' => $row['tanggal_berkas'],
                 'tanggal_berkas_format' => $tanggal_berkas_format,
                 'file_berkas' => $row['file_berkas'],
-                'nomor_spdp' => ($row['nomor_spdp'] != "" and $row['nomor_spdp'] != null) ? $row['nomor_spdp'] : "",
+                'nomor_pengantar_berkas' => $row['nomor_pengantar_berkas'],
+                'tanggal_pengantar_berkas' => $row['tanggal_pengantar_berkas'],
+                'tanggal_pengantar_berkas_format' => $tanggal_pengantar_berkas_format,
+                'file_pengantar_berkas' => $row['file_pengantar_berkas'],
+                'nomor_spdp' => $row['nomor_spdp'],
                 'tanggal_spdp' => $row['tanggal_spdp'],
                 'tanggal_spdp_format' => $tanggal_spdp_format,
                 'file_spdp' => $row['file_spdp'],
-                'nomor_p16' => ($row['nomor_p16'] != "" and $row['nomor_p16'] != null) ? $row['nomor_p16'] : "",
+                'nomor_p16' => $row['nomor_p16'],
                 'tanggal_p16' => $row['tanggal_p16'],
                 'tanggal_p16_format' => $tanggal_p16_format,
                 'file_p16' => $row['file_p16'],
-                'nomor_p17' => ($row['nomor_p17'] != "" and $row['nomor_p17'] != null) ? $row['nomor_p17'] : "",
+                'nomor_p17' => $row['nomor_p17'],
                 'tanggal_p17' => $row['tanggal_p17'],
                 'tanggal_p17_format' => $tanggal_p17_format,
                 'file_p17' => $row['file_p17'],
-                'nomor_sop_form_02' => ($row['nomor_sop_form_02'] != "" and $row['nomor_sop_form_02'] != null) ? $row['nomor_sop_form_02'] : "",
+                'nomor_sop_form_02' => $row['nomor_sop_form_02'],
                 'tanggal_sop_form_02' => $row['tanggal_sop_form_02'],
                 'tanggal_sop_form_02_format' => $tanggal_sop_form_02_format,
                 'file_sop_form_02' => $row['file_sop_form_02'],
-                'nomor_surat_pengembalian_spdp' => ($row['nomor_surat_pengembalian_spdp'] != "" and $row['nomor_surat_pengembalian_spdp'] != null) ? $row['nomor_surat_pengembalian_spdp'] : "",
+                'nomor_surat_pengembalian_spdp' => $row['nomor_surat_pengembalian_spdp'],
                 'tanggal_surat_pengembalian_spdp' => $row['tanggal_surat_pengembalian_spdp'],
                 'tanggal_surat_pengembalian_spdp_format' => $tanggal_surat_pengembalian_spdp_format,
                 'file_surat_pengembalian_spdp' => $row['file_surat_pengembalian_spdp'],

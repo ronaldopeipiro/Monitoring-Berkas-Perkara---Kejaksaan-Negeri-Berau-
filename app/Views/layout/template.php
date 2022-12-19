@@ -319,6 +319,34 @@
 		}
 
 		// send_notif(2, 'admin', "Hallo admin test notifikasi");
+
+
+		function kirim_whatsapp(device_id, no_hp, pesan, file) {
+			const urlPost = base_url + "/notif/whatsapp";
+
+			$.ajax({
+				type: "POST",
+				url: urlPost,
+				dataType: "JSON",
+				data: {
+					device_id: device_id,
+					no_hp: no_hp,
+					pesan: pesan,
+					file: file,
+				},
+				beforeSend: function() {
+					$("#loader").show();
+					console.log('Mencoba mengirim pesan notifikasi WhatsApp !');
+				},
+				success: function(data) {
+					// toastr.success(data.pesan);
+					console.log('Notifikasi WhatsApp berhasil terkirim !');
+				},
+				complete: function(data) {
+					$("#loader").hide();
+				}
+			});
+		}
 	</script>
 </head>
 

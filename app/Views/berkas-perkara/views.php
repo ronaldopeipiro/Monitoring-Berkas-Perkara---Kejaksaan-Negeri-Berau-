@@ -2,6 +2,11 @@
 
 <?= $this->section('content'); ?>
 
+<?php
+// Update Status Berkas dari Proses ke Selesai jika telah P-21
+$update_status_perkara = $db->query("UPDATE berkas_perkara SET status='Selesai' WHERE status_berkas='P-21' ");
+?>
+
 <div class="container-fluid p-0">
 	<div class="row row-deck row-cards">
 
@@ -15,7 +20,7 @@
 						</h3>
 
 						<div>
-							<?php if ($user_level == 2) : ?>
+							<?php if ($user_level <= 2) : ?>
 								<a href="#" class="btn btn-success text-white btnShowModal" data-toggle="modal" data-target="#modalInput" data-title="Tambah Data Berkas Perkara" data-action="tambah" data-toggle="tooltip" data-placement="bottom" title="Tambah Data">
 									<i class="align-middle" data-feather="plus"></i> Tambah
 								</a>
@@ -90,8 +95,8 @@
 							<tbody>
 								<?php
 								$no = 1;
-								$whereDataAdmin = "";
-								$whereDataJaksa = "";
+								$whereDataAdmin = '';
+								$whereDataJaksa = '';
 
 								if (isset($getData)) {
 									if ($getData == "proses") {
@@ -124,27 +129,27 @@
 									$interval_tanggal_penerimaan = date_diff(date_create($row['tanggal_penerimaan']), date_create(date('Y-m-d')))->days;
 
 									$interval_tanggal_berkas = 0;
-									if ($row['tanggal_berkas'] != "") {
+									if ($row['tanggal_berkas'] != '') {
 										$interval_tanggal_berkas = date_diff(date_create($row['tanggal_berkas']), date_create(date('Y-m-d')))->days;
 									}
 
 									$interval_tanggal_spdp = 0;
-									if ($row['tanggal_spdp'] != "") {
+									if ($row['tanggal_spdp'] != '') {
 										$interval_tanggal_spdp = date_diff(date_create($row['tanggal_spdp']), date_create(date('Y-m-d')))->days;
 									}
 
 									$interval_tanggal_p17 = 0;
-									if ($row['tanggal_p17'] != "") {
+									if ($row['tanggal_p17'] != '') {
 										$interval_tanggal_p17 = date_diff(date_create($row['tanggal_p17']), date_create(date('Y-m-d')))->days;
 									}
 
 									$interval_tanggal_sop_form_02 = 0;
-									if ($row['tanggal_sop_form_02'] != "") {
+									if ($row['tanggal_sop_form_02'] != '') {
 										$interval_tanggal_sop_form_02 = date_diff(date_create($row['tanggal_sop_form_02']), date_create(date('Y-m-d')))->days;
 									}
 
 									$interval_tanggal_surat_pengembalian_spdp = 0;
-									if ($row['tanggal_surat_pengembalian_spdp'] != "") {
+									if ($row['tanggal_surat_pengembalian_spdp'] != '') {
 										$interval_tanggal_surat_pengembalian_spdp = date_diff(date_create($row['tanggal_surat_pengembalian_spdp']), date_create(date('Y-m-d')))->days;
 									}
 
@@ -159,20 +164,20 @@
 
 									$array_jaksa_terkait = $row['jaksa_terkait'];
 									$data_jaksa_terkait = $db->query("SELECT * FROM user WHERE id_user IN ($array_jaksa_terkait) ORDER BY nama_lengkap ASC ");
-									$jaksa_terkait = "";
+									$jaksa_terkait = '';
 									foreach ($data_jaksa_terkait->getResult('array') as $jt) {
 										$jaksa_terkait .= $jt['nama_lengkap'] . "<br>";
 									}
 
-									$nama_user_create = "";
-									if ($row['id_user_create'] != "") {
+									$nama_user_create = '';
+									if ($row['id_user_create'] != '') {
 										$id_user_create = $row['id_user_create'];
 										$user_create = $db->query("SELECT * FROM user WHERE id_user='$id_user_create' ")->getRow();
 										$nama_user_create = $user_create->nama_lengkap;
 									}
 
-									$nama_user_update = "";
-									if ($row['id_user_update'] != "") {
+									$nama_user_update = '';
+									if ($row['id_user_update'] != '') {
 										$id_user_update = $row['id_user_update'];
 										$user_update = $db->query("SELECT * FROM user WHERE id_user='$id_user_update' ")->getRow();
 										$nama_user_update = $user_update->nama_lengkap;
@@ -183,61 +188,61 @@
 									<tr>
 										<td class="text-center"><?= $no++; ?>.</td>
 										<td>
-											<?php if (($row['tanggal_penerimaan'] != "0000-00-00") and ($row['tanggal_penerimaan'] != "")) : ?>
+											<?php if (($row['tanggal_penerimaan'] != "0000-00-00") and ($row['tanggal_penerimaan'] != '')) : ?>
 												<?= date('d/m/Y', strtotime($row['tanggal_penerimaan'])); ?>
 											<?php endif; ?>
 										</td>
 
 										<td>
-											<?php if ($row['file_spdp'] != "") : ?>
+											<?php if ($row['file_spdp'] != '') : ?>
 												<a href="<?= base_url(); ?>/assets/berkas/<?= $row['file_spdp']; ?>" target="_blank" class="d-inline-block text-truncate" style="max-width: 140px;">
 													No. : <?= $row['nomor_spdp']; ?>
 												</a>
 											<?php else : ?>
-												<?php if ($row['nomor_spdp'] != "") : ?>
+												<?php if ($row['nomor_spdp'] != '') : ?>
 													<span class="d-inline-block text-truncate" style="max-width: 140px;">
 														No. : <?= $row['nomor_spdp']; ?>
 													</span>
 												<?php endif; ?>
 											<?php endif; ?>
 											<br>
-											<?php if (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != "")) : ?>
+											<?php if (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != '')) : ?>
 												Tgl. : <?= date('d/m/Y', strtotime($row['tanggal_spdp'])); ?>
 											<?php endif; ?>
 										</td>
 
 										<td>
-											<?php if ($row['file_berkas'] != "") : ?>
+											<?php if ($row['file_berkas'] != '') : ?>
 												<a href="<?= base_url(); ?>/assets/berkas/<?= $row['file_berkas']; ?>" target="_blank" class="d-inline-block text-truncate" style="max-width: 140px;">
 													No. : <?= $row['nomor_berkas']; ?>
 												</a>
 											<?php else : ?>
-												<?php if ($row['nomor_berkas'] != "") : ?>
+												<?php if ($row['nomor_berkas'] != '') : ?>
 													<span class="d-inline-block text-truncate" style="max-width: 140px;">
 														No. : <?= $row['nomor_berkas']; ?>
 													</span>
 												<?php endif; ?>
 											<?php endif; ?>
 											<br>
-											<?php if (($row['tanggal_berkas'] != "0000-00-00") and ($row['tanggal_berkas'] != "")) : ?>
+											<?php if (($row['tanggal_berkas'] != "0000-00-00") and ($row['tanggal_berkas'] != '')) : ?>
 												Tgl. : <?= date('d/m/Y', strtotime($row['tanggal_berkas'])); ?>
 											<?php endif; ?>
 										</td>
 
 										<td>
-											<?php if ($row['file_p16'] != "") : ?>
+											<?php if ($row['file_p16'] != '') : ?>
 												<a href="<?= base_url(); ?>/assets/berkas/<?= $row['file_p16']; ?>" target="_blank" class="d-inline-block text-truncate" style="max-width: 140px;">
 													No. : <?= $row['nomor_p16']; ?>
 												</a>
 											<?php else : ?>
-												<?php if ($row['nomor_p16'] != "") : ?>
+												<?php if ($row['nomor_p16'] != '') : ?>
 													<span class="d-inline-block text-truncate" style="max-width: 140px;">
 														No. : <?= $row['nomor_p16']; ?>
 													</span>
 												<?php endif; ?>
 											<?php endif; ?>
 											<br>
-											<?php if (($row['tanggal_p16'] != "0000-00-00") and ($row['tanggal_p16'] != "")) : ?>
+											<?php if (($row['tanggal_p16'] != "0000-00-00") and ($row['tanggal_p16'] != '')) : ?>
 												Tgl. : <?= date('d/m/Y', strtotime($row['tanggal_p16'])); ?>
 											<?php endif; ?>
 										</td>
@@ -259,7 +264,7 @@
 										<td>
 											<div class="list-unstyled d-flex align-items-center justify-content-center">
 												<li class="mr-1">
-													<a href="#" data-toggle="modal" data-target="#modalDetail" data-action="detail" data-title="Detail Data Berkas Perkara" data-id-berkas="<?= $row['id_berkas_perkara']; ?>" data-nomor-berkas="<?= $row['nomor_berkas']; ?>" data-tanggal-berkas="<?= (($row['tanggal_berkas'] != "0000-00-00") and ($row['tanggal_berkas'] != "")) ? date('d/m/Y', strtotime($row['tanggal_berkas'])) : '' ?>" data-tanggal-penerimaan="<?= date('d/m/Y', strtotime($row['tanggal_penerimaan'])); ?>" data-file-berkas="<?= ($row['file_berkas'] != "") ? base_url() . '/assets/berkas/' . $row['file_berkas'] : ''; ?>" data-nomor-spdp="<?= $row['nomor_spdp']; ?>" data-tanggal-spdp="<?= (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != "")) ? date('d/m/Y', strtotime($row['tanggal_spdp'])) : '' ?>" data-file-spdp="<?= ($row['file_spdp'] != "") ? base_url() . '/assets/berkas/' . $row['file_spdp'] : ''; ?>" data-nomor-p16="<?= $row['nomor_p16']; ?>" data-tanggal-p16="<?= (($row['tanggal_p16'] != "0000-00-00") and ($row['tanggal_p16'] != "")) ? date('d/m/Y', strtotime($row['tanggal_p16'])) : '' ?>" data-file-p16="<?= ($row['file_p16'] != "") ? base_url() . '/assets/berkas/' . $row['file_p16'] : ''; ?>" data-nomor-p17="<?= $row['nomor_p17']; ?>" data-tanggal-p17="<?= (($row['tanggal_p17'] != "0000-00-00") and ($row['tanggal_p17'] != "")) ? date('d/m/Y', strtotime($row['tanggal_p17'])) : '' ?>" data-file-p17="<?= ($row['file_p17'] != "") ? base_url() . '/assets/berkas/' . $row['file_p17'] : ''; ?>" data-nomor-sop-form="<?= $row['nomor_sop_form_02']; ?>" data-tanggal-sop-form="<?= (($row['tanggal_sop_form_02'] != "0000-00-00") and ($row['tanggal_sop_form_02'] != "")) ? date('d/m/Y', strtotime($row['tanggal_sop_form_02'])) : '' ?>" data-file-sop-form="<?= ($row['file_sop_form_02'] != "") ? base_url() . '/assets/berkas/' . $row['file_sop_form_02'] : ''; ?>" data-nomor-surat-pengembalian-spdp="<?= $row['nomor_surat_pengembalian_spdp']; ?>" data-tanggal-surat-pengembalian-spdp="<?= (($row['tanggal_surat_pengembalian_spdp'] != "0000-00-00") and ($row['tanggal_surat_pengembalian_spdp'] != "")) ? date('d/m/Y', strtotime($row['tanggal_surat_pengembalian_spdp'])) : '' ?>" data-file-surat-pengembalian-spdp="<?= ($row['file_surat_pengembalian_spdp'] != "") ? base_url() . '/assets/berkas/' . $row['file_surat_pengembalian_spdp'] : ''; ?>" data-instansi-penyidik="<?= $instansi_penyidik->nama_instansi; ?>" data-tersangka="<?= $row['tersangka']; ?>" data-jaksa-terkait="<?= $jaksa_terkait; ?>" data-status-berkas="<?= $row['status_berkas']; ?>" data-pidana-anak="<?= $row['pidana_anak']; ?>" data-create-datetime="<?= (($row['create_datetime'] != "0000-00-00") and ($row['create_datetime'] != "")) ? ' pada ' . date('d/m/Y H:i:s', strtotime($row['create_datetime'])) : '' ?>" data-update-datetime="<?= (($row['update_datetime'] != "0000-00-00") and ($row['update_datetime'] != "")) ? ' pada ' . date('d/m/Y H:i:s', strtotime($row['update_datetime'])) : '' ?>" data-user-create="<?= $nama_user_create; ?>" data-user-update="<?= $nama_user_update; ?>" data-status-notifikasi="<?= $status_notifikasi; ?>" data-status-perkara="<?= $row['status']; ?>" data-interval-penerimaan="<?= $interval_tanggal_penerimaan; ?>" data-interval-berkas="<?= $interval_tanggal_berkas; ?>" data-interval-spdp="<?= $interval_tanggal_spdp; ?>" data-interval-p17="<?= $interval_tanggal_p17; ?>" data-interval-sop-form="<?= $interval_tanggal_sop_form_02; ?>" data-interval-surat-pengembalian-spdp="<?= $interval_tanggal_surat_pengembalian_spdp; ?>" class="badge btn-success text-white btnShowModalDetail" data-toggle="tooltip" data-placement="bottom" title="Detail">
+													<a href="#" data-toggle="modal" data-target="#modalDetail" data-action="detail" data-title="Detail Data Berkas Perkara" data-id-berkas="<?= $row['id_berkas_perkara']; ?>" data-nomor-berkas="<?= $row['nomor_berkas']; ?>" data-tanggal-berkas="<?= (($row['tanggal_berkas'] != "0000-00-00") and ($row['tanggal_berkas'] != '')) ? date('d/m/Y', strtotime($row['tanggal_berkas'])) : '' ?>" data-tanggal-penerimaan="<?= date('d/m/Y', strtotime($row['tanggal_penerimaan'])); ?>" data-file-berkas="<?= ($row['file_berkas'] != '') ? base_url() . '/assets/berkas/' . $row['file_berkas'] : ''; ?>" data-file-pengantar-berkas="<?= ($row['file_pengantar_berkas'] != '') ? base_url() . '/assets/berkas/' . $row['file_pengantar_berkas'] : ''; ?>" data-nomor-spdp="<?= $row['nomor_spdp']; ?>" data-tanggal-spdp="<?= (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != '')) ? date('d/m/Y', strtotime($row['tanggal_spdp'])) : '' ?>" data-file-spdp="<?= ($row['file_spdp'] != '') ? base_url() . '/assets/berkas/' . $row['file_spdp'] : ''; ?>" data-nomor-p16="<?= $row['nomor_p16']; ?>" data-tanggal-p16="<?= (($row['tanggal_p16'] != "0000-00-00") and ($row['tanggal_p16'] != '')) ? date('d/m/Y', strtotime($row['tanggal_p16'])) : '' ?>" data-file-p16="<?= ($row['file_p16'] != '') ? base_url() . '/assets/berkas/' . $row['file_p16'] : ''; ?>" data-nomor-p17="<?= $row['nomor_p17']; ?>" data-tanggal-p17="<?= (($row['tanggal_p17'] != "0000-00-00") and ($row['tanggal_p17'] != '')) ? date('d/m/Y', strtotime($row['tanggal_p17'])) : '' ?>" data-file-p17="<?= ($row['file_p17'] != '') ? base_url() . '/assets/berkas/' . $row['file_p17'] : ''; ?>" data-nomor-sop-form="<?= $row['nomor_sop_form_02']; ?>" data-tanggal-sop-form="<?= (($row['tanggal_sop_form_02'] != "0000-00-00") and ($row['tanggal_sop_form_02'] != '')) ? date('d/m/Y', strtotime($row['tanggal_sop_form_02'])) : '' ?>" data-file-sop-form="<?= ($row['file_sop_form_02'] != '') ? base_url() . '/assets/berkas/' . $row['file_sop_form_02'] : ''; ?>" data-nomor-surat-pengembalian-spdp="<?= $row['nomor_surat_pengembalian_spdp']; ?>" data-tanggal-surat-pengembalian-spdp="<?= (($row['tanggal_surat_pengembalian_spdp'] != "0000-00-00") and ($row['tanggal_surat_pengembalian_spdp'] != '')) ? date('d/m/Y', strtotime($row['tanggal_surat_pengembalian_spdp'])) : '' ?>" data-file-surat-pengembalian-spdp="<?= ($row['file_surat_pengembalian_spdp'] != '') ? base_url() . '/assets/berkas/' . $row['file_surat_pengembalian_spdp'] : ''; ?>" data-instansi-penyidik="<?= $instansi_penyidik->nama_instansi; ?>" data-tersangka="<?= $row['tersangka']; ?>" data-jaksa-terkait="<?= $jaksa_terkait; ?>" data-status-berkas="<?= $row['status_berkas']; ?>" data-pidana-anak="<?= $row['pidana_anak']; ?>" data-create-datetime="<?= (($row['create_datetime'] != "0000-00-00") and ($row['create_datetime'] != '')) ? ' pada ' . date('d/m/Y H:i:s', strtotime($row['create_datetime'])) : '' ?>" data-update-datetime="<?= (($row['update_datetime'] != "0000-00-00") and ($row['update_datetime'] != '')) ? ' pada ' . date('d/m/Y H:i:s', strtotime($row['update_datetime'])) : '' ?>" data-user-create="<?= $nama_user_create; ?>" data-user-update="<?= $nama_user_update; ?>" data-status-notifikasi="<?= $status_notifikasi; ?>" data-status-perkara="<?= $row['status']; ?>" data-interval-penerimaan="<?= $interval_tanggal_penerimaan; ?>" data-interval-berkas="<?= $interval_tanggal_berkas; ?>" data-interval-spdp="<?= $interval_tanggal_spdp; ?>" data-interval-p17="<?= $interval_tanggal_p17; ?>" data-interval-sop-form="<?= $interval_tanggal_sop_form_02; ?>" data-interval-surat-pengembalian-spdp="<?= $interval_tanggal_surat_pengembalian_spdp; ?>" class="badge btn-success text-white btnShowModalDetail" data-toggle="tooltip" data-placement="bottom" title="Detail">
 														<i class="align-middle" data-feather="list"></i>
 													</a>
 												</li>
@@ -267,7 +272,7 @@
 												<?php if (($user_level < 3) or ($user_id == $row['id_user_create'])) : ?>
 
 													<li class="mr-1">
-														<a href="#" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Berkas Perkara" data-id-berkas-perkara="<?= $row['id_berkas_perkara']; ?>" data-nomor-spdp="<?= $row['nomor_spdp']; ?>" data-tanggal-spdp="<?= (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != "")) ? date('Y-m-d', strtotime($row['tanggal_spdp'])) : '' ?>" data-file-spdp="<?= $row['file_spdp']; ?>" data-nomor-berkas="<?= $row['nomor_berkas']; ?>" data-tanggal-berkas="<?= (($row['tanggal_berkas'] != "0000-00-00") and ($row['tanggal_berkas'] != "")) ? date('Y-m-d', strtotime($row['tanggal_berkas'])) : '' ?>" data-file-berkas="<?= $row['file_berkas']; ?>" data-tanggal-penerimaan="<?= date('Y-m-d', strtotime($row['tanggal_penerimaan'])); ?>" data-nomor-p16="<?= $row['nomor_p16']; ?>" data-tanggal-p16="<?= (($row['tanggal_p16'] != "0000-00-00") and ($row['tanggal_p16'] != "")) ? date('Y-m-d', strtotime($row['tanggal_p16'])) : '' ?>" data-file-p16="<?= $row['file_p16']; ?>" data-id-instansi-penyidik="<?= $row['id_instansi_penyidik']; ?>" data-tersangka="<?= $row['tersangka']; ?>" data-jaksa-terkait="<?= $row['jaksa_terkait']; ?>" data-status-berkas="<?= $row['status_berkas']; ?>" data-pidana-anak="<?= $row['pidana_anak']; ?>" class="badge btn-info text-white btnShowModal" data-toggle="tooltip" data-placement="bottom" title="Ubah">
+														<a href="#" data-toggle="modal" data-target="#modalInput" data-action="ubah" data-title="Ubah Data Berkas Perkara" data-id-berkas-perkara="<?= $row['id_berkas_perkara']; ?>" data-nomor-spdp="<?= $row['nomor_spdp']; ?>" data-tanggal-spdp="<?= (($row['tanggal_spdp'] != "0000-00-00") and ($row['tanggal_spdp'] != '')) ? date('Y-m-d', strtotime($row['tanggal_spdp'])) : '' ?>" data-file-spdp="<?= $row['file_spdp']; ?>" data-nomor-berkas="<?= $row['nomor_berkas']; ?>" data-tanggal-berkas="<?= (($row['tanggal_berkas'] != "0000-00-00") and ($row['tanggal_berkas'] != '')) ? date('Y-m-d', strtotime($row['tanggal_berkas'])) : '' ?>" data-file-berkas="<?= $row['file_berkas']; ?>" data-nomor-pengantar-berkas="<?= $row['nomor_pengantar_berkas']; ?>" data-tanggal-pengantar-berkas="<?= (($row['tanggal_pengantar_berkas'] != "0000-00-00") and ($row['tanggal_pengantar_berkas'] != '')) ? date('Y-m-d', strtotime($row['tanggal_pengantar_berkas'])) : '' ?>" data-file-pengantar-berkas="<?= ($row['file_pengantar_berkas'] != '') ? base_url() . '/assets/berkas/' . $row['file_pengantar_berkas'] : ''; ?>" data-tanggal-penerimaan="<?= date('Y-m-d', strtotime($row['tanggal_penerimaan'])); ?>" data-nomor-p16="<?= $row['nomor_p16']; ?>" data-tanggal-p16="<?= (($row['tanggal_p16'] != "0000-00-00") and ($row['tanggal_p16'] != '')) ? date('Y-m-d', strtotime($row['tanggal_p16'])) : '' ?>" data-file-p16="<?= $row['file_p16']; ?>" data-id-instansi-penyidik="<?= $row['id_instansi_penyidik']; ?>" data-tersangka="<?= $row['tersangka']; ?>" data-jaksa-terkait="<?= $row['jaksa_terkait']; ?>" data-status-berkas="<?= $row['status_berkas']; ?>" data-pidana-anak="<?= $row['pidana_anak']; ?>" class="badge btn-info text-white btnShowModal" data-toggle="tooltip" data-placement="bottom" title="Ubah">
 															<i class="align-middle" data-feather="edit"></i>
 														</a>
 													</li>
@@ -299,8 +304,8 @@
 
 <script>
 	function hapus_data(id_berkas_perkara) {
-		event.preventDefault(); // prevent form submit
-
+		// prevent form submit
+		event.preventDefault();
 		var urlPost = base_url + "/berkas-perkara/delete";
 
 		Swal.fire({
@@ -373,6 +378,7 @@
 			"searching": true,
 			"deferRender": true,
 			"initComplete": function(settings, json) {
+
 				$("#card-view-table").on("click", function() {
 					if ($("#data-table-custom").hasClass("card")) {
 						$(".colHeader").remove();
@@ -469,7 +475,7 @@
 			],
 			"buttons": [{
 					extend: 'excelHtml5',
-					filename: 'DATA BERKAS PERKARA KEJAKSAAN NEGERI BERAU - update ' + tanggalHariIni,
+					filename: 'DATA BERKAS PERKARA - KEJAKSAAN NEGERI BERAU - update ' + tanggalHariIni,
 					text: 'Export Excel (*xlsx)',
 					exportOptions: {
 						columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -481,7 +487,7 @@
 				},
 				{
 					extend: 'pdfHtml5',
-					filename: 'DATA BERKAS PERKARA KEJAKSAAN NEGERI BERAU - update ' + tanggalHariIni,
+					filename: 'DATA BERKAS PERKARA - KEJAKSAAN NEGERI BERAU - update ' + tanggalHariIni,
 					text: 'Export PDF (*pdf)',
 					message: 'DATA BERKAS PERKARA',
 					messageBottom: 'Data dibuat otomatis oleh sistem : ' + tanggalHariIni,
@@ -500,7 +506,6 @@
 						doc.styles.tableHeader.fontSize = 10;
 						doc.styles.title.fontSize = 14;
 						doc.content[0].text = doc.content[0].text.trim();
-						// Create a footer
 						doc['footer'] = (function(page, pages) {
 							return {
 								columns: [
@@ -518,31 +523,24 @@
 							}
 						});
 						var objLayout = {};
-						// Horizontal line thickness
 						objLayout['hLineWidth'] = function(i) {
 							return .5;
 						};
-						// Vertikal line thickness
 						objLayout['vLineWidth'] = function(i) {
 							return .5;
 						};
-						// Horizontal line color
 						objLayout['hLineColor'] = function(i) {
 							return '#aaa';
 						};
-						// Vertical line color
 						objLayout['vLineColor'] = function(i) {
 							return '#aaa';
 						};
-						// Left padding of the cell
 						objLayout['paddingLeft'] = function(i) {
 							return 4;
 						};
-						// Right padding of the cell
 						objLayout['paddingRight'] = function(i) {
 							return 4;
 						};
-						// Inject the object in the document
 						doc.content[1].layout = objLayout;
 					}
 				},
@@ -551,7 +549,7 @@
 
 		document.getElementsByClassName("cariTanggal")[0].style.textAlign = "right";
 
-		//konfigurasi daterangepicker pada input dengan id cariTanggalPenerimaan
+		// Konfigurasi daterangepicker pada input dengan id cari tanggal penerimaan
 		$('#cariTanggalPenerimaan').daterangepicker({
 			autoUpdateInput: false
 		});

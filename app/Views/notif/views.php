@@ -37,60 +37,11 @@
 	// Pak ITO
 	// kirim_whatsapp('328b01352c9390ab1f20fedc72398bcf', '085750597580', 'Test', '');
 
-	function pesanBerkasBaruMasuk() {
-		const d = new Date();
-		let time = d.getHours();
-		// let minutes = d.Minutes();
-
-		var ucapanSalam = '';
-		if (time >= 2 && time < 12) {
-			ucapanSalam = 'Selamat Pagi 🙏';
-		} else if (time >= 12 && time < 15) {
-			ucapanSalam = 'Selamat Siang 🙏';
-		} else if (time >= 15 && time < 18) {
-			ucapanSalam = 'Selamat Sore 🙏';
-		} else {
-			ucapanSalam = 'Selamat Malam 🙏';
-		}
-
-
-		var namaJaksa = 'Ronald';
-		var slug = 'IgUOx2gBvqua6he1OUNqsQeffLNyLJqZ9P7hFy7Kf8sfPHYBg5Ynm2XtFb7IkQAmlXRq8OAR5pkA1wGxqVX3D67764W3NZ5HBEKC';
-		var pesanBerkasBaruMasuk = `
-*_INFORMASI BERKAS PERKARA_*
-
-${ucapanSalam} saudara/i *${namaJaksa}*,
-
-📎Anda memiliki 1 berkas perkara baru
-
-*_Detail Berkas_*
------------------------------
-📅 _Tgl. Penerimaan_ : 24/10/2022 
-🪪 _No. SPDP_ : B/39/X/Res.4.2./2022/Resnarkoba
-📅 _Tgl. SPDP_ : 20/10/2022
-📁 _Berkas SPDP_ : https://kejariberau.id/assets/berkas/spdp-1667963577_94cae4d76ccff7116316.pdf
-
-Lihat lebih detail disini
-https://kejariberau.id/berkas-perkara/detail/${slug}
-
-Mohon segera melakukan tindak lanjut atas berkas tersebut
-Terima Kasih 🙏
-
-
-_(Anda menerima pesan ini karena anda terdata sebagai jaksa yang menangani perkara ini)_
-
-*TTD*
-_KEJAKSAAN NEGERI BERAU_
-`;
-
-		// Ronald
-		kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', '085245567747', pesanBerkasBaruMasuk, '');
-	}
 
 	// pesanBerkasBaruMasuk();
 
 
-	function cekAllBerkas() {
+	function cekBerkasKirimPesan() {
 
 		const d = new Date();
 		let time = d.getHours();
@@ -106,7 +57,6 @@ _KEJAKSAAN NEGERI BERAU_
 		} else {
 			ucapanSalam = 'Selamat Malam 🙏';
 		}
-
 
 		$('#loadData').html(`<h5 style="text-align:center; margin-top: 50px;">Mengambil Data . . .</h5>`);
 
@@ -131,52 +81,42 @@ _KEJAKSAAN NEGERI BERAU_
 						const no = i + 1;
 						const dataDetail = listData[i];
 
+						// Kirim Pesan Penerimaan Berkas
+
+						var pesan_sukses = "";
 						var isiPesan = "";
+						var no_hp_jaksa = dataDetail.hp_jaksa;
+						// var no_hp_jaksa = '085245567747';
 
-						isiPesan += `` +
-							dataDetail.interval_tanggal_penerimaan + ` hari sejak tanggal penerimaan` +
-							``;
+						if ((dataDetail.interval_tanggal_penerimaan >= 5) && (dataDetail.status_berkas == "KOSONG")) {
 
-						if (dataDetail.nomor_berkas != "" || dataDetail.tanggal_berkas != "") {
-							isiPesan += ` || ` +
-								dataDetail.interval_tanggal_berkas + ` hari sejak tanggal berkas` +
-								``;
-						} else if (dataDetail.nomor_spdp != "" || dataDetail.tanggal_spdp != "") {
-							isiPesan += ` || ` +
-								dataDetail.interval_tanggal_spdp + ` hari sejak tanggal SPDP` +
-								``;
-						} else if (dataDetail.nomor_p17 != "" || dataDetail.tanggal_p17 != "") {
-							isiPesan += ` || ` +
-								dataDetail.interval_tanggal_p17 + ` hari sejak tanggal P-17` +
-								``;
-						} else if (dataDetail.nomor_sop_form_02 != "" || dataDetail.tanggal_sop_form_02 != "") {
-							isiPesan += ` || ` +
-								dataDetail.interval_tanggal_sop_form_02 + ` hari sejak tanggal SOP-Form 02` +
-								``;
-						} else if (dataDetail.nomor_surat_pengembalian_spdp != "" || dataDetail.tanggal_surat_pengembalian_spdp != "") {
-							isiPesan += ` || ` +
-								dataDetail.interval_tanggal_surat_pengembalian_spdp + ` hari sejak tanggal Surat Pengembalian SPDP` +
-								``;
-						}
+							isiPesan += `Berkas perkara yang anda tangani berikut ini telah melewati `;
 
-						var url_spdp = '';
-						if (dataDetail.file_spdp != "" && dataDetail.file_spdp != null) {
-							url_spdp = base_url + `/assets/berkas/` + dataDetail.file_spdp;
-						}
+							isiPesan += `` +
+								dataDetail.interval_tanggal_penerimaan + ` hari sejak tanggal penerimaan berkas` +
+								``;
 
-						var pesanNotif = `
-*_INFORMASI BERKAS PERKARA_*
+							var url_spdp = '';
+							if (dataDetail.file_spdp != "" && dataDetail.file_spdp != null) {
+								url_spdp = base_url + `/assets/berkas/` + dataDetail.file_spdp;
+							}
 
-${ucapanSalam} saudara/i *${dataDetail.nama_jaksa}*,
+							var pesanNotif = `
+${ucapanSalam} saudara/i 
+*${dataDetail.nama_jaksa}*,
 
 ${isiPesan}
 
 *_Detail Berkas_*
 -----------------------------
 📅 _Tgl. Penerimaan_ : ${dataDetail.tanggal_penerimaan_format} 
+👮 _Instansi Penyidik_ : ${dataDetail.nama_instansi_penyidik} 
+👥 _Tersangka_ : ${dataDetail.tersangka} 
+🔖 _Status Berkas_ : ${dataDetail.status_berkas} 
+
 🪪 _No. SPDP_ : ${dataDetail.nomor_spdp}
 📅 _Tgl. SPDP_ : ${dataDetail.tanggal_spdp_format}
-📁 _Berkas SPDP_ : ${url_spdp}
+📁 _File SPDP_ : ${url_spdp}
 
 Lihat lebih detail disini
 https://kejariberau.id/berkas-perkara/detail/${dataDetail.slug}
@@ -187,18 +127,206 @@ Terima Kasih 🙏
 
 _(Anda menerima pesan ini karena anda terdata sebagai jaksa yang menangani perkara ini)_
 
-*TTD*
-_KEJAKSAAN NEGERI BERAU_
+
+TTD
+*_KEJAKSAAN NEGERI BERAU_*
 `;
 
-						var no_hp_jaksa = dataDetail.hp_jaksa;
-						if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
-							kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', dataDetail.hp_jaksa, pesanNotif, '');
+							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
+								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotif, '');
+							}
+							pesan_sukses += `<p>Sukses mengirim pesan Berkas ke ${no_hp_jaksa}...</p>`;
 						}
+
+						// Kirim Pesan SPDP
+						var isiPesanP16 = ``;
+						if ((dataDetail.interval_tanggal_p16 >= 30) && (dataDetail.status_berkas == 'KOSONG')) {
+
+							isiPesanP16 += `Berkas yang anda tangani berikut ini telah melewati `;
+
+							isiPesanP16 += `` +
+								dataDetail.interval_tanggal_p16 + ` hari sejak Surat Perintah P-16 terbit` +
+								``;
+
+							var url_spdp = '';
+							if (dataDetail.file_spdp != "" && dataDetail.file_spdp != null) {
+								url_spdp = base_url + `/assets/berkas/` + dataDetail.file_spdp;
+							}
+
+							var pesanNotifP16 = `
+${ucapanSalam} saudara/i 
+*${dataDetail.nama_jaksa}*,
+
+${isiPesanP16}
+
+*_Detail Berkas_*
+-----------------------------
+📅 _Tgl. Penerimaan_ : ${dataDetail.tanggal_penerimaan_format} 
+👮 _Instansi Penyidik_ : ${dataDetail.nama_instansi_penyidik} 
+👥 _Tersangka_ : ${dataDetail.tersangka} 
+🔖 _Status Berkas_ : ${dataDetail.status_berkas} 
+
+📅 _Tgl. P-16_ : ${dataDetail.tanggal_p16_format} 
+🪪 _No. SPDP_ : ${dataDetail.nomor_spdp}
+📅 _Tgl. SPDP_ : ${dataDetail.tanggal_spdp_format}
+📁 _File SPDP_ : ${url_spdp}
+
+Lihat lebih detail disini
+https://kejariberau.id/berkas-perkara/detail/${dataDetail.slug}
+
+Mohon segera menerbitkan surat P-17
+Terima Kasih 🙏
+
+
+_(Anda menerima pesan ini karena anda terdata sebagai jaksa yang menangani perkara ini)_
+
+
+TTD
+*_KEJAKSAAN NEGERI BERAU_*
+`;
+
+							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
+								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotifP16, '');
+							}
+							pesan_sukses += `<p>Sukses mengirim pesan SPDP ke ${no_hp_jaksa}...</p>`;
+						}
+
+						// Kirim Pesan P17
+						var isiPesanP17 = ``;
+						if ((dataDetail.interval_tanggal_p17 >= 30) && (dataDetail.status_berkas == 'KOSONG' || dataDetail.status_berkas == 'P-17')) {
+
+							isiPesanP17 += `Berkas yang anda tangani berikut ini telah melewati `;
+
+							isiPesanP17 += `` +
+								dataDetail.interval_tanggal_p17 + ` hari sejak P-17 terbit` +
+								``;
+
+							var pesanNotifP17 = `
+${ucapanSalam} saudara/i 
+*${dataDetail.nama_jaksa}*,
+
+${isiPesanP17}
+
+*_Detail Berkas_*
+-----------------------------
+📅 _Tgl. Penerimaan_ : ${dataDetail.tanggal_penerimaan_format} 
+📅 _Tgl. P-17_ : ${dataDetail.tanggal_p17_format} 
+👮 _Instansi Penyidik_ : ${dataDetail.nama_instansi_penyidik} 
+👥 _Tersangka_ : ${dataDetail.tersangka} 
+🔖 _Status Berkas_ : ${dataDetail.status_berkas} 
+
+Lihat lebih detail disini
+https://kejariberau.id/berkas-perkara/detail/${dataDetail.slug}
+
+Mohon segera menerbitkan SOP Form 02
+Terima Kasih 🙏
+
+
+_(Anda menerima pesan ini karena anda terdata sebagai jaksa yang menangani perkara ini)_
+
+TTD
+*_KEJAKSAAN NEGERI BERAU_*
+`;
+
+							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
+								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotifP17, '');
+							}
+							pesan_sukses += `<p>Sukses mengirim pesan SPDP ke ${no_hp_jaksa}...</p>`;
+						}
+
+
+						// Kirim Pesan P19
+						var isiPesanP19 = ``;
+						if ((dataDetail.interval_tanggal_p19 >= 14) && (dataDetail.status_berkas == 'P-19')) {
+
+							isiPesanP19 += `Berkas yang anda tangani berikut ini telah melewati `;
+
+							isiPesanP19 += `` +
+								dataDetail.interval_tanggal_p19 + ` hari sejak P-19 terbit` +
+								``;
+
+							var pesanNotifP19 = `
+${ucapanSalam} saudara/i 
+*${dataDetail.nama_jaksa}*,
+
+${isiPesanP19}
+
+*_Detail Berkas_*
+-----------------------------
+📅 _Tgl. Penerimaan_ : ${dataDetail.tanggal_penerimaan_format} 
+📅 _Tgl. P-19_ : ${dataDetail.tanggal_p19_format} 
+👮 _Instansi Penyidik_ : ${dataDetail.nama_instansi_penyidik} 
+👥 _Tersangka_ : ${dataDetail.tersangka} 
+🔖 _Status Berkas_ : ${dataDetail.status_berkas} 
+
+Lihat lebih detail disini
+https://kejariberau.id/berkas-perkara/detail/${dataDetail.slug}
+
+Mohon segera menerbitkan Surat P-20
+Terima Kasih 🙏
+
+
+_(Anda menerima pesan ini karena anda terdata sebagai jaksa yang menangani perkara ini)_
+
+TTD
+*_KEJAKSAAN NEGERI BERAU_*
+`;
+
+							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
+								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotifP19, '');
+							}
+							pesan_sukses += `<p>Sukses mengirim pesan SPDP ke ${no_hp_jaksa}...</p>`;
+						}
+
+
+
+						// Kirim Pesan P20
+						var isiPesanP20 = ``;
+						if ((dataDetail.interval_tanggal_p20 >= 14) && (dataDetail.status_berkas == 'P-20')) {
+
+							isiPesanP20 += `Berkas yang anda tangani berikut ini telah melewati `;
+
+							isiPesanP20 += `` +
+								dataDetail.interval_tanggal_p20 + ` hari sejak P-20 terbit` +
+								``;
+
+							var pesanNotifP20 = `
+${ucapanSalam} saudara/i 
+*${dataDetail.nama_jaksa}*,
+
+${isiPesanP20}
+
+*_Detail Berkas_*
+-----------------------------
+📅 _Tgl. Penerimaan_ : ${dataDetail.tanggal_penerimaan_format} 
+📅 _Tgl. P-20_ : ${dataDetail.tanggal_p20_format} 
+👮 _Instansi Penyidik_ : ${dataDetail.nama_instansi_penyidik} 
+👥 _Tersangka_ : ${dataDetail.tersangka} 
+🔖 _Status Berkas_ : ${dataDetail.status_berkas} 
+
+Lihat lebih detail disini
+https://kejariberau.id/berkas-perkara/detail/${dataDetail.slug}
+
+Mohon segera menerbitkan Surat Pengembalian SPDP
+Terima Kasih 🙏
+
+
+_(Anda menerima pesan ini karena anda terdata sebagai jaksa yang menangani perkara ini)_
+
+TTD
+*_KEJAKSAAN NEGERI BERAU_*
+`;
+
+							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
+								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotifP20, '');
+							}
+							pesan_sukses += `<p>Sukses mengirim pesan SPDP ke ${no_hp_jaksa}...</p>`;
+						}
+
 					}
 
+					$('#loadData').html(pesan_sukses);
 				}
-
 			} else {
 				$('#loadData').html(`<h3 style="text-align:center">${msg.msg}</h3>`);
 			}
@@ -213,7 +341,7 @@ _KEJAKSAAN NEGERI BERAU_
 		});
 	}
 
-	cekAllBerkas();
+	cekBerkasKirimPesan();
 </script>
 
 <?= $this->endSection('content-notif'); ?>
