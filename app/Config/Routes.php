@@ -28,7 +28,8 @@ $routes->get('/logout-user', 'Authorize::logout', ['filter' => 'auth_login']);
 $routes->get('/offline', 'Offline::index');
 
 $routes->get('/notif/send/(:any)', 'Notif::index/$1');
-$routes->post('/notif/whatsapp', 'Notif::whatsapp');
+
+$routes->get('/notif/whatsapp', 'Notif::whatsapp');
 
 $routes->post('/notif/push-subscribe', 'Notif::push_subscribe');
 $routes->post('/notif/send-push-notif', 'Notif::send_push_notif');
@@ -39,7 +40,7 @@ $routes->get('/berkas-perkara', 'BerkasPerkara::index', ['filter' => 'auth_login
 $routes->get('/berkas-perkara/detail/(:any)', 'Notif::detail_berkas/$1');
 $routes->post('/berkas-perkara/detail', 'Notif::getDetailBerkas');
 $routes->post('/berkas-perkara/get-all', 'Notif::getAllBerkas');
-$routes->post('/berkas-perkara/get-all-proses', 'Notif::getAllBerkasProses');
+$routes->get('/berkas-perkara/get-all-proses', 'Notif::getAllBerkasProses');
 
 $routes->get('/berkas-perkara/(:any)', 'BerkasPerkara::getBerkas/$1', ['filter' => 'auth_login']);
 

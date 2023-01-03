@@ -17,7 +17,7 @@
 				device_id: device_id,
 				no_hp: no_hp,
 				pesan: pesan,
-				file: file,
+				// file: file,
 			},
 			beforeSend: function() {
 				$("#loader").show();
@@ -35,11 +35,9 @@
 	}
 
 	// Pak ITO
-	// kirim_whatsapp('328b01352c9390ab1f20fedc72398bcf', '085750597580', 'Test', '');
-
+	kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', '085245567747', 'Hallo', '');
 
 	// pesanBerkasBaruMasuk();
-
 
 	function cekBerkasKirimPesan() {
 
@@ -62,9 +60,8 @@
 
 		let requestDetail = $.ajax({
 			url: base_url + '/berkas-perkara/get-all-proses',
-			type: "POST",
+			type: "GET",
 			dataType: "JSON",
-			data: {},
 		});
 
 		requestDetail.done(function(msg) {
@@ -87,6 +84,7 @@
 						var isiPesan = "";
 						var no_hp_jaksa = dataDetail.hp_jaksa;
 						// var no_hp_jaksa = '085245567747';
+						// var no_hp_jaksa = '0895326665503';
 
 						if ((dataDetail.interval_tanggal_penerimaan >= 5) && (dataDetail.status_berkas == "KOSONG")) {
 
@@ -134,8 +132,8 @@ TTD
 
 							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
 								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotif, '');
+								pesan_sukses += `<p>Sukses mengirim pesan Berkas ke ${no_hp_jaksa}...</p>`;
 							}
-							pesan_sukses += `<p>Sukses mengirim pesan Berkas ke ${no_hp_jaksa}...</p>`;
 						}
 
 						// Kirim Pesan SPDP
@@ -187,8 +185,8 @@ TTD
 
 							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
 								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotifP16, '');
+								pesan_sukses += `<p>Sukses mengirim pesan P16 ke ${no_hp_jaksa}...</p>`;
 							}
-							pesan_sukses += `<p>Sukses mengirim pesan SPDP ke ${no_hp_jaksa}...</p>`;
 						}
 
 						// Kirim Pesan P17
@@ -230,19 +228,19 @@ TTD
 
 							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
 								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotifP17, '');
+								pesan_sukses += `<p>Sukses mengirim pesan P17 ke ${no_hp_jaksa}...</p>`;
 							}
-							pesan_sukses += `<p>Sukses mengirim pesan SPDP ke ${no_hp_jaksa}...</p>`;
 						}
 
 
 						// Kirim Pesan P19
 						var isiPesanP19 = ``;
-						if ((dataDetail.interval_tanggal_p19 >= 14) && (dataDetail.status_berkas == 'P-19')) {
+						if ((dataDetail.interval_tanggal_sop_form_02 >= 14) && (dataDetail.status_berkas == 'P-19')) {
 
 							isiPesanP19 += `Berkas yang anda tangani berikut ini telah melewati `;
 
 							isiPesanP19 += `` +
-								dataDetail.interval_tanggal_p19 + ` hari sejak P-19 terbit` +
+								dataDetail.interval_tanggal_sop_form_02 + ` hari sejak SOP Form 02 terbit` +
 								``;
 
 							var pesanNotifP19 = `
@@ -275,9 +273,8 @@ TTD
 							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
 								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotifP19, '');
 							}
-							pesan_sukses += `<p>Sukses mengirim pesan SPDP ke ${no_hp_jaksa}...</p>`;
+							pesan_sukses += `<p>Sukses mengirim pesan P-19 ke ${no_hp_jaksa}...</p>`;
 						}
-
 
 
 						// Kirim Pesan P20
@@ -320,13 +317,13 @@ TTD
 							if (no_hp_jaksa != "" && no_hp_jaksa != null && no_hp_jaksa.length > 10) {
 								kirim_whatsapp('1fb92afe72a55161160bdd2c642055cf', no_hp_jaksa, pesanNotifP20, '');
 							}
-							pesan_sukses += `<p>Sukses mengirim pesan SPDP ke ${no_hp_jaksa}...</p>`;
+							pesan_sukses += `<p>Sukses mengirim pesan Notif P-20 ke ${no_hp_jaksa}...</p>`;
 						}
 
 					}
 
-					$('#loadData').html(pesan_sukses);
 				}
+				$('#loadData').html(pesan_sukses);
 			} else {
 				$('#loadData').html(`<h3 style="text-align:center">${msg.msg}</h3>`);
 			}
@@ -341,7 +338,7 @@ TTD
 		});
 	}
 
-	cekBerkasKirimPesan();
+	// cekBerkasKirimPesan();
 </script>
 
 <?= $this->endSection('content-notif'); ?>

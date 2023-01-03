@@ -145,7 +145,7 @@ class Notif extends BaseController
         $device_id = $this->request->getPost('device_id');
         $no_hp = $this->request->getPost('no_hp');
         $pesan = $this->request->getPost('pesan');
-        $file = $this->request->getPost('file');
+        // $file = $this->request->getPost('file');
 
         $url = 'https://app.whacenter.com/api/send';
         $ch = curl_init($url);
@@ -154,7 +154,7 @@ class Notif extends BaseController
             'device_id' => $device_id,
             'number' => $no_hp,
             'message' => $pesan,
-            'file' => $file,
+            // 'file' => $file,
         );
 
         $payload = $data;
@@ -352,11 +352,13 @@ class Notif extends BaseController
 
             $interval_tanggal_penerimaan = 0;
             $interval_tanggal_berkas = 0;
+            $interval_tanggal_pengantar_berkas = 0;
             $interval_tanggal_spdp = 0;
             $interval_tanggal_p16 = 0;
             $interval_tanggal_p17 = 0;
             $interval_tanggal_sop_form_02 = 0;
             $interval_tanggal_surat_pengembalian_spdp = 0;
+
             $interval_tanggal_penerimaan = date_diff(date_create($row['tanggal_penerimaan']), date_create(date('Y-m-d')))->days;
 
             if ($row['notifikasi_send'] == "Y") {
@@ -486,6 +488,7 @@ class Notif extends BaseController
                 'nama_user_update' => $nama_user_update,
                 'interval_tanggal_penerimaan' => $interval_tanggal_penerimaan,
                 'interval_tanggal_berkas' => $interval_tanggal_berkas,
+                'interval_tanggal_pengantar_berkas' => $interval_tanggal_pengantar_berkas,
                 'interval_tanggal_spdp' => $interval_tanggal_spdp,
                 'interval_tanggal_p16' => $interval_tanggal_p16,
                 'interval_tanggal_p17' => $interval_tanggal_p17,
